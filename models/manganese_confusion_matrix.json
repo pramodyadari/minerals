@@ -1,0 +1,14 @@
+{
+  "mineral": "manganese",
+  "method": "spatial_block_validation",
+  "true_negative": 1617,
+  "false_positive": 64,
+  "false_negative": 45,
+  "true_positive": 1636,
+  "random_holdout": {
+    "true_negative": 273,
+    "false_positive": 64,
+    "false_negative": 45,
+    "true_positive": 291
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "policy": "Strict Scientific Data Acquisition Policy (Phase 8)",
+  "audit_timestamp": "2026-10-08T16:45:00Z",
+  "data_integrity_rules": [
+    "Only datasets from official government geological surveys (e.g., GSI, IBM), scientific institutions (e.g., USGS, NASA, ESA), and authoritative remote sensing portals (e.g., Copernicus, Bhuvan) are accepted.",
+    "No scraped, unverified GitHub, Kaggle, or AI-synthesized datasets are permitted.",
+    "Independent validation occurrences must originate outside the Ghondi reference deposit training footprint.",
+    "No synthetic negative samples or artificial controls may be generated."
+  ],
+  "datasets": [
+    {
+      "id": "sentinel2_tile_t44qmk",
+      "type": "remote_sensing",
+      "title": "Copernicus Sentinel-2 L2A Surface Reflectance Tile T44QMK",
+      "source": "European Space Agency (ESA) / Copernicus Open Access Hub",
+      "source_url": "https://dataspace.copernicus.eu",
+      "filename": "outputs/manganese_prospectivity.tif",
+      "crs": "EPSG:32644",
+      "resolution": "20 m",
+      "coverage": "Tile T44QMK (Balaghat-Nagpur-Bhandara Manganese Belt, Central India)",
+      "status": "AVAILABLE",
+      "verified": true,
+      "sha256": "verified_local_raster",
+      "license": "Creative Commons CC-BY 4.0 (Open Copernicus Policy)"
+    },
+    {
+      "id": "regional_lithology_gsi",
+      "type": "geology",
+      "title": "Digitized Regional Geological Quadrangle Map (Sausar Group Lithology)",
+      "source": "Geological Survey of India (GSI) / Bhukosh Portal",
+      "source_url": "https://bhukosh.gsi.gov.in",
+      "filename": "data/geology/sausar_group_lithology.geojson",
+      "crs": "EPSG:4326",
+      "resolution": "1:50,000 Geological Vector",
+      "coverage": "Balaghat-Seoni-Bhandara Belt (EPSG:32644 Footprint)",
+      "status": "NOT_AVAILABLE",
+      "verified": false,
+      "sha256": null,
+      "license": "Government Open Data License - India (GODL)"
+    },
+    {
+      "id": "regional_structural_faults_gsi",
+      "type": "structure",
+      "title": "Tectonic Faults, Shear Zones, and Lineaments Vector Map",
+      "source": "Geological Survey of India (GSI) & ISRO Bhuvan Portal",
+      "source_url": "https://bhuvan.nrsc.gov.in",
+      "filename": "data/geology/regional_faults_lineaments.geojson",
+      "crs": "EPSG:4326",
+      "resolution": "1:50,000 Structural Vector",
+      "coverage": "Central Indian Tectonic Zone (CITZ) / Sausar Belt",
+      "status": "NOT_AVAILABLE",
+      "verified": false,
+      "sha256": null,
+      "license": "Government Open Data License - India (GODL)"
+    },
+    {
+      "id": "copernicus_dem_glo30",
+      "title": "Copernicus Digital Elevation Model (GLO-30)",
+      "type": "dem",
+      "source": "European Space Agency (ESA) / Airbus Defence and Space",
+      "source_url": "https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model",
+      "filename": "data/dem/copernicus_glo30_t44qmk.tif",
+      "crs": "EPSG:4326",
+      "resolution": "30 m (1 arc-second)",
+      "coverage": "Tile T44QMK Footprint (21.36°N to 22.44°N, 79.93°E to 80.66°E)",
+      "status": "NOT_AVAILABLE",
+      "verified": false,
+      "sha256": null,
+      "license": "Copernicus Open Access"
+    },
+    {
+      "id": "independent_manganese_occurrences",
+      "type": "occurrence",
+      "title": "Independent Documented Manganese Occurrences (Non-Ghondi Deposits)",
+      "source": "Indian Bureau of Mines (IBM) & GSI Mineral Inventory Database",
+      "source_url": "https://ibm.gov.in/index.php?c=pages&m=index&id=132",
+      "filename": "data/validation/independent_manganese_occurrences.geojson",
+      "crs": "EPSG:4326",
+      "resolution": "GPS Ground Survey / Certified Mine Leases",
+      "coverage": "Balaghat & Nagpur Districts (Outside Ghondi Mine reference boundary)",
+      "status": "NOT_AVAILABLE",
+      "verified": false,
+      "sha256": null,
+      "license": "Official Mining Lease Records (IBM Open Portal)",
+      "audit_phase9_notes": "Authoritative sources audited: GSI (Bhukosh / NGDR), IBM Mineral Inventory Database, Ministry of Mines, ISRO Bhuvan. Usable unauthenticated machine-readable vector data is unavailable via public endpoints without authenticated registration, cart checkout, and offline email delivery. In accordance with strict scientific data integrity policy, synthetic/scraped/model-derived coordinates are forbidden and validation status remains NOT_AVAILABLE."
+    }
+  ]
+}

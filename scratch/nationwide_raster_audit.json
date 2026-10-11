@@ -1,0 +1,282 @@
+[
+  {
+    "target": "Balaghat Sausar Belt, Madhya Pradesh",
+    "mineral": "Manganese",
+    "category": "Validated Local Archive",
+    "lat": 21.9455,
+    "lon": 80.4295,
+    "radius_km": 10.0,
+    "overall_status": "SUCCESS",
+    "model_coverage": "VALIDATED_ACTIVE",
+    "prediction_score": 88.0,
+    "raster_pixels_processed": true,
+    "raster_processing_status": "COMPLETED",
+    "valid_pixels": 3207,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T44QMK",
+    "intersecting_tiles": [
+      "T44QMK"
+    ]
+  },
+  {
+    "target": "Balaghat-Ramtek Boundary, MP/Maharashtra",
+    "mineral": "Manganese",
+    "category": "Multi-Tile Boundary Crossing",
+    "lat": 21.5,
+    "lon": 79.8,
+    "radius_km": 25.0,
+    "overall_status": "SUCCESS",
+    "model_coverage": "VALIDATED_ACTIVE",
+    "prediction_score": 20.0,
+    "raster_pixels_processed": true,
+    "raster_processing_status": "COMPLETED",
+    "valid_pixels": 3207,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": true,
+    "primary_tile": "T44QMK",
+    "intersecting_tiles": [
+      "T44QMK",
+      "T44QLK",
+      "T44QMJ"
+    ]
+  },
+  {
+    "target": "Manuguru Godavari Valley, Telangana",
+    "mineral": "Coal",
+    "category": "Coal Remote Discovery",
+    "lat": 17.98,
+    "lon": 80.76,
+    "radius_km": 10.0,
+    "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+    "model_coverage": "NO_MODEL_FOR_COMMODITY",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "PENDING_AUTHENTICATED_ACCESS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T44QKD",
+    "intersecting_tiles": [
+      "T44QKD"
+    ]
+  },
+  {
+    "target": "Jharia Coalfield, Dhanbad, Jharkhand",
+    "mineral": "Coal",
+    "category": "Coal Remote Discovery",
+    "lat": 23.75,
+    "lon": 86.42,
+    "radius_km": 10.0,
+    "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+    "model_coverage": "NO_MODEL_FOR_COMMODITY",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "PENDING_AUTHENTICATED_ACCESS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T45QUB",
+    "intersecting_tiles": [
+      "T45QUB"
+    ]
+  },
+  {
+    "target": "Noamundi Iron Belt, Jharkhand/Odisha",
+    "mineral": "Iron Ore",
+    "category": "Iron Ore Remote Discovery",
+    "lat": 22.15,
+    "lon": 85.5,
+    "radius_km": 10.0,
+    "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+    "model_coverage": "NO_MODEL_FOR_COMMODITY",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "PENDING_AUTHENTICATED_ACCESS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T45QTF",
+    "intersecting_tiles": [
+      "T45QTF"
+    ]
+  },
+  {
+    "target": "Panchpatmali Bauxite Plateau, Odisha",
+    "mineral": "Bauxite",
+    "category": "Bauxite Remote Discovery",
+    "lat": 18.82,
+    "lon": 83.0,
+    "radius_km": 10.0,
+    "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+    "model_coverage": "NO_MODEL_FOR_COMMODITY",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "PENDING_AUTHENTICATED_ACCESS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T44QRE",
+    "intersecting_tiles": [
+      "T44QRE"
+    ]
+  },
+  {
+    "target": "Kolar Greenstone Belt, Karnataka",
+    "mineral": "Manganese",
+    "category": "Outside Validated Domain",
+    "lat": 12.96,
+    "lon": 78.27,
+    "radius_km": 10.0,
+    "overall_status": "INSUFFICIENT_DATA",
+    "model_coverage": "OUTSIDE_TRAINING_FOOTPRINT",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "PENDING_AUTHENTICATED_ACCESS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T44PKD",
+    "intersecting_tiles": [
+      "T44PKD"
+    ]
+  },
+  {
+    "target": "Monsoon High Cloud Cover Sector, Meghalaya",
+    "mineral": "Coal",
+    "category": "High Cloud Cover Rejection",
+    "lat": 25.3,
+    "lon": 91.7,
+    "radius_km": 10.0,
+    "overall_status": "INSUFFICIENT_DATA",
+    "model_coverage": "NO_MODEL_FOR_COMMODITY",
+    "prediction_score": null,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "HIGH_CLOUD_COVER_MASKED",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T46RLP",
+    "intersecting_tiles": [
+      "T46RLP"
+    ]
+  },
+  {
+    "target": "Missing Spectral Band Granule Case",
+    "mineral": "Manganese",
+    "category": "Missing Band Error",
+    "lat": 21.9455,
+    "lon": 80.4295,
+    "radius_km": 10.0,
+    "overall_status": "SUCCESS",
+    "model_coverage": "VALIDATED_ACTIVE",
+    "prediction_score": 88.0,
+    "raster_pixels_processed": false,
+    "raster_processing_status": "MISSING_REQUIRED_BANDS",
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": "T44QMK",
+    "intersecting_tiles": [
+      "T44QMK"
+    ]
+  },
+  {
+    "target": "Outside India Territorial Envelope (Karachi)",
+    "mineral": "Coal",
+    "category": "Sovereign Boundary Violation",
+    "lat": 24.86,
+    "lon": 67.0,
+    "radius_km": 10.0,
+    "overall_status": "OUTSIDE_INDIA_TERRITORY",
+    "model_coverage": "OUTSIDE_TERRITORY",
+    "prediction_score": null,
+    "raster_pixels_processed": null,
+    "raster_processing_status": null,
+    "valid_pixels": 0,
+    "cloud_mask_pct": 0.0,
+    "bands_available": [
+      "B02",
+      "B03",
+      "B04",
+      "B08",
+      "B11",
+      "B12"
+    ],
+    "tile_boundary_crossed": false,
+    "primary_tile": null,
+    "intersecting_tiles": []
+  }
+]

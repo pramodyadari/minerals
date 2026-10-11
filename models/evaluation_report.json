@@ -1,0 +1,71 @@
+{
+  "evaluation_split": "test",
+  "total_test_samples": 40,
+  "overall_accuracy_pct": 100.0,
+  "macro_avg": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0
+  },
+  "per_class_metrics": {
+    "coal": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 10
+    },
+    "manganese": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 10
+    },
+    "iron_ore": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 10
+    },
+    "bauxite": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 10
+    }
+  },
+  "confusion_matrix": {
+    "classes": [
+      "coal",
+      "manganese",
+      "iron_ore",
+      "bauxite"
+    ],
+    "matrix": [
+      [
+        10,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        10,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        10,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        10
+      ]
+    ]
+  },
+  "integrity_notice": "Independent test set evaluation. Does not substitute subsurface drilling or geophysical surveys."
+}

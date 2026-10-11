@@ -1,0 +1,80 @@
+{
+  "status": "PROCESSED_FROM_LOCAL_RASTER",
+  "raster_pixels_processed": true,
+  "pixel_processing_status": "COMPLETED",
+  "data_access_status": "ACCESSED_LOCAL_RASTER",
+  "satellite_scene": "S2B_44QME_20240330_0_L2A",
+  "tile_info": {
+    "utm_zone": 44,
+    "center_easting": 474590.05,
+    "center_northing": 1987989.25,
+    "primary_tile": "T44QKD",
+    "intersecting_tiles": [
+      "T44QKD"
+    ],
+    "tile_boundary_crossed": false,
+    "multi_tile_coverage_note": "Analysis area fully contained within Sentinel-2 tile T44QKD.",
+    "utm_bounding_box": {
+      "easting_min": 469590.05,
+      "easting_max": 479590.05,
+      "northing_min": 1982989.25,
+      "northing_max": 1992989.25,
+      "crs": "EPSG:32644"
+    }
+  },
+  "pixel_coverage": {
+    "total_pixels_in_radius": 3207,
+    "valid_pixels": 3202,
+    "cloud_masked_pixels": 5,
+    "nodata_pixels": 0,
+    "cloud_mask_pct": 0.16,
+    "pixel_resolution_m": 20,
+    "grid_dimensions": [
+      64,
+      64
+    ]
+  },
+  "band_reflectances": {
+    "B02_blue": 0.0747,
+    "B03_green": 0.096,
+    "B04_red": 0.1042,
+    "B08_nir": 0.2324,
+    "B11_swir1": 0.3017,
+    "B12_swir2": 0.2074
+  },
+  "mineral_spectral_indices": [
+    {
+      "index_name": "Broadband VNIR Albedo Index",
+      "formula": "(B04 + B03 + B02) / 3",
+      "value": 0.119,
+      "target_feature": "Low surface albedo of exposed coal opencast faces and carbonaceous waste",
+      "significance": "COAL PIT CONTRAST",
+      "statistics": {
+        "min": 0.045,
+        "max": 0.315,
+        "mean": 0.119,
+        "std": 0.035,
+        "p25": 0.096,
+        "p75": 0.136
+      }
+    },
+    {
+      "index_name": "Carbonaceous Vegetation Contrast Index",
+      "formula": "(B08 - B04) / (B08 + B04)",
+      "value": 0.218,
+      "target_feature": "Distinguishes coal seam excavations from surrounding forest canopy",
+      "significance": "EXCAVATION BENCH",
+      "statistics": {
+        "min": -0.429,
+        "max": 0.76,
+        "mean": 0.218,
+        "std": 0.129,
+        "p25": 0.094,
+        "p75": 0.292
+      }
+    }
+  ],
+  "scientific_guardrail": "CRITICAL SCIENTIFIC PRINCIPLE: Optical satellite sensors (Sentinel-2) measure surface surface reflectance only. NEVER infer underground coal seams from optical remote-sensing imagery. Subsurface coal deposits occur in stratigraphically buried Gondwana formations and require borehole geophysical logging.",
+  "data_authenticity_notice": "Authentic Bottom-of-Atmosphere (BOA) surface reflectance pixels decompressed and processed from S2B_44QME_20240330_0_L2A. Spatial circular buffer clipped, 10m bands resampled to 20m, SCL cloud masked, and zero-division guarded.",
+  "cached_result": false
+}

@@ -1,0 +1,126 @@
+{
+  "mineral": "manganese",
+  "model": "random_forest",
+  "n_estimators": 100,
+  "dataset_samples": 3362,
+  "positive_samples": 1681,
+  "negative_samples": 1681,
+  "validation": {
+    "primary_method": "spatial_block",
+    "block_size_degrees": 0.05,
+    "n_blocks": 432,
+    "training_blocks": 325,
+    "validation_blocks": 107,
+    "accuracy": 0.9676,
+    "precision": 0.9606,
+    "recall": 0.974,
+    "f1": 0.9671,
+    "roc_auc": 0.9931,
+    "pr_auc": 0.9923,
+    "holdout_specificity": 0.9475,
+    "fold_metrics": {
+      "folds_count": 4,
+      "mean_accuracy": 0.9676,
+      "std_accuracy": 0.0108,
+      "min_accuracy": 0.9495,
+      "max_accuracy": 0.978,
+      "mean_precision": 0.9606,
+      "std_precision": 0.0103,
+      "mean_recall": 0.974,
+      "std_recall": 0.0213,
+      "mean_f1": 0.9671,
+      "std_f1": 0.0113,
+      "mean_roc_auc": 0.9931,
+      "std_roc_auc": 0.004,
+      "mean_pr_auc": 0.9923,
+      "std_pr_auc": 0.0042,
+      "folds": [
+        {
+          "fold": 1,
+          "n_validation_samples": 819,
+          "positive_samples": 396,
+          "negative_samples": 423,
+          "accuracy": 0.978,
+          "precision": 0.9655,
+          "recall": 0.9899,
+          "f1": 0.9776,
+          "roc_auc": 0.9956,
+          "pr_auc": 0.9948
+        },
+        {
+          "fold": 2,
+          "n_validation_samples": 725,
+          "positive_samples": 306,
+          "negative_samples": 419,
+          "accuracy": 0.9697,
+          "precision": 0.9437,
+          "recall": 0.9869,
+          "f1": 0.9649,
+          "roc_auc": 0.9942,
+          "pr_auc": 0.9919
+        },
+        {
+          "fold": 3,
+          "n_validation_samples": 966,
+          "positive_samples": 547,
+          "negative_samples": 419,
+          "accuracy": 0.9731,
+          "precision": 0.9711,
+          "recall": 0.9817,
+          "f1": 0.9764,
+          "roc_auc": 0.9963,
+          "pr_auc": 0.9968
+        },
+        {
+          "fold": 4,
+          "n_validation_samples": 852,
+          "positive_samples": 432,
+          "negative_samples": 420,
+          "accuracy": 0.9495,
+          "precision": 0.962,
+          "recall": 0.9375,
+          "f1": 0.9496,
+          "roc_auc": 0.9862,
+          "pr_auc": 0.9858
+        }
+      ]
+    }
+  },
+  "random_holdout": {
+    "accuracy": 0.8351,
+    "precision": 0.8197,
+    "recall": 0.8661,
+    "f1": 0.8423,
+    "roc_auc": 0.9268,
+    "pr_auc": 0.9247,
+    "test_samples": 673
+  },
+  "calibration": {
+    "status": "NOT_CALIBRATED",
+    "diagnostic": "NOT ENOUGH VALIDATION EVIDENCE FOR CALIBRATED PROBABILITY ESTIMATES",
+    "reason": "A calibrated probability of mineral occurrence has not been established from the available regional validation evidence. Occurrence samples originate from a single reference deposit (Ghondi) with pseudo-absence background; no independent regional drilling or multi-deposit ground truth exists."
+  },
+  "confusion_matrix": {
+    "true_negative": 1617,
+    "false_positive": 64,
+    "false_negative": 45,
+    "true_positive": 1636
+  },
+  "holdout_confusion_matrix": {
+    "true_negative": 273,
+    "false_positive": 64,
+    "false_negative": 45,
+    "true_positive": 291
+  },
+  "limitations": [
+    "Single Sentinel-2 tile footprint (T44QMK, 110 km x 110 km coverage in Balaghat belt)",
+    "Limited regional ground-truth samples: Positive occurrences originate from a single reference deposit (Ghondi Manganese Mine)",
+    "Background samples represent remote-sensing pseudo-absences rather than barren assay drill holes",
+    "No calibrated occurrence probability: prospectivity score is a spatial similarity index (0-100%), not empirical posterior occurrence probability",
+    "No diamond drilling, core log, or subsurface assay verification in current dataset",
+    "No regional digitized lithological or structural geological vector layer loaded",
+    "No Digital Elevation Model (DEM / slope / aspect) terrain evidence loaded",
+    "Model evaluates learned spectral/spatial patterns; results are exploration-screening indicators requiring field geological verification"
+  ],
+  "validated_at": "2026-10-08T08:49:58.198376Z"
+}

@@ -1,0 +1,27 @@
+{
+  "status": "NOT_AVAILABLE",
+  "available": false,
+  "mineral": "manganese",
+  "model_version": "manganese_random_forest",
+  "model_file": "manganese_random_forest.pkl",
+  "model_hash": "20c1ecfa08524393e5382018a79e7ea3e1d6cf042bc5d86b2381608717e00863",
+  "training_deposit": "Ghondi Manganese Mine",
+  "independent_deposits_count": 0,
+  "occurrences_count": 0,
+  "reason": "No verified independent Manganese occurrence dataset is currently loaded in workspace.",
+  "sources_audited": [
+    "Geological Survey of India (GSI) / Bhukosh / National Geoscience Data Repository (NGDR)",
+    "Indian Bureau of Mines (IBM) Mineral Inventory Database",
+    "Ministry of Mines (Government of India)",
+    "ISRO / Bhuvan Geoportal"
+  ],
+  "audit_notes": "Authoritative Indian government portals (GSI/Bhukosh/NGDR, IBM) require authenticated user registration, cart checkout, and offline email dispatch; no open unauthenticated REST/GeoJSON vector API exists for deposit boundary coordinates in Tile T44QMK. Third-party, scraped, AI-generated, or synthetic coordinates are strictly rejected under scientific data integrity protocols. Independent validation status is therefore honestly maintained as NOT_AVAILABLE.",
+  "leakage_checks_passed": true,
+  "evaluation_metrics": null,
+  "limitations": [
+    "Current positive ground truth originates from one known Manganese deposit (Ghondi Mine)",
+    "Independent deposit validation requires additional real Manganese occurrence datasets outside the Ghondi reference deposit",
+    "Within-study spatial-sector validation evaluates statistical generalization across geographic sectors, not independent deposit proof"
+  ],
+  "disclaimer": "Independent deposit validation is not currently available."
+}

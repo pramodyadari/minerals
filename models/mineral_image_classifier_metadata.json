@@ -1,0 +1,114 @@
+{
+  "model_architecture": "MineralConvNet",
+  "task": "4-Class Mineral Specimen Image Classification",
+  "classes": [
+    "coal",
+    "manganese",
+    "iron_ore",
+    "bauxite"
+  ],
+  "class_to_idx": {
+    "coal": 0,
+    "manganese": 1,
+    "iron_ore": 2,
+    "bauxite": 3
+  },
+  "input_dimensions": [
+    3,
+    224,
+    224
+  ],
+  "best_validation_accuracy_pct": 100.0,
+  "total_training_epochs": 12,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "trained_timestamp": "2026-10-09T11:40:01Z",
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6455,
+      "train_acc": 89.29,
+      "validation_loss": 1.5517,
+      "validation_acc": 50.0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.1061,
+      "train_acc": 100.0,
+      "validation_loss": 1.4279,
+      "validation_acc": 72.5
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.042,
+      "train_acc": 100.0,
+      "validation_loss": 0.0033,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.1693,
+      "train_acc": 91.43,
+      "validation_loss": 0.0067,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.0338,
+      "train_acc": 99.29,
+      "validation_loss": 0.0001,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.0164,
+      "train_acc": 99.29,
+      "validation_loss": 0.0001,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.0092,
+      "train_acc": 100.0,
+      "validation_loss": 0.0002,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.0526,
+      "train_acc": 98.57,
+      "validation_loss": 0.0003,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.0067,
+      "train_acc": 100.0,
+      "validation_loss": 0.0005,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.0099,
+      "train_acc": 100.0,
+      "validation_loss": 0.0006,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.0199,
+      "train_acc": 99.29,
+      "validation_loss": 0.0007,
+      "validation_acc": 100.0
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.0039,
+      "train_acc": 100.0,
+      "validation_loss": 0.0006,
+      "validation_acc": 100.0
+    }
+  ],
+  "framework": "PyTorch 2.14.1+cpu",
+  "disclaimer": "Specimen surface visual classification only. Does not prove underground mineral occurrence."
+}

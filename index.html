@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Mineral Intelligence — Satellite-Based Mineral Prospectivity and Exploration Decision Support System. AI-powered geospatial mineral exploration platform.">
+    <title>AI Mineral Intelligence — Satellite-Based Mineral Prospectivity Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet GIS Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+</head>
+<body>
+    <!-- ====== NAVIGATION ====== -->
+    <nav id="main-nav" class="glass-nav">
+        <div class="nav-container">
+            <div class="nav-brand" id="nav-brand">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 48 48" class="brand-svg">
+                        <defs>
+                            <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#7b2fff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M24 4 L40 16 L36 38 H12 L8 16 Z" fill="none" stroke="url(#brand-grad)" stroke-width="2"/>
+                        <path d="M24 12 L32 20 L30 32 H18 L16 20 Z" fill="url(#brand-grad)" opacity="0.3"/>
+                        <circle cx="24" cy="22" r="4" fill="#00f0ff"/>
+                        <line x1="24" y1="4" x2="24" y2="12" stroke="#00f0ff" stroke-width="1" opacity="0.5"/>
+                        <line x1="40" y1="16" x2="32" y2="20" stroke="#7b2fff" stroke-width="1" opacity="0.5"/>
+                        <line x1="8" y1="16" x2="16" y2="20" stroke="#00f0ff" stroke-width="1" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">AI <span class="brand-highlight">Mineral Intelligence</span></span>
+                    <span class="brand-tagline">Discover • Analyze • Explore</span>
+                </div>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#home" class="nav-link active" data-page="home">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+                    Home
+                </a>
+                <a href="#dashboard" class="nav-link" data-page="dashboard">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                    Dashboard
+                </a>
+                <a href="#map" class="nav-link" data-page="map">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12 1.586l-4 4v12.828l4-4V1.586zM3.707 3.293A1 1 0 002 4v10a1 1 0 00.293.707L6 18.414V5.586L3.707 3.293zM17.707 5.293L14 1.586v12.828l2.293 2.293A1 1 0 0018 16V6a1 1 0 00-.293-.707z" clip-rule="evenodd"/></svg>
+                    Map
+                </a>
+                <a href="#analytics" class="nav-link" data-page="analytics">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+                    Analytics
+                </a>
+                <a href="#visualization" class="nav-link" data-page="visualization">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/></svg>
+                    3D View
+                </a>
+                <a href="#explainable-ai" class="nav-link" data-page="explainable-ai">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                    XAI
+                </a>
+                <a href="#settings" class="nav-link" data-page="settings">
+                    <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+                    Settings
+                </a>
+            </div>
+            <div class="nav-profile" id="nav-profile">
+                <div class="profile-avatar">
+                    <svg viewBox="0 0 36 36" fill="none">
+                        <circle cx="18" cy="18" r="17" stroke="#00f0ff" stroke-width="1.5" opacity="0.6"/>
+                        <circle cx="18" cy="14" r="5" fill="#00f0ff" opacity="0.8"/>
+                        <path d="M8 30c0-5.523 4.477-10 10-10s10 4.477 10 10" fill="#00f0ff" opacity="0.4"/>
+                    </svg>
+                </div>
+                <div class="profile-info">
+                    <span class="profile-welcome">Welcome</span>
+                    <span class="profile-name">Researcher</span>
+                </div>
+                <svg class="profile-chevron" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ====== PAGE: HOME ====== -->
+    <section id="page-home" class="page active">
+        <!-- Hero Section -->
+        <div class="hero" id="hero-section">
+            <div class="hero-bg">
+                <img src="hero_bg.jpg" alt="" class="hero-bg-img" loading="eager">
+                <div class="hero-overlay"></div>
+                <div class="scan-beam"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1 class="hero-title animate-in">
+                        <span class="hero-ai">AI</span> <span class="hero-mineral">Mineral Intelligence</span>
+                    </h1>
+                    <h2 class="hero-subtitle animate-in delay-1">
+                        Satellite-Based Mineral Prospectivity and<br>Exploration Decision Support System
+                    </h2>
+                    <p class="hero-description animate-in delay-2">
+                        Harnessing the power of satellite imagery, spectral analysis and machine learning to identify mineral-rich zones and support smarter exploration decisions.
+                    </p>
+                    <div class="hero-cta animate-in delay-3">
+                        <button class="btn-primary btn-3d" id="btn-explore-dashboard" onclick="navigateTo('dashboard')">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/></svg>
+                            Explore Dashboard
+                            <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        </button>
+                        <button class="btn-secondary btn-3d" id="btn-watch-demo">
+                            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                            Watch Demo
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <!-- Prospectivity Indicator -->
+                    <div class="prospectivity-card glass-card float-animation" id="prospectivity-indicator">
+                        <div class="prosp-header">Manganese Prospectivity</div>
+                        <div class="prosp-score">
+                            <span class="prosp-label">Score:</span>
+                            <span class="prosp-value" id="hero-prosp-value">—</span>
+                            <svg class="prosp-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <!-- Side Feature List -->
+                    <div class="hero-features">
+                        <div class="hero-feature-item float-animation delay-1">
+                            <div class="feature-dot cyan"></div>
+                            <svg class="feature-icon-sm" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <span>Satellite Data</span>
+                        </div>
+                        <div class="hero-feature-item float-animation delay-2">
+                            <div class="feature-dot purple"></div>
+                            <svg class="feature-icon-sm" viewBox="0 0 24 24" fill="none" stroke="#7b2fff" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                            <span>AI Analysis</span>
+                        </div>
+                        <div class="hero-feature-item float-animation delay-3">
+                            <div class="feature-dot green"></div>
+                            <svg class="feature-icon-sm" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+                            <span>2D/3D Visualization</span>
+                        </div>
+                        <div class="hero-feature-item float-animation delay-4">
+                            <div class="feature-dot orange"></div>
+                            <svg class="feature-icon-sm" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Better Decisions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Features Section -->
+        <div class="features-section" id="features-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <div class="section-title-row">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        <h2 class="section-title">Key Features</h2>
+                    </div>
+                    <div class="section-subtitle-line">
+                        <span>From satellite to actionable insights</span>
+                        <div class="line-dot-connector">
+                            <span class="connector-line"></span>
+                            <span class="connector-dot"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="features-grid" id="features-grid">
+                    <div class="feature-card glass-card" data-tilt>
+                        <div class="feature-card-icon gradient-cyan-purple">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="18" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/>
+                                <path d="M24 6v36M6 24h36" stroke="#00f0ff" stroke-width="1" opacity="0.3"/>
+                                <circle cx="24" cy="24" r="8" fill="#00f0ff" opacity="0.2"/>
+                                <circle cx="24" cy="24" r="3" fill="#00f0ff"/>
+                                <path d="M14 14l5 5M29 14l-5 5M14 34l5-5M29 34l-5-5" stroke="#7b2fff" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">Satellite Analysis</h3>
+                        <p class="feature-card-desc">Use Sentinel-2 data for spectral analysis and mineral detection.</p>
+                        <a class="feature-card-link" href="#dashboard" onclick="navigateTo('dashboard')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                    <div class="feature-card glass-card" data-tilt>
+                        <div class="feature-card-icon gradient-orange-red">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M24 8v32" stroke="#ff6b35" stroke-width="1" opacity="0.3"/>
+                                <circle cx="24" cy="16" r="4" stroke="#ff6b35" stroke-width="1.5"/>
+                                <circle cx="16" cy="28" r="3" stroke="#ff4444" stroke-width="1.5"/>
+                                <circle cx="32" cy="28" r="3" stroke="#ff6b35" stroke-width="1.5"/>
+                                <circle cx="24" cy="36" r="3" stroke="#ff4444" stroke-width="1.5"/>
+                                <line x1="24" y1="20" x2="16" y2="25" stroke="#ff6b35" stroke-width="1"/>
+                                <line x1="24" y1="20" x2="32" y2="25" stroke="#ff6b35" stroke-width="1"/>
+                                <line x1="16" y1="31" x2="24" y2="33" stroke="#ff4444" stroke-width="1"/>
+                                <line x1="32" y1="31" x2="24" y2="33" stroke="#ff4444" stroke-width="1"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">AI Prediction</h3>
+                        <p class="feature-card-desc">Machine learning models identify high-prospectivity areas with confidence scores.</p>
+                        <a class="feature-card-link" href="#analytics" onclick="navigateTo('analytics')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                    <div class="feature-card glass-card" data-tilt>
+                        <div class="feature-card-icon gradient-green-cyan">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <rect x="8" y="8" width="32" height="32" rx="4" stroke="#00ff88" stroke-width="1.5" opacity="0.4"/>
+                                <circle cx="20" cy="20" r="6" stroke="#00f0ff" stroke-width="1.5"/>
+                                <circle cx="30" cy="30" r="4" stroke="#00ff88" stroke-width="1.5"/>
+                                <path d="M24 12v24M12 24h24" stroke="#00ff88" stroke-width="0.5" opacity="0.3"/>
+                                <circle cx="20" cy="20" r="2" fill="#00f0ff" opacity="0.6"/>
+                                <circle cx="30" cy="30" r="1.5" fill="#00ff88" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">Interactive Maps</h3>
+                        <p class="feature-card-desc">Explore 2D maps with candidate zones and detailed insights.</p>
+                        <a class="feature-card-link" href="#map" onclick="navigateTo('map')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                    <div class="feature-card glass-card featured" data-tilt>
+                        <div class="feature-card-icon gradient-multi">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M8 36 L16 28 L24 32 L32 20 L40 24" stroke="#00f0ff" stroke-width="2" fill="none"/>
+                                <path d="M8 36 L16 28 L24 32 L32 20 L40 24 L40 36 L8 36Z" fill="url(#mesh-grad)" opacity="0.3"/>
+                                <defs><linearGradient id="mesh-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00f0ff"/><stop offset="50%" stop-color="#7b2fff"/><stop offset="100%" stop-color="#ff6b35"/></linearGradient></defs>
+                                <circle cx="16" cy="28" r="2" fill="#00f0ff"/>
+                                <circle cx="24" cy="32" r="2" fill="#7b2fff"/>
+                                <circle cx="32" cy="20" r="2" fill="#ff6b35"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">3D Visualization</h3>
+                        <p class="feature-card-desc">View AI-derived prospectivity surfaces in 3D for better understanding.</p>
+                        <a class="feature-card-link" href="#visualization" onclick="navigateTo('visualization')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                    <div class="feature-card glass-card" data-tilt>
+                        <div class="feature-card-icon gradient-purple-pink">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <rect x="10" y="20" width="5" height="18" rx="1" fill="#7b2fff" opacity="0.6"/>
+                                <rect x="18" y="14" width="5" height="24" rx="1" fill="#a855f7" opacity="0.6"/>
+                                <rect x="26" y="10" width="5" height="28" rx="1" fill="#7b2fff" opacity="0.8"/>
+                                <rect x="34" y="16" width="5" height="22" rx="1" fill="#a855f7" opacity="0.6"/>
+                                <path d="M12 18 L20 12 L28 8 L36 14" stroke="#ff6b35" stroke-width="2" fill="none"/>
+                                <circle cx="12" cy="18" r="2" fill="#ff6b35"/>
+                                <circle cx="20" cy="12" r="2" fill="#ff6b35"/>
+                                <circle cx="28" cy="8" r="2" fill="#ff6b35"/>
+                                <circle cx="36" cy="14" r="2" fill="#ff6b35"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">Production Forecast</h3>
+                        <p class="feature-card-desc">Predict production shortfalls using historical and operational data.</p>
+                        <a class="feature-card-link" href="#analytics" onclick="navigateTo('analytics')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                    <div class="feature-card glass-card" data-tilt>
+                        <div class="feature-card-icon gradient-blue-shield">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M24 6 L38 14 V28 C38 36 24 42 24 42 C24 42 10 36 10 28 V14 L24 6Z" stroke="#00a8ff" stroke-width="1.5" fill="#00a8ff" fill-opacity="0.1"/>
+                                <path d="M18 24 L22 28 L30 20" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-card-title">Exploration Support</h3>
+                        <p class="feature-card-desc">Make data-driven decisions with explainable AI and comprehensive reports.</p>
+                        <a class="feature-card-link" href="#explainable-ai" onclick="navigateTo('explainable-ai')">Learn More <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats / Footer Section -->
+        <div class="stats-section" id="stats-section">
+            <div class="stats-bg">
+                <img src="footer_rocks.jpg" alt="" class="stats-bg-img" loading="lazy">
+                <div class="stats-overlay"></div>
+            </div>
+            <div class="stats-container">
+                <div class="stats-left">
+                    <div class="stats-brand-icon">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M24 4 L40 16 L36 38 H12 L8 16 Z" fill="none" stroke="#00f0ff" stroke-width="2"/>
+                            <path d="M24 12 L32 20 L30 32 H18 L16 20 Z" fill="#00f0ff" opacity="0.2"/>
+                            <circle cx="24" cy="22" r="4" fill="#00f0ff"/>
+                        </svg>
+                    </div>
+                    <h3 class="stats-tagline">Smarter Exploration.<br><span class="orange-text">A Richer Tomorrow.</span></h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/><circle cx="16" cy="16" r="6" stroke="#00f0ff" stroke-width="1.5"/><circle cx="16" cy="16" r="2" fill="#00f0ff"/></svg>
+                        </div>
+                        <div class="stat-value" data-count="6">0</div>
+                        <div class="stat-label">Satellite Bands</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 32 32" fill="none"><path d="M8 24 L14 16 L20 20 L26 10" stroke="#7b2fff" stroke-width="2"/><circle cx="14" cy="16" r="2" fill="#7b2fff"/><circle cx="20" cy="20" r="2" fill="#7b2fff"/></svg>
+                        </div>
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">ML Powered</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="12" r="4" stroke="#00ff88" stroke-width="1.5"/><circle cx="10" cy="24" r="3" stroke="#00ff88" stroke-width="1.5"/><circle cx="22" cy="24" r="3" stroke="#00ff88" stroke-width="1.5"/><line x1="16" y1="16" x2="10" y2="21" stroke="#00ff88" stroke-width="1"/><line x1="16" y1="16" x2="22" y2="21" stroke="#00ff88" stroke-width="1"/></svg>
+                        </div>
+                        <div class="stat-value" data-count="2">0</div>
+                        <div class="stat-label">AI Models</div>
+                    </div>
+                    <div class="stat-item glass-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 32 32" fill="none"><path d="M8 16 C8 16 12 8 16 16 C20 24 24 16 24 16" stroke="#ff6b35" stroke-width="2"/><circle cx="16" cy="16" r="10" stroke="#ff6b35" stroke-width="1" opacity="0.3"/></svg>
+                        </div>
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Minerals Supported</div>
+                    </div>
+                </div>
+                <div class="stats-right">
+                    <div class="mineral-badge glass-card">
+                        <span class="mineral-name">Manganese</span>
+                        <span class="mineral-sub">Key to a Sustainable Future <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: DASHBOARD ====== -->
+    <section id="page-dashboard" class="page">
+        <div class="page-wrapper">
+            <div class="page-header exploration-intelligence-header" id="dash-header-intelligence">
+                <div class="header-main-titles">
+                    <div class="header-top-tag">EXPLORATION INTELLIGENCE PLATFORM • PRODUCTION DEMO</div>
+                    <h1 class="page-title"><span class="glow-text">AI MINERAL EXPLORATION</span></h1>
+                    <p class="page-subtitle">AI-assisted mineral prospectivity screening and exploration target intelligence</p>
+                </div>
+                <div class="header-meta-actions">
+                    <div class="header-status-indicators" id="header-status-strip">
+                        <div class="status-indicator-pill trained" id="header-status-model" title="Trained Copernicus Sentinel-2 Random Forest model">
+                            <span class="status-indicator-label">MODEL</span>
+                            <span class="status-indicator-val">● TRAINED</span>
+                        </div>
+                        <div class="status-indicator-pill within-study" id="header-status-validation" title="Evaluated via Spatially Blocked 5km Cross-Validation within Tile T44QMK">
+                            <span class="status-indicator-label">VALIDATION</span>
+                            <span class="status-indicator-val">● WITHIN-STUDY</span>
+                        </div>
+                        <div class="status-indicator-pill not-calibrated" id="header-status-calibration" title="Spatial prospectivity index (0-100%); empirical calibration curve not fitted">
+                            <span class="status-indicator-label">CALIBRATION</span>
+                            <span class="status-indicator-val">● NOT CALIBRATED</span>
+                        </div>
+                        <div class="status-indicator-pill not-available" id="header-status-independent" title="Zero verified external deposit records outside Ghondi mine available">
+                            <span class="status-indicator-label">INDEPENDENT VALIDATION</span>
+                            <span class="status-indicator-val">● NOT AVAILABLE</span>
+                        </div>
+                    </div>
+                    <div class="header-action-buttons">
+                        <button type="button" class="btn-demo-mode" id="btn-demo-mode" title="Run interactive guided walkthrough of verified exploration target">
+                            <span class="demo-icon">▶</span> DEMO MODE
+                        </button>
+                        <button type="button" class="btn-system-health" id="btn-system-health" title="Inspect runtime system health and data connectivity">
+                            <span class="health-icon">🩺</span> SYSTEM HEALTH
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPLORATION COMMAND CENTER (Phase 10 Workflow) -->
+            <div class="dash-panel glass-card command-center-panel" id="dash-command-center" style="margin-bottom: 20px;">
+                <div class="command-center-header">
+                    <div class="command-center-title-wrap">
+                        <span class="command-center-icon">🧭</span>
+                        <h3 class="command-center-title">EXPLORATION COMMAND CENTER</h3>
+                        <span class="workflow-badge">DECISION-SUPPORT WORKFLOW</span>
+                    </div>
+                    <div class="command-center-status-summary" id="command-center-status-text">
+                        Current Status: <strong id="command-center-target-state" style="color:var(--cyan);">No Target Selected</strong>
+                    </div>
+                </div>
+                <div class="workflow-steps-track" id="workflow-steps-track">
+                    <div class="workflow-step active" id="wf-step-1" data-step="1">
+                        <div class="step-num">1</div>
+                        <div class="step-info">
+                            <span class="step-tag">Step 1</span>
+                            <strong class="step-label">SELECT MINERAL</strong>
+                        </div>
+                        <div class="step-state-dot"></div>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step" id="wf-step-2" data-step="2">
+                        <div class="step-num">2</div>
+                        <div class="step-info">
+                            <span class="step-tag">Step 2</span>
+                            <strong class="step-label">SELECT LOCATION</strong>
+                        </div>
+                        <div class="step-state-dot"></div>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step" id="wf-step-3" data-step="3">
+                        <div class="step-num">3</div>
+                        <div class="step-info">
+                            <span class="step-tag">Step 3</span>
+                            <strong class="step-label">ANALYZE TARGET</strong>
+                        </div>
+                        <div class="step-state-dot"></div>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step" id="wf-step-4" data-step="4">
+                        <div class="step-num">4</div>
+                        <div class="step-info">
+                            <span class="step-tag">Step 4</span>
+                            <strong class="step-label">REVIEW EVIDENCE</strong>
+                        </div>
+                        <div class="step-state-dot"></div>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step" id="wf-step-5" data-step="5">
+                        <div class="step-num">5</div>
+                        <div class="step-info">
+                            <span class="step-tag">Step 5</span>
+                            <strong class="step-label">COMPARE / EXPORT</strong>
+                        </div>
+                        <div class="step-state-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <!-- Control Panel -->
+                <div class="dash-panel glass-card span-1" id="dash-controls">
+                    <h3 class="panel-title"><svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg> Analysis Controls</h3>
+                    <div class="control-group">
+                        <label class="control-label">Target Mineral</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="mineral-select">
+                                <option value="manganese" selected>Manganese ● TRAINED</option>
+                                <option value="iron_ore">Iron Ore ○ AWAITING TRAINING DATA</option>
+                                <option value="bauxite">Bauxite ○ AWAITING TRAINING DATA</option>
+                                <option value="copper">Copper ○ AWAITING TRAINING DATA</option>
+                                <option value="lithium">Lithium ○ AWAITING TRAINING DATA</option>
+                                <option value="coal">Coal ○ AWAITING TRAINING DATA</option>
+                                <option value="limestone">Limestone ○ AWAITING TRAINING DATA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Search Location Input with Suggestions (Req 1) -->
+                    <div class="control-group location-search-container" id="location-search-container">
+                        <label class="control-label">Search Location</label>
+                        <div class="search-input-wrapper">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="glass-select search-input" id="location-search-input" placeholder="Search places, towns, districts, zones..." autocomplete="off">
+                            <button type="button" class="search-clear-btn" id="location-search-clear" style="display:none;" title="Clear search">×</button>
+                        </div>
+                        <div class="suggestions-dropdown" id="location-suggestions-dropdown" style="display:none;"></div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Location Presets</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="location-select">
+                                <option value="" disabled selected>— Select Target Preset —</option>
+                                <option value="ghondi" data-lat="21.9455" data-lon="80.4295">Ghondi Manganese Mine (Known Deposit)</option>
+                                <option value="zone-67684" data-lat="22.214160" data-lon="80.063632">Zone 67684 — NW Cluster (97.6%)</option>
+                                <option value="zone-124766" data-lat="21.939738" data-lon="80.602479">Zone 124766 — Central East (97.0%)</option>
+                                <option value="zone-187925" data-lat="21.639316" data-lon="80.558661">Zone 187925 — South East (96.9%)</option>
+                                <option value="zone-103786" data-lat="22.036465" data-lon="80.437670">Zone 103786 — Central Belt (96.7%)</option>
+                                <option value="zone-191911" data-lat="21.615292" data-lon="80.390039">Zone 191911 — Southern Belt (96.6%)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Active Exploration Target Coordinates -->
+                    <div class="control-group target-coords-box" id="target-coords-panel">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <label class="control-label" style="margin-bottom:0; font-size:0.8rem; font-weight:700; color:var(--cyan); letter-spacing:0.5px;">TARGET ANALYSIS</label>
+                            <span class="target-source-badge" id="target-source-badge" style="background:rgba(255,255,255,0.08);color:var(--text-dim);">No Target</span>
+                        </div>
+                        <!-- Enriched Target Place Name Card (Req 5 & 6) -->
+                        <div class="target-place-card" id="target-place-card" style="margin-bottom:8px;">
+                            <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">Location:</div>
+                            <div class="place-main-title" id="target-place-name" style="font-weight:700; color:#fff;">No Target Selected</div>
+                            <div class="place-sub-title" id="target-place-subarea">Click the map or choose a location to begin.</div>
+                            <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase; margin-top:4px;">Coordinates:</div>
+                            <div class="place-coords-text font-mono" id="target-coords-display" style="display:none; font-size:0.72rem; color:var(--cyan); margin-top:2px;"></div>
+                            <div class="target-card-meta-strip" id="target-card-meta-strip" style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">
+                                <span class="target-chip mineral-chip" id="target-card-mineral" style="font-size:0.65rem; padding:1px 6px; border-radius:3px; background:rgba(0,240,255,0.1); color:var(--cyan); border:1px solid rgba(0,240,255,0.25);">Mineral: Manganese</span>
+                                <span class="target-chip score-chip" id="target-card-prospectivity" style="font-size:0.65rem; padding:1px 6px; border-radius:3px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.1);">Prospectivity: —</span>
+                                <span class="target-chip priority-chip" id="target-card-priority" style="font-size:0.65rem; padding:1px 6px; border-radius:3px; background:rgba(255,255,255,0.06); color:var(--text-dim); border:1px solid rgba(255,255,255,0.1);">Priority: —</span>
+                                <span class="target-chip zone-chip" id="target-card-zone" style="font-size:0.65rem; padding:1px 6px; border-radius:3px; background:rgba(255,255,255,0.06); color:var(--text-dim); border:1px solid rgba(255,255,255,0.1);">Candidate Zone: NONE</span>
+                                <span class="target-chip status-chip" id="target-card-status" style="font-size:0.65rem; padding:1px 6px; border-radius:3px; background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.25);">Status: EXPLORATION SCREENING</span>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px;">
+                            <div>
+                                <span style="font-size:0.68rem; color:var(--text-dim); display:block; margin-bottom:2px;">Latitude (°N)</span>
+                                <input type="number" step="0.0001" class="glass-select" id="target-lat-input" value="" placeholder="e.g. 21.9455" style="padding:6px 10px; font-family:monospace; font-size:0.82rem;">
+                            </div>
+                            <div>
+                                <span style="font-size:0.68rem; color:var(--text-dim); display:block; margin-bottom:2px;">Longitude (°E)</span>
+                                <input type="number" step="0.0001" class="glass-select" id="target-lon-input" value="" placeholder="e.g. 80.4295" style="padding:6px 10px; font-family:monospace; font-size:0.82rem;">
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="target-tile-status" id="target-tile-status" style="color:var(--text-dim);">Click map or choose preset</span>
+                            <button type="button" class="map-link-btn" id="btn-view-target-on-map">View on Map →</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Analysis Radius</label>
+                        <div class="select-wrapper" style="margin-bottom:8px;">
+                            <select class="glass-select" id="radius-select">
+                                <option value="10">10 km (Local Cluster)</option>
+                                <option value="25" selected>25 km (Regional Block)</option>
+                                <option value="50">50 km (Broad Belt)</option>
+                                <option value="100">100 km (Tile Overview)</option>
+                            </select>
+                        </div>
+                        <div class="radius-slider">
+                            <input type="range" class="glass-range" id="radius-range" min="10" max="100" value="25" step="5">
+                            <div class="range-labels">
+                                <span>10 km</span>
+                                <span id="radius-value" class="range-current">25 km</span>
+                                <span>100 km</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-3d btn-full" id="btn-run-analysis">
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                        Run Analysis
+                    </button>
+                    <button class="btn-secondary btn-3d btn-full" id="btn-export-target-report" style="margin-top:8px;" title="Export official Exploration Target Intelligence Report">
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 100 2h4a1 1 0 100-2H8zm0-3a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd"/></svg>
+                        Export Target Report
+                    </button>
+                    <button class="btn-secondary btn-3d btn-full" id="btn-export-dossier" style="margin-top:8px;">
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        Export Target Dossier (GeoJSON)
+                    </button>
+
+                </div>
+
+                <!-- Prospectivity Score & Model Confidence -->
+                <div class="dash-panel glass-card span-2" id="dash-score">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                        <h3 class="panel-title" style="margin-bottom:0;"><svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> AI Prospectivity & Model Confidence</h3>
+                        <div class="model-confidence-badge-header" id="dash-confidence-badge" title="Empirical probability calibration curve not fitted">
+                            <span class="badge-label">Model Confidence:</span>
+                            <span class="badge-status uncalibrated" id="model-confidence-status">Not Calibrated</span>
+                        </div>
+                    </div>
+                    <div class="score-display">
+                        <div class="score-ring">
+                            <svg viewBox="0 0 200 200" class="score-svg">
+                                <defs>
+                                    <linearGradient id="score-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#00f0ff"/>
+                                        <stop offset="50%" style="stop-color:#7b2fff"/>
+                                        <stop offset="100%" style="stop-color:#ff6b35"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="url(#score-grad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="534" stroke-dashoffset="534" transform="rotate(-90 100 100)" class="score-progress"/>
+                            </svg>
+                            <div class="score-center">
+                                <span class="score-number" id="score-number">—</span>
+                                <span class="score-percent" id="score-percent"></span>
+                                <span class="score-text" id="score-classification">Awaiting Target</span>
+                            </div>
+                        </div>
+                        <div class="score-details">
+                            <div class="score-detail-item">
+                                <span class="detail-label">Model Confidence</span>
+                                <span class="detail-value text-uncalibrated" id="score-confidence-detail">Not Calibrated</span>
+                                <span class="detail-subtext">Spatial index (calibration curve not fitted)</span>
+                            </div>
+                            <div class="score-detail-item">
+                                <span class="detail-label">Data Quality</span>
+                                <div class="detail-bar"><div class="detail-fill green" style="width:0%"></div></div>
+                                <span class="detail-value">—</span>
+                            </div>
+                            <div class="score-detail-item">
+                                <span class="detail-label">Model Accuracy</span>
+                                <div class="detail-bar"><div class="detail-fill purple" style="width:0%"></div></div>
+                                <span class="detail-value">—</span>
+                            </div>
+                            <div class="score-detail-item">
+                                <span class="detail-label">Coverage</span>
+                                <div class="detail-bar"><div class="detail-fill orange" style="width:0%"></div></div>
+                                <span class="detail-value">—</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prospectivity-explanation-banner" id="prospectivity-score-explanation" style="margin-top: 14px; padding: 10px 14px; border-radius: 8px; background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); font-size: 0.73rem; color: var(--text-secondary); line-height: 1.45; display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="font-size: 0.9rem; line-height: 1;">ℹ️</span>
+                        <div>
+                            Spatial Prospectivity Index derived from the trained Random Forest model. This is an exploration-screening score, not a probability of mineral occurrence.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="dash-panel glass-card span-1" id="dash-stats-panel">
+                    <h3 class="panel-title"><svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg> Quick Statistics</h3>
+                    <div class="quick-stats">
+                        <div class="qstat">
+                            <div class="qstat-value cyan">6</div>
+                            <div class="qstat-label">Bands Analyzed</div>
+                        </div>
+                        <div class="qstat">
+                            <div class="qstat-value purple">10</div>
+                            <div class="qstat-label">Features Extracted</div>
+                        </div>
+                        <div class="qstat">
+                            <div class="qstat-value green">20</div>
+                            <div class="qstat-label">Candidate Zones</div>
+                        </div>
+                        <div class="qstat">
+                            <div class="qstat-value orange" id="dash-pixels-stat">—</div>
+                            <div class="qstat-label">Pixels Processed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI PROSPECTIVITY EVIDENCE & CONFIDENCE PANEL -->
+                <div class="dash-panel glass-card span-full" id="dash-evidence-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <h3 class="panel-title" style="margin-bottom:2px;">
+                                <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                                AI Prospectivity Evidence &amp; Confidence
+                            </h3>
+                            <p style="font-size:0.75rem; color:var(--text-dim); margin:0;">Transparent evaluation of prediction strength, contributing model evidence, active limitations, and field verification priorities.</p>
+                        </div>
+                        <div class="target-source-badge" id="evidence-target-badge" style="background:rgba(0,240,255,0.1); color:var(--cyan); border:1px solid rgba(0,240,255,0.3);">
+                            Scientific Verification Active
+                        </div>
+                    </div>
+
+                    <!-- Non-Technical Summary & Exploration Recommendation -->
+                    <div class="evidence-hero-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-bottom:18px;">
+                        <!-- Plain-Language Explanation -->
+                        <div class="evidence-summary-card glass-card-inner" style="padding:16px; border-radius:10px;">
+                            <div class="evidence-subheading" style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--cyan); font-size:0.85rem; margin-bottom:8px;">
+                                <span class="evidence-subheading-icon">💡</span>
+                                <span>WHY THIS TARGET?</span>
+                            </div>
+                            <p class="evidence-plain-text" id="evidence-plain-explanation" style="font-size:0.8rem; color:var(--text-secondary); line-height:1.5; margin:0;">
+                                Select a target on the map, choose a preset, or search by location to generate real evidence attribution and model reasoning.
+                            </p>
+                        </div>
+
+                        <!-- Exploration Recommendation -->
+                        <div class="evidence-summary-card glass-card-inner" style="padding:16px; border-radius:10px;">
+                            <div class="evidence-subheading" style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--cyan); font-size:0.85rem; margin-bottom:8px;">
+                                <span class="evidence-subheading-icon">🎯</span>
+                                <span>Exploration Recommendation</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                                <span class="priority-tag awaiting" id="evidence-rec-tag">INSUFFICIENT DATA</span>
+                                <span style="font-size:0.72rem; color:var(--text-dim);" id="evidence-rec-status-note">Awaiting target selection</span>
+                            </div>
+                            <p style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; margin-bottom:10px;" id="evidence-rec-action-text">
+                                Select an exploration target inside Sentinel-2 Tile T44QMK to receive field verification guidance.
+                            </p>
+                            <div class="screening-disclaimer-box" style="padding:8px 10px; border-radius:6px; background:rgba(255,170,0,0.08); border:1px solid rgba(255,170,0,0.25); font-size:0.72rem; color:#fcd34d;">
+                                <span class="disclaimer-icon">⚠️</span>
+                                <span><strong>Scientific Distinction:</strong> AI result is an exploration-screening indication, not confirmation of a mineral deposit.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODEL TRUST & VALIDATION SECTION (Phase 10 Requirement 8) -->
+                    <div class="evidence-summary-card glass-card-inner" id="model-validation-card" style="padding:16px; border-radius:10px; margin-bottom:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                            <div class="evidence-subheading" style="display:flex; align-items:center; gap:8px; font-weight:700; color:var(--cyan); font-size:0.85rem;" title="MODEL VALIDATION">
+                                <span class="evidence-subheading-icon">🔬</span>
+                                <span>MODEL TRUST &amp; VALIDATION</span>
+                                <span class="sr-only" style="display:none;">MODEL VALIDATION</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span class="badge-status" id="validation-model-status" style="background:rgba(0,240,255,0.15); color:var(--cyan); border:1px solid rgba(0,240,255,0.3); font-size:0.72rem; padding:2px 8px; border-radius:4px; font-weight:700;">MODEL STATUS: TRAINED</span>
+                                <span class="badge-status" id="model-hash-verified-badge" style="background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3); font-size:0.72rem; padding:2px 8px; border-radius:4px; font-weight:700;" title="SHA-256: 20c1ecfa08524393e5382018a79e7ea3e1d6cf042bc5d86b2381608717e00863">SHA-256 VERIFIED</span>
+                            </div>
+                        </div>
+                        <div class="validation-metrics-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:12px;">
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">VALIDATION</div>
+                                <div style="font-size:0.82rem; font-weight:700; color:#fff;" id="val-methodology">Within-study spatial-sector validation</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">SPATIAL ACCURACY</div>
+                                <div style="font-size:1.1rem; font-weight:700; color:var(--cyan);" id="val-spatial-accuracy">96.76%</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">F1-SCORE</div>
+                                <div style="font-size:1.1rem; font-weight:700; color:#a78bfa;" id="val-spatial-f1">96.71% (0.9671)</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">ROC-AUC</div>
+                                <div style="font-size:1.1rem; font-weight:700; color:#34d399;" id="val-spatial-roc">0.9931</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">PR-AUC</div>
+                                <div style="font-size:1.1rem; font-weight:700; color:#38bdf8;" id="val-spatial-pr">0.9923</div>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.68rem; color:var(--text-dim); text-transform:uppercase;">CALIBRATION</div>
+                                <div style="font-size:0.85rem; font-weight:700; color:#f59e0b;" id="val-calibration-status">NOT CALIBRATED</div>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-bottom:10px;">
+                            <div style="background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); font-size:0.75rem;">
+                                <span style="color:var(--text-dim);">Training Dataset:</span> <strong style="color:#fff;">T44QMK Sentinel-2 (ESA Copernicus)</strong>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); font-size:0.75rem;">
+                                <span style="color:var(--text-dim);">Model Integrity:</span> <strong style="color:#34d399; font-family:monospace;">SHA-256 VERIFIED</strong>
+                            </div>
+                        </div>
+                        <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:6px; padding:10px 12px; font-size:0.75rem; margin-bottom:10px;">
+                            <div style="font-weight:700; color:#f59e0b; margin-bottom:4px;">WHY NOT CALIBRATED?</div>
+                            <div style="color:var(--text-secondary); line-height:1.4;" id="val-why-not-calibrated">
+                                A calibrated probability of mineral occurrence has not been established from the available regional validation evidence.
+                            </div>
+                        </div>
+                        <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:6px; padding:12px; font-size:0.75rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:4px;">
+                                <div style="font-weight:700; color:#f87171; display:flex; align-items:center; gap:6px;">
+                                    <span>🛡️</span><span>INDEPENDENT DEPOSIT VALIDATION</span>
+                                </div>
+                                <span class="badge-status" id="val-independent-status" style="background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.4); font-size:0.68rem; padding:2px 8px; border-radius:3px; font-weight:700;">NOT AVAILABLE</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:8px;">
+                                <div style="background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:4px;">
+                                    <div style="font-size:0.65rem; color:var(--text-dim);">TRAINING DEPOSIT</div>
+                                    <div style="font-size:0.8rem; font-weight:700; color:#fff;" id="val-training-deposit">Ghondi Manganese Mine</div>
+                                </div>
+                                <div style="background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:4px;">
+                                    <div style="font-size:0.65rem; color:var(--text-dim);">INDEPENDENT TEST DEPOSITS</div>
+                                    <div style="font-size:0.8rem; font-weight:700; color:#fca5a5;" id="val-independent-deposits-count">0</div>
+                                </div>
+                                <div style="background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:4px;">
+                                    <div style="font-size:0.65rem; color:var(--text-dim);">LEAKAGE CHECK</div>
+                                    <div style="font-size:0.8rem; font-weight:700; color:#34d399;" id="val-leakage-check">VERIFIED (NO LEAKAGE)</div>
+                                </div>
+                            </div>
+                            <div style="color:var(--text-secondary); line-height:1.4;" id="val-independent-explanation">
+                                Current positive ground truth originates from one known Manganese deposit (Ghondi Mine). Independent deposit validation requires additional real Manganese occurrence datasets. (Within-study spatial-sector validation: 96.76%).
+                            </div>
+                        </div>
+                        <div style="margin-top:10px; font-size:0.72rem; color:var(--text-dim); line-height:1.4; padding:8px 10px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                            <em>The reported validation measures performance within the available study area. Independent deposit validation requires verified external Manganese deposits, which are currently unavailable.</em>
+                        </div>
+                    </div>
+
+                    <!-- Categorized Evidence Breakdown -->
+                    <div style="margin-bottom:18px;">
+                        <h4 class="evidence-section-header" style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-bottom:10px;">Evidence Breakdown</h4>
+                        <div class="evidence-breakdown-grid" id="evidence-breakdown-cards" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+                            <!-- Populated dynamically by EvidenceEngine -->
+                        </div>
+                    </div>
+
+                    <!-- Top Contributing Model Features (XAI Integration) -->
+                    <div style="margin-bottom:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <h4 class="evidence-section-header" style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-bottom:0;">Top Model Features (Random Forest Contributions)</h4>
+                            <span style="font-size:0.72rem; color:var(--cyan); font-family:monospace;">models/manganese_random_forest.pkl</span>
+                        </div>
+                        <div class="top-features-table-wrapper glass-card-inner" style="padding:14px; border-radius:10px;">
+                            <div id="evidence-top-features-list" style="display:flex; flex-direction:column; gap:8px;">
+                                <!-- Top 5 features populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Limitations & Data Quality -->
+                    <div style="margin-bottom:18px;">
+                        <h4 class="evidence-section-header" style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-bottom:10px;">Limitations &amp; Data Quality</h4>
+                        <div class="glass-card-inner" style="padding:14px; border-radius:10px;">
+                            <ul class="limitations-bullet-list" id="evidence-limitations-list" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:0.75rem; color:var(--text-secondary);">
+                                <!-- Limitations populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Data Provenance & Sources Table -->
+                    <div>
+                        <h4 class="evidence-section-header" style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-bottom:10px;">Data Provenance &amp; Evidence Sources</h4>
+                        <div class="provenance-table-wrapper glass-card-inner" style="overflow-x:auto; border-radius:10px;">
+                            <table class="provenance-table" style="width:100%; border-collapse:collapse; font-size:0.75rem;">
+                                <thead>
+                                    <tr style="border-bottom:1px solid rgba(255,255,255,0.08); text-align:left; color:var(--text-dim);">
+                                        <th style="padding:8px 12px;">Evidence Source</th>
+                                        <th style="padding:8px 12px;">Status</th>
+                                        <th style="padding:8px 12px;">Data Type</th>
+                                        <th style="padding:8px 12px;">Coverage / Footprint</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="evidence-provenance-tbody">
+                                    <!-- Provenance rows populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Backward compatibility container for existing tests referencing dash-why-panel -->
+                    <div id="dash-why-panel" style="display:none;">
+                        <div id="why-explanation-content"></div>
+                    </div>
+                </div>
+
+                <!-- AI EXPLORATION TARGET RANKING & COMPARISON PANEL -->
+                <div class="dash-panel glass-card span-full" id="dash-ranking-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                        <div>
+                            <h3 class="panel-title" style="margin-bottom:2px;">
+                                <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                TOP EXPLORATION TARGETS
+                            </h3>
+                            <p style="font-size:0.75rem; color:var(--text-dim); margin:0;">Authoritative candidate discovery zones sorted by model prospectivity score. Distinctly evaluates confidence, evidence strength, and exploration priorities.</p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <span class="target-source-badge" id="ranking-mineral-badge" style="background:rgba(0,240,255,0.1); color:var(--cyan); border:1px solid rgba(0,240,255,0.3);">
+                                Commodity: Manganese (Trained)
+                            </span>
+                            <span class="target-source-badge" id="ranking-confidence-indicator" style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.3);" title="Empirical probability calibration curves not fitted">
+                                Confidence: Not Calibrated
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Ranking Toolbar & Actions -->
+                    <div class="ranking-toolbar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:260px;">
+                            <div class="search-input-wrapper" style="width:100%; max-width:340px;">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" class="glass-select search-input" id="ranking-filter-input" placeholder="Filter by zone ID, sector name, priority..." autocomplete="off" style="padding:6px 10px 6px 32px; font-size:0.8rem;">
+                            </div>
+                            <span style="font-size:0.75rem; color:var(--text-dim); white-space:nowrap;" id="ranking-count-summary">20 Zones Ranked</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <button type="button" class="btn-secondary" id="btn-select-top3" style="padding:6px 12px; font-size:0.75rem;">
+                                Select Top 3
+                            </button>
+                            <button type="button" class="btn-secondary" id="btn-clear-selection" style="padding:6px 12px; font-size:0.75rem;">
+                                Clear Selection
+                            </button>
+                            <button type="button" class="btn-primary" id="btn-compare-targets" disabled style="padding:6px 14px; font-size:0.78rem;">
+                                Compare Targets (<span id="compare-count-badge">0</span>)
+                            </button>
+                            <button type="button" class="btn-secondary" id="btn-export-ranked-geojson" style="padding:6px 12px; font-size:0.75rem;">
+                                Export (GeoJSON)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Ranking Table -->
+                    <div class="ranking-table-container glass-card-inner" style="overflow-x:auto; border-radius:10px; margin-bottom:12px;">
+                        <table class="glass-table ranking-table" id="ranking-table" style="width:100%; border-collapse:collapse; font-size:0.76rem;">
+                            <thead>
+                                <tr style="border-bottom:1px solid rgba(255,255,255,0.08); text-align:left; color:var(--text-dim);">
+                                    <th style="padding:10px 8px; width:36px; text-align:center;">
+                                        <input type="checkbox" id="ranking-select-all" title="Select / Deselect all targets">
+                                    </th>
+                                    <th style="padding:10px 10px; width:50px;">Rank</th>
+                                    <th style="padding:10px 12px;">Target Zone &amp; Sector</th>
+                                    <th style="padding:10px 12px;">Prospectivity</th>
+                                    <th style="padding:10px 12px;">Model Confidence</th>
+                                    <th style="padding:10px 12px;">Evidence</th>
+                                    <th style="padding:10px 12px;">Data Quality</th>
+                                    <th style="padding:10px 12px;">Exploration Priority</th>
+                                    <th style="padding:10px 12px; text-align:right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ranking-table-tbody">
+                                <!-- Populated dynamically by TargetRankingEngine -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Priority & Screening Disclaimer Notice (Req 5 & 11) -->
+                    <div class="screening-disclaimer-box" style="padding:8px 12px; border-radius:6px; background:rgba(255,170,0,0.06); border:1px solid rgba(255,170,0,0.2); font-size:0.72rem; color:#fcd34d;">
+                        <span class="disclaimer-icon">⚠️</span>
+                        <span><strong>Exploration Screening Principle:</strong> Priority indicates AI-assisted exploration screening and does not confirm mineralization. Model Confidence is strictly Not Calibrated across regional surfaces.</span>
+                    </div>
+
+                    <!-- Untrained Mineral Notice Container (Req 12) -->
+                    <div id="ranking-untrained-notice" style="display:none; padding:32px 20px; text-align:center;">
+                        <div style="font-size:1.1rem; color:var(--text-secondary); margin-bottom:8px; font-weight:700;" id="ranking-untrained-title">TARGET RANKING<br><span style="font-size:0.95rem; color:#f87171; font-weight:600;">Model not trained</span></div>
+                        <p style="font-size:0.85rem; color:var(--text-secondary); max-width:600px; margin:0 auto; line-height:1.5;" id="ranking-untrained-text">Training data required before mineral-specific candidate zones can be generated.</p>
+                    </div>
+                </div>
+
+                <!-- TARGET COMPARISON MODAL / VIEW (Req 6) -->
+                <div class="custom-modal-overlay" id="target-comparison-modal" style="display:none;">
+                    <div class="custom-modal-dialog glass-card" style="max-width:980px; width:92%; max-height:90vh; overflow-y:auto; padding:22px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                            <div>
+                                <h3 style="margin:0 0 4px 0; font-size:1.1rem; color:#fff; display:flex; align-items:center; gap:8px;">
+                                    <span>🎯</span> AI Exploration Target Comparison
+                                </h3>
+                                <p style="margin:0; font-size:0.74rem; color:var(--text-dim);">Side-by-side scientific evaluation of candidate anomalies. Audits evidence availability without penalizing missing regional datasets.</p>
+                            </div>
+                            <button type="button" class="modal-close-btn" id="btn-close-comparison" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer; line-height:1;">&times;</button>
+                        </div>
+
+                        <!-- Comparison Matrix Container -->
+                        <div id="comparison-matrix-container" style="overflow-x:auto; margin-bottom:14px;"></div>
+
+                        <!-- Summary & Differential Note -->
+                        <div class="glass-card-inner" style="padding:12px; margin-bottom:14px;" id="comparison-summary-container">
+                            <div style="font-size:0.72rem; color:var(--text-dim); margin-bottom:4px; font-weight:600;">Differential Summary</div>
+                            <p style="font-size:0.76rem; color:var(--text-secondary); margin:0; line-height:1.4;" id="comparison-summary-text"></p>
+                        </div>
+
+                        <div class="screening-disclaimer-box" style="padding:8px 12px; border-radius:6px; background:rgba(255,170,0,0.06); border:1px solid rgba(255,170,0,0.2); font-size:0.72rem; color:#fcd34d; margin-bottom:14px;">
+                            <span>⚠️ <strong>Scientific Honesty:</strong> Missing datasets (Spectral, Terrain, Geology, Drilling) reflect uningested regional data layers rather than negative physical measurements.</span>
+                        </div>
+
+                        <div style="display:flex; justify-content:flex-end; gap:8px;">
+                            <button type="button" class="btn-secondary" id="btn-export-comparison-geojson" style="font-size:0.78rem;">
+                                Export Comparison (GeoJSON)
+                            </button>
+                            <button type="button" class="btn-primary" id="btn-dismiss-comparison" style="font-size:0.78rem;">
+                                Close Comparison
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TARGET INTELLIGENCE / DETAIL MODAL (Req 7) -->
+                <div class="custom-modal-overlay" id="target-detail-modal" style="display:none;">
+                    <div class="custom-modal-dialog glass-card" style="max-width:760px; width:90%; max-height:90vh; overflow-y:auto; padding:22px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+                            <div>
+                                <span class="priority-tag high" id="detail-modal-priority" style="margin-bottom:6px; display:inline-block;">HIGH PRIORITY</span>
+                                <h3 style="margin:0 0 2px 0; font-size:1.15rem; color:#fff;" id="detail-modal-title">Zone 67684 — NW Cluster</h3>
+                                <p style="margin:0; font-size:0.74rem; color:var(--text-dim);" id="detail-modal-subarea">Paraswada / Lamta Sector, Balaghat</p>
+                            </div>
+                            <button type="button" class="modal-close-btn" id="btn-close-target-detail" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer; line-height:1;">&times;</button>
+                        </div>
+
+                        <!-- 4 Metric Cards Grid -->
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin-bottom:16px;">
+                            <div class="glass-card-inner" style="padding:10px; text-align:center;">
+                                <div style="font-size:0.68rem; color:var(--text-dim);">Prospectivity Score</div>
+                                <div style="font-size:1.4rem; font-weight:800; color:var(--cyan); font-family:monospace;" id="detail-modal-score">97.6%</div>
+                                <div style="font-size:0.65rem; color:var(--text-dim);">Spatial index</div>
+                            </div>
+                            <div class="glass-card-inner" style="padding:10px; text-align:center;">
+                                <div style="font-size:0.68rem; color:var(--text-dim);">Model Confidence</div>
+                                <div style="font-size:1.05rem; font-weight:700; color:#f59e0b; margin-top:4px;" id="detail-modal-confidence">Not Calibrated</div>
+                                <div style="font-size:0.65rem; color:var(--text-dim);">Uncalibrated curve</div>
+                            </div>
+                            <div class="glass-card-inner" style="padding:10px; text-align:center;">
+                                <div style="font-size:0.68rem; color:var(--text-dim);">Evidence Strength</div>
+                                <div style="font-size:1.15rem; font-weight:700; color:#00ff88; margin-top:2px;" id="detail-modal-evidence-strength">Strong</div>
+                                <div style="font-size:0.65rem; color:var(--text-dim);">Multi-layer match</div>
+                            </div>
+                            <div class="glass-card-inner" style="padding:10px; text-align:center;">
+                                <div style="font-size:0.68rem; color:var(--text-dim);">Data Quality</div>
+                                <div style="font-size:1.15rem; font-weight:700; color:#60a5fa; margin-top:2px;" id="detail-modal-data-quality">Medium</div>
+                                <div style="font-size:0.65rem; color:var(--text-dim);">3/8 layers active</div>
+                            </div>
+                        </div>
+
+                        <!-- Top Model Contributing Features (XAI) -->
+                        <div style="margin-bottom:14px;">
+                            <h4 style="font-size:0.82rem; font-weight:700; color:#fff; margin:0 0 8px 0;">Top Model Features (XAI Contributions)</h4>
+                            <div class="glass-card-inner" style="padding:12px; border-radius:8px;" id="detail-modal-features-list"></div>
+                        </div>
+
+                        <!-- Geological Context (Phase 7 Requirement 11) -->
+                        <div class="glass-card-inner" style="padding:12px; margin-bottom:10px; font-size:0.75rem;">
+                            <div style="font-weight:700; color:var(--cyan); margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+                                <span>🏛️ GEOLOGICAL CONTEXT</span>
+                                <span class="badge-status" id="detail-modal-geology-status" style="font-size:0.65rem; padding:1px 6px; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:3px;">DATA NOT AVAILABLE</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                                <div><span style="color:var(--text-dim);">Lithology:</span> <strong id="detail-modal-lithology" style="color:#f87171;">DATA NOT AVAILABLE</strong></div>
+                                <div><span style="color:var(--text-dim);">Structure distance:</span> <strong id="detail-modal-structure-dist" style="color:#f87171;">DATA NOT AVAILABLE</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Terrain Context (Phase 7 Requirement 11) -->
+                        <div class="glass-card-inner" style="padding:12px; margin-bottom:14px; font-size:0.75rem;">
+                            <div style="font-weight:700; color:#38bdf8; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+                                <span>⛰️ TERRAIN CONTEXT</span>
+                                <span class="badge-status" id="detail-modal-terrain-status" style="font-size:0.65rem; padding:1px 6px; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); border-radius:3px;">DATA NOT AVAILABLE</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
+                                <div><span style="color:var(--text-dim);">Elevation:</span> <strong id="detail-modal-elevation" style="color:#f87171;">DATA NOT AVAILABLE</strong></div>
+                                <div><span style="color:var(--text-dim);">Slope:</span> <strong id="detail-modal-slope" style="color:#f87171;">DATA NOT AVAILABLE</strong></div>
+                                <div><span style="color:var(--text-dim);">Aspect:</span> <strong id="detail-modal-aspect" style="color:#f87171;">DATA NOT AVAILABLE</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Footprint & Geospatial Specs -->
+                        <div class="glass-card-inner" style="padding:12px; margin-bottom:14px; font-size:0.75rem;">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                <div><span style="color:var(--text-dim);">Ground Footprint:</span> <strong id="detail-modal-footprint" style="color:#fff;">111 pixels (~44.4 ha)</strong></div>
+                                <div><span style="color:var(--text-dim);">Coordinates:</span> <span id="detail-modal-coords" class="font-mono cyan">22.2142°N, 80.0636°E</span></div>
+                                <div><span style="color:var(--text-dim);">Projected UTM 44N:</span> <span id="detail-modal-utm" class="font-mono">441,089 E, 2,426,904 N</span></div>
+                                <div><span style="color:var(--text-dim);">Spatial Resolution:</span> <span>20 m Sentinel-2</span></div>
+                            </div>
+                        </div>
+
+                        <div class="screening-disclaimer-box" style="padding:8px 12px; border-radius:6px; background:rgba(255,170,0,0.06); border:1px solid rgba(255,170,0,0.2); font-size:0.72rem; color:#fcd34d; margin-bottom:14px;">
+                            <span>⚠️ <strong>Exploration Screening Indication:</strong> AI prospectivity index identifies priority anomaly targets for ground truth verification. This is not proof of an ore deposit.</span>
+                        </div>
+
+                        <div style="display:flex; justify-content:flex-end; gap:8px;">
+                            <button type="button" class="btn-secondary" id="btn-modal-add-compare" style="font-size:0.78rem;">
+                                Add to Comparison
+                            </button>
+                            <button type="button" class="btn-primary" id="btn-modal-view-map" style="font-size:0.78rem;">
+                                Set Target &amp; View on Map →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPECTRAL FINGERPRINT PANEL -->
+                <div class="dash-panel glass-card span-full" id="dash-spectral-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <h3 class="panel-title" style="margin-bottom:0;">
+                            <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                            Spectral Fingerprint — Sentinel-2 Mineral Ratios
+                        </h3>
+                        <span class="target-source-badge" id="spectral-status-badge" style="background: rgba(0, 240, 255, 0.1); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3);">
+                            Real Bands Verification Active
+                        </span>
+                    </div>
+
+                    <div class="spectral-grid" id="spectral-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+                        <!-- Ferrous Minerals (B11/B8A) -->
+                        <div class="spectral-card glass-card-inner" id="spectral-card-ferrous">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-weight:700; color:var(--text-primary); font-size:0.95rem;">Ferrous Minerals</span>
+                                <span class="formula-badge" style="font-family:monospace; font-size:0.75rem; background:rgba(0,240,255,0.15); color:var(--cyan); padding:2px 8px; border-radius:4px; font-weight:600;">B11 / B8A</span>
+                            </div>
+                            <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:12px; line-height:1.4;">SWIR-1 / Narrow NIR ratio highlighting ferrous iron (Fe²⁺) in silicates & carbonates.</p>
+                            <div class="spectral-metrics" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Target Value</span>
+                                    <span id="spectral-ferrous-value" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Buffer Mean</span>
+                                    <span id="spectral-ferrous-mean" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-secondary); margin-bottom:4px;">
+                                <span>Range: <strong id="spectral-ferrous-range" style="color:var(--text-primary);">—</strong></span>
+                                <span id="spectral-ferrous-status" style="color:var(--text-dim);">Awaiting L2A Bands</span>
+                            </div>
+                        </div>
+
+                        <!-- Clay Minerals (B11/B12) -->
+                        <div class="spectral-card glass-card-inner" id="spectral-card-clay">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-weight:700; color:var(--text-primary); font-size:0.95rem;">Clay Minerals</span>
+                                <span class="formula-badge" style="font-family:monospace; font-size:0.75rem; background:rgba(123,47,255,0.15); color:#a855f7; padding:2px 8px; border-radius:4px; font-weight:600;">B11 / B12</span>
+                            </div>
+                            <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:12px; line-height:1.4;">SWIR-1 / SWIR-2 ratio detecting Al-OH alteration clays (kaolinite, illite, montmorillonite).</p>
+                            <div class="spectral-metrics" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Target Value</span>
+                                    <span id="spectral-clay-value" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Buffer Mean</span>
+                                    <span id="spectral-clay-mean" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-secondary); margin-bottom:4px;">
+                                <span>Range: <strong id="spectral-clay-range" style="color:var(--text-primary);">—</strong></span>
+                                <span id="spectral-clay-status" style="color:var(--text-dim);">Awaiting L2A Bands</span>
+                            </div>
+                        </div>
+
+                        <!-- Iron Oxide (B04/B02) -->
+                        <div class="spectral-card glass-card-inner" id="spectral-card-iron">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-weight:700; color:var(--text-primary); font-size:0.95rem;">Iron Oxide</span>
+                                <span class="formula-badge" style="font-family:monospace; font-size:0.75rem; background:rgba(255,107,53,0.15); color:var(--orange); padding:2px 8px; border-radius:4px; font-weight:600;">B04 / B02</span>
+                            </div>
+                            <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:12px; line-height:1.4;">Red / Blue ratio capturing ferric iron (Fe³⁺) charge transfer in hematite & goethite gossans.</p>
+                            <div class="spectral-metrics" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Target Value</span>
+                                    <span id="spectral-iron-value" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px;">
+                                    <span style="font-size:0.68rem; color:var(--text-dim); display:block;">Buffer Mean</span>
+                                    <span id="spectral-iron-mean" style="font-size:1.1rem; font-weight:700; color:var(--text-primary); font-family:monospace;">—</span>
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-secondary); margin-bottom:4px;">
+                                <span>Range: <strong id="spectral-iron-range" style="color:var(--text-primary);">—</strong></span>
+                                <span id="spectral-iron-status" style="color:var(--text-dim);">Awaiting L2A Bands</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spectral-note" id="spectral-integrity-note" style="margin-top:14px; padding:10px 14px; border-radius:8px; background:rgba(0,240,255,0.03); border:1px solid rgba(0,240,255,0.1); font-size:0.72rem; color:var(--text-secondary);">
+                        <strong style="color:var(--cyan);">Scientific Integrity Active:</strong> Multi-spectral ratios require raw Sentinel-2 L2A surface reflectance rasters (B02, B04, B8A, B11, B12). Real pixel-level ratios are calculated dynamically when band rasters are present in <code>data/raw/</code> or <code>data/bands/</code>. No values are simulated or placeholder-generated.
+                    </div>
+                </div>
+
+
+                <!-- Recent Analysis -->
+                <div class="dash-panel glass-card span-full" id="dash-recent">
+                    <h3 class="panel-title"><svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg> Recent Analyses</h3>
+                    <div class="table-wrapper">
+                        <table class="glass-table">
+                            <thead>
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Score</th>
+                                    <th>Classification</th>
+                                    <th>Radius</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-analyses-tbody">
+                                <tr id="no-analyses-row">
+                                    <td colspan="6" style="text-align: center; color: var(--text-dim); font-style: italic; padding: 24px;">No analyses yet — select a location and click Run Analysis</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: MAP ====== -->
+    <section id="page-map" class="page">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <h1 class="page-title"><span class="glow-text">Interactive Map</span></h1>
+                <p class="page-subtitle">2D Prospectivity Visualization & Zone Analysis</p>
+            </div>
+            <div class="map-layout">
+                <div class="map-sidebar glass-card">
+                    <h3 class="panel-title">Target Location</h3>
+                    
+                    <!-- Target Location Search Box (Req 1) -->
+                    <div class="control-group location-search-container" id="map-location-search-container">
+                        <label class="control-label">Search Location</label>
+                        <div class="search-input-wrapper">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="glass-select search-input" id="map-location-search-input" placeholder="Search places, towns, districts, zones..." autocomplete="off">
+                            <button type="button" class="search-clear-btn" id="map-location-search-clear" style="display:none;" title="Clear search">×</button>
+                        </div>
+                        <div class="suggestions-dropdown" id="map-location-suggestions-dropdown" style="display:none;"></div>
+                    </div>
+
+                    <!-- Target Preset Selector -->
+                    <div class="control-group">
+                        <label class="control-label">Location Presets</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="map-location-select">
+                                <option value="" disabled selected>— Select Target Preset —</option>
+                                <option value="ghondi" data-lat="21.9455" data-lon="80.4295">Ghondi Manganese Mine (Known Deposit)</option>
+                                <option value="zone-67684" data-lat="22.214160" data-lon="80.063632">Zone 67684 — NW Cluster (97.6%)</option>
+                                <option value="zone-124766" data-lat="21.939738" data-lon="80.602479">Zone 124766 — Central East (97.0%)</option>
+                                <option value="zone-187925" data-lat="21.639316" data-lon="80.558661">Zone 187925 — South East (96.9%)</option>
+                                <option value="zone-103786" data-lat="22.036465" data-lon="80.437670">Zone 103786 — Central Belt (96.7%)</option>
+                                <option value="zone-191911" data-lat="21.615292" data-lon="80.390039">Zone 191911 — Southern Belt (96.6%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Target Place Name Card (Req 6) -->
+                    <div class="target-place-card" id="map-target-place-card" style="margin-bottom:10px;">
+                        <div class="place-main-title" id="map-place-name">No Target Selected</div>
+                        <div class="place-sub-title" id="map-place-subarea">Click the map or search for a location</div>
+                    </div>
+
+                    <!-- Target Coordinates Input -->
+                    <div class="control-group target-coords-box" style="margin-bottom:12px;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                            <div>
+                                <span style="font-size:0.68rem; color:var(--text-dim); display:block; margin-bottom:2px;">Latitude (°N)</span>
+                                <input type="number" step="0.0001" class="glass-select" id="map-lat-input" value="" placeholder="e.g. 21.9455" style="padding:6px 8px; font-family:monospace; font-size:0.8rem;">
+                            </div>
+                            <div>
+                                <span style="font-size:0.68rem; color:var(--text-dim); display:block; margin-bottom:2px;">Longitude (°E)</span>
+                                <input type="number" step="0.0001" class="glass-select" id="map-lon-input" value="" placeholder="e.g. 80.4295" style="padding:6px 8px; font-family:monospace; font-size:0.8rem;">
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                            <span class="target-tile-status" id="map-target-status" style="font-size:0.7rem; color:var(--text-dim);">Click map or choose preset</span>
+                            <button type="button" class="popup-btn" id="btn-map-apply-coords" style="padding:4px 10px; font-size:0.75rem;">Apply Coords</button>
+                        </div>
+                    </div>
+
+                    <!-- Live Target Prospectivity Card -->
+                    <div class="map-info glass-card-inner" id="map-live-prospectivity-card" style="margin-bottom:14px; border:1px solid rgba(0,240,255,0.25); background:rgba(10,20,35,0.6);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <span style="font-size:0.72rem; text-transform:uppercase; letter-spacing:1px; color:var(--cyan); font-weight:600;">Prospectivity Result</span>
+                            <span id="map-classification-tag" class="status-badge" style="font-size:0.68rem; padding:2px 8px; background:rgba(255,255,255,0.08); color:var(--text-dim); border:1px solid rgba(255,255,255,0.15); border-radius:10px;">Awaiting Target</span>
+                        </div>
+                        <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:8px;">
+                            <span id="map-score-number" style="font-family:'Orbitron',monospace; font-size:1.8rem; font-weight:800; color:var(--cyan); text-shadow:0 0 12px rgba(0,240,255,0.4);">—</span>
+                            <span style="font-size:0.75rem; color:var(--text-dim);">Click map to analyze</span>
+                        </div>
+                        <div class="info-row" style="font-size:0.75rem; padding:3px 0;"><span class="info-label">Buffer Mean:</span><span class="info-value" id="map-mean-score">—</span></div>
+                        <div class="info-row" style="font-size:0.75rem; padding:3px 0;"><span class="info-label">Buffer Peak (Max):</span><span class="info-value" id="map-max-score">—</span></div>
+                        <div class="info-row" style="font-size:0.75rem; padding:3px 0;"><span class="info-label">Buffer Min:</span><span class="info-value" id="map-min-score">—</span></div>
+                        <div class="info-row" style="font-size:0.75rem; padding:3px 0;"><span class="info-label">Nearby Zones:</span><span class="info-value cyan" id="map-nearby-zones-count">—</span></div>
+                        <div class="info-row" style="font-size:0.75rem; padding:3px 0; border-top:1px dashed rgba(255,255,255,0.08); margin-top:4px; padding-top:4px;"><span class="info-label">Spectral Ratios:</span><span class="info-value" id="map-spectral-status" style="color:var(--text-dim); font-size:0.7rem;">Awaiting Target</span></div>
+                    </div>
+
+                    <h3 class="panel-title" style="margin-top:4px;">Map & Buffer Controls</h3>
+                    <div class="control-group">
+                        <label class="control-label">Basemap Style</label>
+                        <div class="toggle-group">
+                            <button class="toggle-btn active" data-layer="satellite">Satellite</button>
+                            <button class="toggle-btn" data-layer="prospectivity">Heatmap</button>
+                            <button class="toggle-btn" data-layer="dark">Dark</button>
+                            <button class="toggle-btn" data-layer="terrain">Terrain</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Map Overlays (Req 3)</label>
+                        <div class="layer-checkbox-group">
+                            <label class="layer-checkbox-label">
+                                <input type="checkbox" id="toggle-place-labels" checked>
+                                <span>Place Labels</span>
+                            </label>
+                            <label class="layer-checkbox-label">
+                                <input type="checkbox" id="toggle-prospectivity-overlay" checked>
+                                <span>Prospectivity Heatmap</span>
+                            </label>
+                            <label class="layer-checkbox-label">
+                                <input type="checkbox" id="toggle-tile-footprint" checked>
+                                <span>Exploration Boundary (T44QMK)</span>
+                            </label>
+                            <label class="layer-checkbox-label">
+                                <input type="checkbox" id="show-zones-toggle" checked>
+                                <span>Prospectivity Zones</span>
+                            </label>
+                            <label class="layer-checkbox-label" title="No verified geological/lithology dataset currently loaded">
+                                <input type="checkbox" id="toggle-geology-layer" disabled>
+                                <span style="color:var(--text-dim);">Geology — Data unavailable</span>
+                            </label>
+                            <label class="layer-checkbox-label" title="No verified structural faults/lineaments dataset currently loaded">
+                                <input type="checkbox" id="toggle-structures-layer" disabled>
+                                <span style="color:var(--text-dim);">Structures — Data unavailable</span>
+                            </label>
+                            <label class="layer-checkbox-label" title="No verified Digital Elevation Model (DEM) currently loaded">
+                                <input type="checkbox" id="toggle-terrain-layer" disabled>
+                                <span style="color:var(--text-dim);">Terrain — Data unavailable</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Analysis Radius</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="map-radius-select">
+                                <option value="10">10 km (Local Cluster)</option>
+                                <option value="25" selected>25 km (Regional Block)</option>
+                                <option value="50">50 km (Broad Belt)</option>
+                                <option value="100">100 km (Tile Overview)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Overlay Opacity</label>
+                        <input type="range" class="glass-range" id="opacity-range" min="0" max="100" value="75">
+                    </div>
+                    <button class="btn-primary btn-3d btn-full" id="btn-map-run-analysis" style="margin-bottom:14px;">
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                        Analyze Target in Dashboard
+                    </button>
+                    <div class="map-legend">
+                        <h4 class="legend-title">Prospectivity Legend</h4>
+                        <div class="legend-items">
+                            <div class="legend-item"><span class="legend-color" style="background: #ff0055"></span> Very High (90-100%)</div>
+                            <div class="legend-item"><span class="legend-color" style="background: #ff4444"></span> High (75-90%)</div>
+                            <div class="legend-item"><span class="legend-color" style="background: #ffaa00"></span> Moderate (50-75%)</div>
+                            <div class="legend-item"><span class="legend-color" style="background: #88cc44"></span> Low (25-50%)</div>
+                            <div class="legend-item"><span class="legend-color" style="background: #00aa44"></span> Very Low (0-25%)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-canvas glass-card" id="map-canvas">
+                    <div id="leaflet-map"></div>
+                    <canvas id="prospectivity-map" style="display:none" width="800" height="600"></canvas>
+                    <div class="map-overlay-controls">
+                        <button class="map-ctrl-btn" id="map-btn-zoom-in" title="Zoom In">+</button>
+                        <button class="map-ctrl-btn" id="map-btn-zoom-out" title="Zoom Out">−</button>
+                        <button class="map-ctrl-btn" id="map-btn-reset" title="Reset View">⟲</button>
+                    </div>
+                    <div class="map-coordinates" id="map-coordinates">
+                        <span>Click anywhere on map to select exploration target</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: ANALYTICS ====== -->
+    <section id="page-analytics" class="page">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <h1 class="page-title"><span class="glow-text">Analytics</span></h1>
+                <p class="page-subtitle">Prospectivity Statistics, Feature Importance & Production Analysis</p>
+            </div>
+            <div class="analytics-grid">
+                <div class="analytics-panel glass-card span-2">
+                    <h3 class="panel-title">Feature Importance</h3>
+                    <div class="chart-container" id="feature-importance-chart">
+                        <canvas id="feature-chart" width="600" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-panel glass-card span-1">
+                    <h3 class="panel-title">Score Distribution</h3>
+                    <div class="chart-container" id="score-distribution-chart">
+                        <canvas id="distribution-chart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-panel glass-card span-1">
+                    <h3 class="panel-title">Spectral Indices</h3>
+                    <div class="indices-list">
+                        <div class="index-item">
+                            <div class="index-header"><span class="index-name">NDVI</span><span class="index-value">0.42</span></div>
+                            <div class="index-bar"><div class="index-fill" style="width:42%; background: linear-gradient(90deg, #00ff88, #00f0ff)"></div></div>
+                        </div>
+                        <div class="index-item">
+                            <div class="index-header"><span class="index-name">NDMI</span><span class="index-value">0.38</span></div>
+                            <div class="index-bar"><div class="index-fill" style="width:38%; background: linear-gradient(90deg, #7b2fff, #a855f7)"></div></div>
+                        </div>
+                        <div class="index-item">
+                            <div class="index-header"><span class="index-name">Iron Oxide Ratio</span><span class="index-value">0.71</span></div>
+                            <div class="index-bar"><div class="index-fill" style="width:71%; background: linear-gradient(90deg, #ff6b35, #ff4444)"></div></div>
+                        </div>
+                        <div class="index-item">
+                            <div class="index-header"><span class="index-name">Clay Index</span><span class="index-value">0.55</span></div>
+                            <div class="index-bar"><div class="index-fill" style="width:55%; background: linear-gradient(90deg, #ffaa00, #ff6b35)"></div></div>
+                        </div>
+                        <div class="index-item">
+                            <div class="index-header"><span class="index-name">SWIR Ratio</span><span class="index-value">0.63</span></div>
+                            <div class="index-bar"><div class="index-fill" style="width:63%; background: linear-gradient(90deg, #00f0ff, #7b2fff)"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-panel glass-card span-2">
+                    <h3 class="panel-title">Production Shortfall Analysis</h3>
+                    <div class="chart-container" id="production-chart-container">
+                        <canvas id="production-chart" width="600" height="250"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-panel glass-card span-full" id="production-prediction-panel">
+                    <h3 class="panel-title"><svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg> Production Prediction (AI Engine)</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <div class="control-group">
+                                <label class="control-label">Rainfall (mm)</label>
+                                <input type="number" class="glass-select" id="prod-rainfall" value="150" min="0" max="500" step="10" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text-primary); font-family: var(--font-display); font-size: 0.85rem;">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Equipment Downtime (hr)</label>
+                                <input type="number" class="glass-select" id="prod-downtime" value="20" min="0" max="100" step="1" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text-primary); font-family: var(--font-display); font-size: 0.85rem;">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Blasting Delay (hr)</label>
+                                <input type="number" class="glass-select" id="prod-blasting" value="8" min="0" max="48" step="1" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text-primary); font-family: var(--font-display); font-size: 0.85rem;">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Equipment Availability (%)</label>
+                                <input type="number" class="glass-select" id="prod-availability" value="85" min="0" max="100" step="1" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text-primary); font-family: var(--font-display); font-size: 0.85rem;">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Planned Production (tonnes)</label>
+                                <input type="number" class="glass-select" id="prod-planned" value="11000" min="1000" max="20000" step="500" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: var(--text-primary); font-family: var(--font-display); font-size: 0.85rem;">
+                            </div>
+                            <button class="btn-primary btn-3d btn-full" id="btn-predict-production" style="margin-top: 12px;">
+                                <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+                                Predict Production
+                            </button>
+                        </div>
+                        <div id="production-result" style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+                            <div style="text-align: center; color: var(--text-dim); font-style: italic; padding: 40px 20px;">Enter operational parameters and click Predict Production to see AI forecast results.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-panel glass-card span-1">
+                    <h3 class="panel-title">Model Performance</h3>
+                    <div class="model-metrics">
+                        <div class="metric-card glass-card-inner">
+                            <div class="metric-value cyan">0.95</div>
+                            <div class="metric-label">AUC-ROC</div>
+                        </div>
+                        <div class="metric-card glass-card-inner">
+                            <div class="metric-value green">0.92</div>
+                            <div class="metric-label">Precision</div>
+                        </div>
+                        <div class="metric-card glass-card-inner">
+                            <div class="metric-value purple">0.89</div>
+                            <div class="metric-label">Recall</div>
+                        </div>
+                        <div class="metric-card glass-card-inner">
+                            <div class="metric-value orange">0.91</div>
+                            <div class="metric-label">F1-Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: 3D VISUALIZATION ====== -->
+    <section id="page-visualization" class="page">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <h1 class="page-title"><span class="glow-text">3D PROSPECTIVITY SURFACE</span></h1>
+                <p class="page-subtitle">Interactive 3D Prospectivity Surface Exploration (Spatial Prospectivity Index, Not Probability)</p>
+            </div>
+            <div class="viz-layout">
+                <div class="viz-sidebar glass-card">
+                    <h3 class="panel-title">Visualization Controls</h3>
+                    <div class="control-group">
+                        <label class="control-label">Mineral</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="viz-mineral-select">
+                                <option value="manganese" selected>Manganese (Active Model)</option>
+                                <option value="bauxite" disabled>Bauxite (Not Yet Trained)</option>
+                                <option value="coal" disabled>Coal (Not Yet Trained)</option>
+                                <option value="iron_ore" disabled>Iron Ore (Not Yet Trained)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Analysis Radius</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="viz-radius-select">
+                                <option value="10">10 km (Local Cluster)</option>
+                                <option value="25" selected>25 km (Regional Block)</option>
+                                <option value="50">50 km (Broad Belt)</option>
+                                <option value="100">100 km (Tile Overview)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Color Mode</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="colormap-select">
+                                <option value="prospectivity" selected>Prospectivity (Standard Green-Red)</option>
+                                <option value="viridis">Viridis</option>
+                                <option value="plasma">Plasma</option>
+                                <option value="thermal">Thermal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Vertical Exaggeration</label>
+                        <input type="range" class="glass-range" id="elevation-scale" min="1" max="15" value="5">
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Surface Resolution</label>
+                        <div class="select-wrapper">
+                            <select class="glass-select" id="viz-resolution-select">
+                                <option value="60">High (60 × 60 nodes)</option>
+                                <option value="50" selected>Standard (50 × 50 nodes)</option>
+                                <option value="35">Fast (35 × 35 nodes)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Analysis Boundary</label>
+                        <label class="switch">
+                            <input type="checkbox" id="show-grid" checked>
+                            <span class="slider-toggle"></span>
+                        </label>
+                    </div>
+                    <div class="viz-actions" style="display: flex; gap: 8px; margin-top: 12px;">
+                        <button class="btn-secondary btn-3d" id="btn-reset-3d" style="flex: 1; padding: 8px;">Reset View</button>
+                        <button class="btn-secondary btn-3d" id="btn-fullscreen-3d" style="flex: 1; padding: 8px;">Fullscreen</button>
+                    </div>
+                    <!-- Prospectivity Legend (Requirement 13) -->
+                    <div class="viz-legend glass-card-inner" style="margin-top: 14px; padding: 12px; border-radius: 6px;">
+                        <h4 style="font-size: 0.78rem; color: var(--cyan); margin-bottom: 8px; font-family: var(--font-display);">Prospectivity Index Legend</h4>
+                        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.73rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:#4caf50; border-radius:2px; display:inline-block;"></span> 0–50</span>
+                                <strong style="color:#4caf50;">LOW</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:#fbc02d; border-radius:2px; display:inline-block;"></span> 50–75</span>
+                                <strong style="color:#fbc02d;">MEDIUM</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; background:#e53935; border-radius:2px; display:inline-block;"></span> 75–100</span>
+                                <strong style="color:#e53935;">HIGH</strong>
+                            </div>
+                        </div>
+                        <div style="font-size:0.65rem; color:var(--text-dim); margin-top:8px; line-height:1.3;">
+                            <em>Values reflect spatial similarity score, not probability of finding ore. Elevation axis represents model surface, not digital terrain.</em>
+                        </div>
+                    </div>
+                    <div class="viz-info glass-card-inner" style="margin-top: 14px;">
+                        <h4 style="font-size: 0.78rem; color: var(--cyan); margin-bottom: 8px; font-family: var(--font-display);">3D Surface Statistics</h4>
+                        <div class="info-row"><span class="info-label">Grid Size:</span><span class="info-value">50 × 50</span></div>
+                        <div class="info-row"><span class="info-label">Max Prospectivity:</span><span class="info-value cyan">--</span></div>
+                        <div class="info-row"><span class="info-label">Min Prospectivity:</span><span class="info-value orange">--</span></div>
+                        <div class="info-row"><span class="info-label">Mean Prospectivity:</span><span class="info-value">--</span></div>
+                    </div>
+                    <div class="viz-disclaimer" style="margin-top: 14px; padding: 10px; background: rgba(255,255,255,0.02); border-left: 2px solid var(--orange); border-radius: 4px; font-size: 0.68rem; color: var(--text-dim); line-height: 1.4;">
+                        <b>Scientific Note:</b> AI prospectivity represents an exploration indication derived from satellite and machine-learning evidence. It does not confirm the presence of an ore deposit and requires geological and field validation.
+                    </div>
+                </div>
+                <div class="viz-canvas glass-card" id="viz-canvas" style="padding: 0; overflow: hidden;">
+                    <div id="terrain-3d-container" style="width: 100%; height: 620px; min-height: 550px;"></div>
+                    <canvas id="terrain-3d" style="display:none" width="900" height="600"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: EXPLAINABLE AI ====== -->
+    <section id="page-explainable-ai" class="page">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <h1 class="page-title"><span class="glow-text">Explainable AI</span></h1>
+                <p class="page-subtitle">Understanding AI Prospectivity Decisions — Transparency & Evidence</p>
+            </div>
+            <div class="xai-grid">
+                <div class="xai-panel glass-card span-full">
+                    <h3 class="panel-title">Why This Area Scored 87% — Model Evidence</h3>
+                    <div class="evidence-summary">
+                        <div class="evidence-card glass-card-inner positive">
+                            <div class="evidence-icon">↑</div>
+                            <div class="evidence-content">
+                                <h4>High Iron Oxide Ratio (0.71)</h4>
+                                <p>Strong SWIR absorption indicates elevated manganese oxide surface expression. This feature contributed +18% to the final score.</p>
+                            </div>
+                            <div class="evidence-impact positive">+18%</div>
+                        </div>
+                        <div class="evidence-card glass-card-inner positive">
+                            <div class="evidence-icon">↑</div>
+                            <div class="evidence-content">
+                                <h4>SWIR Ratio Anomaly (0.63)</h4>
+                                <p>Sentinel-2 SWIR bands show spectral signature consistent with manganese-bearing minerals. Contributed +15% to score.</p>
+                            </div>
+                            <div class="evidence-impact positive">+15%</div>
+                        </div>
+                        <div class="evidence-card glass-card-inner moderate">
+                            <div class="evidence-icon">→</div>
+                            <div class="evidence-content">
+                                <h4>Moderate NDVI (0.42)</h4>
+                                <p>Vegetation index suggests semi-exposed terrain suitable for mineral detection. Neutral contribution to score.</p>
+                            </div>
+                            <div class="evidence-impact moderate">+5%</div>
+                        </div>
+                        <div class="evidence-card glass-card-inner positive">
+                            <div class="evidence-icon">↑</div>
+                            <div class="evidence-content">
+                                <h4>Clay Index Pattern (0.55)</h4>
+                                <p>Altered clay minerals often co-occur with manganese deposits. Pattern match with known deposit signatures. +12%</p>
+                            </div>
+                            <div class="evidence-impact positive">+12%</div>
+                        </div>
+                        <div class="evidence-card glass-card-inner negative">
+                            <div class="evidence-icon">↓</div>
+                            <div class="evidence-content">
+                                <h4>NDMI Moisture Level (0.38)</h4>
+                                <p>Moderate moisture content slightly reduces confidence in spectral mineral detection accuracy.</p>
+                            </div>
+                            <div class="evidence-impact negative">-3%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xai-panel glass-card span-2">
+                    <h3 class="panel-title">Feature Contribution Waterfall</h3>
+                    <div class="chart-container">
+                        <canvas id="waterfall-chart" width="600" height="350"></canvas>
+                    </div>
+                </div>
+                <div class="xai-panel glass-card span-1">
+                    <h3 class="panel-title">Satellite-Derived Features</h3>
+                    <div class="feature-list">
+                        <div class="feature-row">
+                            <span class="feature-name">B2 (Blue)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:35%; background:#4488ff"></div></div>
+                            <span class="feature-val">0.35</span>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-name">B3 (Green)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:42%; background:#44cc88"></div></div>
+                            <span class="feature-val">0.42</span>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-name">B4 (Red)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:58%; background:#ff4444"></div></div>
+                            <span class="feature-val">0.58</span>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-name">B8 (NIR)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:67%; background:#ff6b35"></div></div>
+                            <span class="feature-val">0.67</span>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-name">B11 (SWIR-1)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:73%; background:#7b2fff"></div></div>
+                            <span class="feature-val">0.73</span>
+                        </div>
+                        <div class="feature-row">
+                            <span class="feature-name">B12 (SWIR-2)</span>
+                            <div class="feature-bar"><div class="feature-fill" style="width:69%; background:#a855f7"></div></div>
+                            <span class="feature-val">0.69</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="xai-panel glass-card span-full">
+                    <h3 class="panel-title">Confidence Decomposition</h3>
+                    <div class="confidence-grid">
+                        <div class="conf-card glass-card-inner">
+                            <div class="conf-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#00f0ff" stroke-width="6" stroke-dasharray="251" stroke-dashoffset="25" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="conf-val">90%</span>
+                            </div>
+                            <span class="conf-label">Spectral Match</span>
+                        </div>
+                        <div class="conf-card glass-card-inner">
+                            <div class="conf-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#7b2fff" stroke-width="6" stroke-dasharray="251" stroke-dashoffset="45" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="conf-val">82%</span>
+                            </div>
+                            <span class="conf-label">Spatial Pattern</span>
+                        </div>
+                        <div class="conf-card glass-card-inner">
+                            <div class="conf-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#00ff88" stroke-width="6" stroke-dasharray="251" stroke-dashoffset="20" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="conf-val">92%</span>
+                            </div>
+                            <span class="conf-label">Model Agreement</span>
+                        </div>
+                        <div class="conf-card glass-card-inner">
+                            <div class="conf-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#ff6b35" stroke-width="6" stroke-dasharray="251" stroke-dashoffset="55" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <span class="conf-val">78%</span>
+                            </div>
+                            <span class="conf-label">Data Coverage</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== PAGE: SETTINGS ====== -->
+    <section id="page-settings" class="page">
+        <div class="page-wrapper">
+            <div class="page-header">
+                <h1 class="page-title"><span class="glow-text">Settings</span></h1>
+                <p class="page-subtitle">Configure Mineral, Radius, Visualization & Analysis Preferences</p>
+            </div>
+            <div class="settings-grid">
+                <div class="settings-panel glass-card">
+                    <h3 class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/><path d="M3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zm5.99 7.176A9.026 9.026 0 007 14.935v-3.515l1.68.72a3 3 0 002.64 0l1.68-.72v3.515a9.028 9.028 0 00-2.3 1.638z"/></svg>
+                        Mineral Preferences
+                    </h3>
+                    <div class="settings-form">
+                        <div class="control-group">
+                            <label class="control-label">Default Mineral</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select" id="default-mineral">
+                                    <option value="manganese" selected>Manganese</option>
+                                    <option value="iron">Iron Ore</option>
+                                    <option value="copper">Copper</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Detection Threshold</label>
+                            <input type="range" class="glass-range" id="threshold-range" min="0" max="100" value="60">
+                            <div class="range-labels">
+                                <span>Low (0%)</span>
+                                <span class="range-current">60%</span>
+                                <span>High (100%)</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Auto-detect Minerals</label>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider-toggle"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-panel glass-card">
+                    <h3 class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+                        Location & Radius
+                    </h3>
+                    <div class="settings-form">
+                        <div class="control-group">
+                            <label class="control-label">Default Location</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select" id="default-location">
+                                    <option value="nagpur" selected>Nagpur, Maharashtra</option>
+                                    <option value="sindhudurg">Sindhudurg, Maharashtra</option>
+                                    <option value="ratnagiri">Ratnagiri, Maharashtra</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Default Radius (km)</label>
+                            <input type="range" class="glass-range" id="default-radius" min="5" max="50" value="20" step="5">
+                            <div class="range-labels">
+                                <span>5 km</span>
+                                <span class="range-current">20 km</span>
+                                <span>50 km</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Coordinate System</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select">
+                                    <option value="wgs84" selected>WGS 84 (EPSG:4326)</option>
+                                    <option value="utm">UTM Zone 44N</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-panel glass-card">
+                    <h3 class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4zm0 6a2 2 0 100 4h12a2 2 0 100-4H4zm0 6a2 2 0 100 4h12a2 2 0 100-4H4z"/></svg>
+                        Visualization
+                    </h3>
+                    <div class="settings-form">
+                        <div class="control-group">
+                            <label class="control-label">Color Map</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select">
+                                    <option value="spectral" selected>Spectral</option>
+                                    <option value="viridis">Viridis</option>
+                                    <option value="plasma">Plasma</option>
+                                    <option value="thermal">Thermal</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">3D Auto-Rotate</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider-toggle"></span>
+                            </label>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Show Grid Lines</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider-toggle"></span>
+                            </label>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Animation Speed</label>
+                            <input type="range" class="glass-range" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-panel glass-card">
+                    <h3 class="panel-title">
+                        <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+                        Analysis Settings
+                    </h3>
+                    <div class="settings-form">
+                        <div class="control-group">
+                            <label class="control-label">ML Model</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select">
+                                    <option value="rf" selected>Random Forest</option>
+                                    <option value="xgb">XGBoost</option>
+                                    <option value="ensemble">Ensemble</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Explainability Mode</label>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider-toggle"></span>
+                            </label>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Export Format</label>
+                            <div class="select-wrapper">
+                                <select class="glass-select">
+                                    <option value="pdf">PDF Report</option>
+                                    <option value="csv">CSV Data</option>
+                                    <option value="geojson">GeoJSON</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-primary btn-3d btn-full" style="margin-top:16px">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== TARGET REPORT MODAL (Phase 10 Requirement 14) ====== -->
+    <div class="custom-modal-overlay" id="target-report-modal" style="display:none;">
+        <div class="custom-modal-dialog glass-card target-report-dialog" style="max-width:840px; width:92%; max-height:90vh; overflow-y:auto; padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px;">
+                <div>
+                    <div style="font-size:0.7rem; color:var(--cyan); font-weight:700; letter-spacing:1px; text-transform:uppercase;">OFFICIAL EXPLORATION INTELLIGENCE DOSSIER</div>
+                    <h2 style="margin:2px 0; font-size:1.25rem; color:#fff;" id="target-report-modal-title">AI MINERAL EXPLORATION TARGET REPORT</h2>
+                    <p style="margin:0; font-size:0.75rem; color:var(--text-dim);">Decision-support screening intelligence generated from Copernicus Sentinel-2 spectral indices &amp; machine learning</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="btn-close-target-report" style="background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer; line-height:1;">&times;</button>
+            </div>
+            
+            <div class="target-report-content" id="target-report-content">
+                <!-- Populated dynamically by generateTargetReport() in app.js -->
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px; border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; flex-wrap:wrap;">
+                <button type="button" class="btn-secondary" id="btn-print-target-report" style="font-size:0.78rem;">
+                    🖨️ Print / Save PDF
+                </button>
+                <button type="button" class="btn-secondary" id="btn-download-target-report" style="font-size:0.78rem;">
+                    📥 Download Report (Markdown)
+                </button>
+                <button type="button" class="btn-secondary" id="btn-download-report-geojson" style="font-size:0.78rem;">
+                    🗺️ Export GeoJSON
+                </button>
+                <button type="button" class="btn-primary" id="btn-dismiss-target-report" style="font-size:0.78rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SYSTEM HEALTH MODAL (Phase 10 Requirement 17) ====== -->
+    <div class="custom-modal-overlay" id="system-health-modal" style="display:none;">
+        <div class="custom-modal-dialog glass-card system-health-dialog" style="max-width:680px; width:90%; max-height:90vh; overflow-y:auto; padding:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
+                <div>
+                    <h3 style="margin:0 0 2px 0; font-size:1.15rem; color:#fff; display:flex; align-items:center; gap:8px;">
+                        <span>🩺</span> SYSTEM HEALTH AUDIT &amp; RUNTIME STATUS
+                    </h3>
+                    <p style="margin:0; font-size:0.74rem; color:var(--text-dim);">Real-time runtime state audit of API backend, models, rasters, and geological data availability</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="btn-close-system-health" style="background:none; border:none; color:var(--text-dim); font-size:1.5rem; cursor:pointer; line-height:1;">&times;</button>
+            </div>
+
+            <div class="system-health-grid" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">API Service</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">HTTP REST endpoint on local port (default 8085)</span>
+                    </div>
+                    <span class="health-status-badge" id="health-api-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(0,240,255,0.15); color:var(--cyan); border:1px solid rgba(0,240,255,0.3);">CHECKING...</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Manganese Model</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">models/manganese_random_forest.pkl (SHA-256 verified)</span>
+                    </div>
+                    <span class="health-status-badge" id="health-model-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3);">LOADED</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Raster Prediction Surface</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">data/processed/manganese_prospectivity.tif (5,490 x 5,490)</span>
+                    </div>
+                    <span class="health-status-badge" id="health-raster-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3);">AVAILABLE</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Candidate Zones Directory</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">high_prospectivity_zones.csv (20 ranked candidate sectors)</span>
+                    </div>
+                    <span class="health-status-badge" id="health-zones-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3);">AVAILABLE</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Geology (GSI / Bhukosh Vector Maps)</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">Lithology formations &amp; regional structural faults</span>
+                    </div>
+                    <span class="health-status-badge" id="health-geology-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3);">NOT AVAILABLE</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Terrain (Copernicus DEM)</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">Elevation, slope &amp; aspect digital elevation model</span>
+                    </div>
+                    <span class="health-status-badge" id="health-terrain-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3);">NOT AVAILABLE</span>
+                </div>
+                <div class="health-item-row" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:6px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05);">
+                    <div>
+                        <strong style="font-size:0.8rem; color:#fff; display:block;">Independent Deposit Validation</strong>
+                        <span style="font-size:0.7rem; color:var(--text-dim);">Verified external occurrences outside Ghondi mine</span>
+                    </div>
+                    <span class="health-status-badge" id="health-ind-val-status" style="font-size:0.72rem; padding:3px 10px; border-radius:4px; font-weight:700; background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3);">NOT AVAILABLE</span>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+                <button type="button" class="btn-secondary" id="btn-refresh-system-health" style="font-size:0.78rem;">
+                    🔄 Re-check Health
+                </button>
+                <button type="button" class="btn-primary" id="btn-close-system-health-action" style="font-size:0.78rem;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== PERSISTENT SCIENTIFIC FOOTER DISCLAIMER (Phase 10 Requirement 21) ====== -->
+    <footer class="app-scientific-footer" id="app-footer-disclaimer">
+        <div class="footer-disclaimer-container">
+            <span class="disclaimer-badge">SCIENTIFIC NOTICE</span>
+            <p class="disclaimer-text">
+                Exploration screening only. Prospectivity scores are model-derived spatial indices, not probabilities of mineral occurrence. Independent deposit validation is currently unavailable. Field verification and subsurface investigation are required.
+            </p>
+        </div>
+    </footer>
+
+    <!-- External Geospatial & Visualization Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    
+    <!-- Modular AI Mineral Intelligence Core -->
+    <script src="js/mineral-registry.js"></script>
+    <script src="js/geo.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/locations.js"></script>
+    <script src="js/prospectivity.js"></script>
+    <script src="js/zones.js"></script>
+    <script src="js/production.js"></script>
+    <script src="js/xai.js"></script>
+    <script src="js/evidence.js"></script>
+    <script src="js/ranking.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/visual3d.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

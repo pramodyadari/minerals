@@ -1,0 +1,91 @@
+{
+  "mineral_id": "manganese",
+  "mineral_name": "Manganese",
+  "model_version": "1.0.0",
+  "model_type": "RandomForestClassifier",
+  "n_estimators": 100,
+  "trained_at": "2026-09-13T20:29:00Z",
+  "dataset_identifier": "Sentinel-2 Tile T44QMK / Ghondi Reference Sector",
+  "sample_count": {
+    "total": 3362,
+    "positive_mine_pixels": 1681,
+    "negative_background_pixels": 1681
+  },
+  "spatial_coverage": {
+    "crs": "EPSG:32644 (WGS 84 / UTM Zone 44N)",
+    "tile": "T44QMK",
+    "bounding_box": {
+      "min_latitude": 21.3667,
+      "max_latitude": 22.4333,
+      "min_longitude": 79.9333,
+      "max_longitude": 80.6515
+    }
+  },
+  "metrics": {
+    "test_accuracy_pct": 83.51,
+    "validation_method": "Stratified Holdout Split (80/20)",
+    "n_features": 10
+  },
+  "feature_schema": [
+    "B02",
+    "B03",
+    "B04",
+    "B08",
+    "B11",
+    "B12",
+    "NDVI",
+    "NDWI",
+    "clay_ratio",
+    "iron_oxide_ratio"
+  ],
+  "feature_importances": {
+    "B04": 0.154392,
+    "NDVI": 0.109006,
+    "B08": 0.107987,
+    "B12": 0.105528,
+    "B11": 0.105385,
+    "iron_oxide_ratio": 0.094952,
+    "B02": 0.083859,
+    "NDWI": 0.083804,
+    "clay_ratio": 0.080582,
+    "B03": 0.074504
+  },
+  "provenance": {
+    "satellite": "Copernicus Sentinel-2 L2A",
+    "reference_deposit": "Ghondi Manganese Mine (MOIL Belt, Balaghat)",
+    "scientific_distinction": "Spatial prospectivity index (0-100%); empirical probability calibration not fitted across regional surface"
+  },
+  "validation_status": "SPATIALLY_VALIDATED",
+  "validation_method": "Spatially Blocked Cross-Validation (5km grid blocks)",
+  "spatial_block_size": 0.05,
+  "spatial_block_count": 432,
+  "spatial_training_blocks": 325,
+  "spatial_validation_blocks": 107,
+  "spatial_accuracy": 96.76,
+  "spatial_precision": 0.9606,
+  "spatial_recall": 0.974,
+  "spatial_f1": 0.9671,
+  "spatial_roc_auc": 0.9931,
+  "spatial_pr_auc": 0.9923,
+  "random_holdout_metrics": {
+    "accuracy_pct": 83.51,
+    "precision": 0.8197,
+    "recall": 0.8661,
+    "f1_score": 0.8423,
+    "roc_auc": 0.9268,
+    "pr_auc": 0.9247
+  },
+  "calibration_status": "NOT_CALIBRATED",
+  "calibration_diagnostic": "NOT ENOUGH VALIDATION EVIDENCE FOR CALIBRATED PROBABILITY ESTIMATES",
+  "validation_timestamp": "2026-10-08T08:49:58.198376Z",
+  "limitations": [
+    "Single Sentinel-2 tile footprint (T44QMK, 110 km x 110 km coverage in Balaghat belt)",
+    "Limited regional ground-truth samples: Positive occurrences originate from a single reference deposit (Ghondi Manganese Mine)",
+    "Background samples represent remote-sensing pseudo-absences rather than barren assay drill holes",
+    "No calibrated occurrence probability: prospectivity score is a spatial similarity index (0-100%), not empirical posterior occurrence probability",
+    "No diamond drilling, core log, or subsurface assay verification in current dataset",
+    "No regional digitized lithological or structural geological vector layer loaded",
+    "No Digital Elevation Model (DEM / slope / aspect) terrain evidence loaded",
+    "Model evaluates learned spectral/spatial patterns; results are exploration-screening indicators requiring field geological verification"
+  ]
+}
