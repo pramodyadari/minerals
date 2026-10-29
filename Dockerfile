@@ -46,17 +46,22 @@ RUN pip install --no-cache-dir torch torchvision --index-url https://download.py
 COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend application, models, and data assets
+# Copy AI architecture, pipelines, root modules, models, and data assets
+COPY ai/ ./ai/
 COPY backend/ ./backend/
 COPY models/ ./models/
 COPY data/ ./data/
+COPY *.py ./
+
+# Ensure Python includes app root and backend in its module search path
+ENV PYTHONPATH="/app:/app/backend"
 
 # Copy built frontend assets into the distribution directory for static mounting
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
-# Expose default port (Railway automatically injects $PORT at runtime)
+# Expose default port (Railway and Render automatically inject $PORT at runtime)
 EXPOSE 8001
 ENV PORT=8001
 
-# Start Uvicorn bound to Railway dynamic $PORT (or 8001 by default)
+# Start Uvicorn bound to dynamic $PORT (or 8001 by default)
 CMD uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8001}
