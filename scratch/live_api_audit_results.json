@@ -1,0 +1,217 @@
+[
+  {
+    "radius_km": 1.0,
+    "calculated_area_sq_km": 3.14,
+    "reported_area_sq_km": null,
+    "status_code": 200,
+    "occurrences_inside": {
+      "Manganese": 0,
+      "Iron Ore": 0,
+      "Coal": 0,
+      "Bauxite": 0
+    },
+    "manganese_ai": {
+      "prospectivity_score": 55.8,
+      "prospectivity_status": null,
+      "prediction_type": null,
+      "zones_in_radius_count": null,
+      "nearest_zone_dist_km": null
+    },
+    "manganese_evidence_index": null,
+    "manganese_subscores": {},
+    "manganese_data_coverage_pct": null,
+    "manganese_terrain": {
+      "elev_mean_m": null,
+      "relief_window_m": null,
+      "status": "OUT_OF_BOUNDS"
+    },
+    "cache_info": {},
+    "3d_grid": {
+      "status": "AVAILABLE",
+      "radius_km": null,
+      "center_lat": 21.9048,
+      "center_lon": 80.1849,
+      "rows": 32,
+      "cols": 32,
+      "reason": null
+    },
+    "iron_ore_score": null,
+    "iron_ore_evidence_index": null,
+    "coal_score": null,
+    "coal_evidence_index": null,
+    "bauxite_score": null,
+    "bauxite_evidence_index": null
+  },
+  {
+    "radius_km": 5.0,
+    "calculated_area_sq_km": 78.54,
+    "reported_area_sq_km": null,
+    "status_code": 200,
+    "occurrences_inside": {
+      "Manganese": 0,
+      "Iron Ore": 0,
+      "Coal": 0,
+      "Bauxite": 0
+    },
+    "manganese_ai": {
+      "prospectivity_score": 55.8,
+      "prospectivity_status": null,
+      "prediction_type": null,
+      "zones_in_radius_count": null,
+      "nearest_zone_dist_km": null
+    },
+    "manganese_evidence_index": null,
+    "manganese_subscores": {},
+    "manganese_data_coverage_pct": null,
+    "manganese_terrain": {
+      "elev_mean_m": null,
+      "relief_window_m": null,
+      "status": "OUT_OF_BOUNDS"
+    },
+    "cache_info": {},
+    "3d_grid": {
+      "status": "AVAILABLE",
+      "radius_km": null,
+      "center_lat": 21.9048,
+      "center_lon": 80.1849,
+      "rows": 32,
+      "cols": 32,
+      "reason": null
+    },
+    "iron_ore_score": null,
+    "iron_ore_evidence_index": null,
+    "coal_score": null,
+    "coal_evidence_index": null,
+    "bauxite_score": null,
+    "bauxite_evidence_index": null
+  },
+  {
+    "radius_km": 10.0,
+    "calculated_area_sq_km": 314.16,
+    "reported_area_sq_km": null,
+    "status_code": 200,
+    "occurrences_inside": {
+      "Manganese": 0,
+      "Iron Ore": 0,
+      "Coal": 0,
+      "Bauxite": 0
+    },
+    "manganese_ai": {
+      "prospectivity_score": 55.8,
+      "prospectivity_status": null,
+      "prediction_type": null,
+      "zones_in_radius_count": null,
+      "nearest_zone_dist_km": null
+    },
+    "manganese_evidence_index": null,
+    "manganese_subscores": {},
+    "manganese_data_coverage_pct": null,
+    "manganese_terrain": {
+      "elev_mean_m": null,
+      "relief_window_m": null,
+      "status": "OUT_OF_BOUNDS"
+    },
+    "cache_info": {},
+    "3d_grid": {
+      "status": "AVAILABLE",
+      "radius_km": null,
+      "center_lat": 21.9048,
+      "center_lon": 80.1849,
+      "rows": 32,
+      "cols": 32,
+      "reason": null
+    },
+    "iron_ore_score": null,
+    "iron_ore_evidence_index": null,
+    "coal_score": null,
+    "coal_evidence_index": null,
+    "bauxite_score": null,
+    "bauxite_evidence_index": null
+  },
+  {
+    "radius_km": 25.0,
+    "calculated_area_sq_km": 1963.5,
+    "reported_area_sq_km": null,
+    "status_code": 200,
+    "occurrences_inside": {
+      "Manganese": 0,
+      "Iron Ore": 0,
+      "Coal": 0,
+      "Bauxite": 0
+    },
+    "manganese_ai": {
+      "prospectivity_score": 55.8,
+      "prospectivity_status": null,
+      "prediction_type": null,
+      "zones_in_radius_count": null,
+      "nearest_zone_dist_km": null
+    },
+    "manganese_evidence_index": null,
+    "manganese_subscores": {},
+    "manganese_data_coverage_pct": null,
+    "manganese_terrain": {
+      "elev_mean_m": null,
+      "relief_window_m": null,
+      "status": "OUT_OF_BOUNDS"
+    },
+    "cache_info": {},
+    "3d_grid": {
+      "status": "AVAILABLE",
+      "radius_km": null,
+      "center_lat": 21.9048,
+      "center_lon": 80.1849,
+      "rows": 32,
+      "cols": 32,
+      "reason": null
+    },
+    "iron_ore_score": null,
+    "iron_ore_evidence_index": null,
+    "coal_score": null,
+    "coal_evidence_index": null,
+    "bauxite_score": null,
+    "bauxite_evidence_index": null
+  },
+  {
+    "radius_km": 50.0,
+    "calculated_area_sq_km": 7853.98,
+    "reported_area_sq_km": null,
+    "status_code": 200,
+    "occurrences_inside": {
+      "Manganese": 0,
+      "Iron Ore": 0,
+      "Coal": 0,
+      "Bauxite": 0
+    },
+    "manganese_ai": {
+      "prospectivity_score": 55.8,
+      "prospectivity_status": null,
+      "prediction_type": null,
+      "zones_in_radius_count": null,
+      "nearest_zone_dist_km": null
+    },
+    "manganese_evidence_index": null,
+    "manganese_subscores": {},
+    "manganese_data_coverage_pct": null,
+    "manganese_terrain": {
+      "elev_mean_m": null,
+      "relief_window_m": null,
+      "status": "OUT_OF_BOUNDS"
+    },
+    "cache_info": {},
+    "3d_grid": {
+      "status": "AVAILABLE",
+      "radius_km": null,
+      "center_lat": 21.9048,
+      "center_lon": 80.1849,
+      "rows": 32,
+      "cols": 32,
+      "reason": null
+    },
+    "iron_ore_score": null,
+    "iron_ore_evidence_index": null,
+    "coal_score": null,
+    "coal_evidence_index": null,
+    "bauxite_score": null,
+    "bauxite_evidence_index": null
+  }
+]

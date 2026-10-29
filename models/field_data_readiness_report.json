@@ -1,0 +1,246 @@
+{
+  "audit_metadata": {
+    "report_title": "Phase 3: Field-Data Readiness and Classifier Reliability Audit",
+    "timestamp": "2026-10-29T14:51:38.550110+00:00",
+    "auditor": "Senior Computer-Vision Engineer & Mineral-Data Quality Auditor",
+    "workspace": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo",
+    "manifest_file": "data/dataset_manifest.json",
+    "feedback_queue_file": "data/feedback/specimen_feedback_queue.jsonl"
+  },
+  "executive_readiness_assessment": {
+    "dataset_ready_for_scientifically_defensible_field_photo_evaluation": false,
+    "overall_status": "NOT_READY_FOR_FIELD_DEPLOYMENT",
+    "primary_deficiency": "Total absence of laboratory-verified physical mineral specimens with chemical/mineralogical assay confirmation in the training, validation, and test splits.",
+    "production_gatekeeper_status": "Baseline MineralConvNet preserved. OOD threshold 5.0 enforced. Production weights untouched."
+  },
+  "physical_specimens_vs_images": {
+    "total_image_files_cataloged": 621,
+    "total_unique_content_hashes": 373,
+    "total_independent_physical_rock_specimens": 3,
+    "verified_physical_specimens_count": 0,
+    "unverified_physical_specimens_count": 3,
+    "physical_specimens_breakdown": {
+      "verified": {
+        "coal": 0,
+        "manganese": 0,
+        "iron_ore": 0,
+        "bauxite": 0,
+        "total": 0
+      },
+      "unverified_field_specimens": {
+        "coal": [
+          {
+            "specimen_id": "SPECIMEN_FIELD_COAL_001",
+            "supplied_name": "Bituminous Coal",
+            "sha256": "70df91e2acfb562d95410d4e043bb1001807c1e9d8ae5898fd4e08ed11e1a1fb",
+            "file_count": 5,
+            "dimensions": [
+              4608,
+              3072
+            ],
+            "acquisition": "macroscopic_field_sample_on_white_paper_with_scale_natural_indoor_light",
+            "chemical_assay_verified": false,
+            "quarantine_status": "QUARANTINED"
+          }
+        ],
+        "manganese": [
+          {
+            "specimen_id": "SPECIMEN_FIELD_MANGANESE_001",
+            "supplied_name": "Manganese",
+            "sha256": "c31314697563e17891e7f9289e569e00bb2196e012d171736a50f8da579041ef",
+            "file_count": 23,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "acquisition": "macroscopic_specimen_high_contrast_studio_backdrop",
+            "chemical_assay_verified": false,
+            "quarantine_status": "QUARANTINED"
+          }
+        ],
+        "iron_ore": [],
+        "bauxite": [],
+        "unverified_rock": [
+          {
+            "specimen_id": "SPECIMEN_FIELD_ROCK_001",
+            "supplied_name": "Unverified Rock",
+            "sha256": "8797163ce43ed7b63d9caf65ffb1141ea48d79860fdd569b0bb113ab15a8777b",
+            "file_count": 3,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "acquisition": "macroscopic_field_specimen_natural_diffuse_light",
+            "chemical_assay_verified": false,
+            "quarantine_status": "QUARANTINED"
+          }
+        ]
+      }
+    }
+  },
+  "dataset_split_composition": {
+    "splits": {
+      "train": 140,
+      "validation": 40,
+      "test": 42,
+      "evaluation_known": 80,
+      "evaluation_ood": 60,
+      "uploads": 259
+    },
+    "class_by_split": {
+      "train": {
+        "bauxite": 35,
+        "coal": 35,
+        "iron_ore": 35,
+        "manganese": 35
+      },
+      "validation": {
+        "bauxite": 10,
+        "coal": 10,
+        "iron_ore": 10,
+        "manganese": 10
+      },
+      "test": {
+        "manganese": 12,
+        "bauxite": 10,
+        "coal": 10,
+        "iron_ore": 10
+      },
+      "evaluation_known": {
+        "bauxite": 20,
+        "coal": 20,
+        "iron_ore": 20,
+        "manganese": 20
+      },
+      "evaluation_ood": {
+        "basalt": 12,
+        "granite": 12,
+        "limestone": 12,
+        "quartz": 12,
+        "sandstone": 12
+      },
+      "uploads": {
+        "unknown": 259
+      }
+    }
+  },
+  "image_source_and_verification_breakdown": {
+    "by_source_type": {
+      "SYNTHETIC_TEXTURE_PATCH": 302,
+      "OOD_REFERENCE_LITHOLOGY": 60,
+      "TEST_FIXTURE_API_UPLOAD": 156,
+      "CORRUPT_FIXTURE": 42,
+      "TEST_FIXTURE_SOLID_BLOCK": 30,
+      "UNVERIFIED_FIELD_PHOTO": 31
+    },
+    "by_verification_status": {
+      "SYNTHETIC_REFERENCE_ONLY": 302,
+      "SYNTHETIC_OOD_BENCHMARK": 60,
+      "TEST_FIXTURE_UNVERIFIED": 156,
+      "CORRUPT_UNREADABLE": 42,
+      "SYNTHETIC_TEST_BLOCK": 30,
+      "UNVERIFIED_QUARANTINED": 31
+    }
+  },
+  "acquisition_condition_coverage": {
+    "coverage_counts": {
+      "procedural_synthetic_texture_generation_224x224": 302,
+      "procedural_synthetic_lithology_generation_224x224": 60,
+      "automated_test_api_client_submission": 156,
+      "malformed_truncated_byte_stream": 42,
+      "uniform_color_synthetic_block": 30,
+      "macroscopic_specimen_high_contrast_studio_backdrop": 23,
+      "macroscopic_field_specimen_natural_diffuse_light": 3,
+      "macroscopic_field_sample_on_white_paper_with_scale_natural_indoor_light": 5
+    },
+    "critical_field_gaps": {
+      "in_situ_outcrop_photography": 0,
+      "drill_core_photography": 0,
+      "unweathered_vs_weathered_rind_pairs": 0,
+      "wet_vs_dry_calibrated_pairs": 0,
+      "calibrated_18pct_gray_card_exposures": 0,
+      "lossless_raw_exif_preserved_exposures": 0
+    }
+  },
+  "duplicates_and_data_leakage": {
+    "exact_duplicate_hash_groups": 16,
+    "total_exact_duplicate_files": 264,
+    "cross_split_exact_leakage_core_train_val_test": 0,
+    "cross_split_near_duplicate_leakage_dhash_le_4": [
+      {
+        "distance": 4,
+        "train_file": "data/train/iron_ore/iron_ore_train_004.jpg",
+        "test_file": "data/test/iron_ore/iron_ore_test_004.jpg",
+        "note": "Perceptual dHash proximity on synthetic noise patterns"
+      }
+    ],
+    "evaluation_mirroring_note": "data/evaluation/known contains 80 files mirroring validation and test sets as a known-class benchmark.",
+    "upload_redundancy_note": "data/uploads contains 250 duplicate files generated by automated API tests and repeated user upload attempts."
+  },
+  "feedback_queue_quarantine_audit": {
+    "total_records": 46,
+    "verified_ground_truth_records": 0,
+    "training_eligible_records": 0,
+    "pending_geological_validation_quarantined": 46,
+    "quarantine_compliance": "100.0% COMPLIANT \u2014 Zero unverified feedback records ingested into training data."
+  },
+  "missing_metadata_and_verification_requirements": {
+    "laboratory_assays": "Missing for 100% of specimens (0/3 physical specimens have XRF, XRD, or wet-chemical verification).",
+    "physical_specimen_ids": "Historically missing; now cataloged with explicit specimen IDs or null for synthetic textures.",
+    "acquisition_parameters": "Missing camera sensor data, optical EXIF, illuminant temperature, and distance for all field uploads.",
+    "geological_provenance": "Missing host rock lithology, formation, mining lease, and geographic coordinates for all 3 uploads."
+  },
+  "prioritized_specimen_acquisition_plan": {
+    "tier_1_core_economic_minerals": {
+      "objective": "Acquire 50-100 physical specimens per target class (200-400 total) from authentic Indian mining belts.",
+      "target_districts": {
+        "coal": [
+          "Jharia (Jharkhand)",
+          "Raniganj (West Bengal)"
+        ],
+        "iron_ore": [
+          "Bailadila (Chhattisgarh)",
+          "Noamundi (Jharkhand)"
+        ],
+        "manganese": [
+          "Balaghat (Madhya Pradesh)",
+          "Dongri Buzurg (Maharashtra)"
+        ],
+        "bauxite": [
+          "Panchpatmali (Odisha)",
+          "Koraput (Odisha)"
+        ]
+      },
+      "mandatory_verification": "Certified laboratory assay: XRF elemental analysis (% Fe, % Mn, % Al2O3, % SiO2) and XRD mineralogy."
+    },
+    "tier_2_photographic_protocol": {
+      "photos_per_specimen": 4,
+      "conditions": [
+        "Fresh fracture face under diffuse daylight",
+        "Weathered rind / surface crust",
+        "Directional sunlight for luster/specular highlight characterization",
+        "Wet / misted surface for sub-surface refraction"
+      ],
+      "color_and_scale_standards": "Calibrated 18% neutral gray card and centimeter scale bar in frame; raw DNG + lossless JPEG."
+    },
+    "tier_3_negative_benchmark_ood_rocks": {
+      "objective": "Acquire 25 assayed physical specimens each of country rock and gangue lithologies.",
+      "lithologies": [
+        "Quartz vein",
+        "Banded Hematite Jasper (BHJ)",
+        "Granite/Granodiorite",
+        "Limestone/Dolomite",
+        "Sandstone/Shale",
+        "Basalt"
+      ]
+    },
+    "tier_4_partitioning_governance": {
+      "rule": "Group-based physical specimen splitting. All images of a given physical specimen ID are restricted to a single split (Train: 70%, Val: 15%, Test: 15%)."
+    }
+  },
+  "remaining_risks_and_guardrails": [
+    "Risk of False Generalization: The existing classifier achieves 100% test accuracy solely on synthetic texture patches; evaluating on real field photos without verified field training data produces out-of-distribution rejections.",
+    "Risk of OOD Threshold Dilution: Relaxing the OOD threshold (tau = 5.0) to force acceptance of unverified photos admits non-target rocks (as demonstrated by ResNet-18 admitting quartz and limestone).",
+    "Risk of Feedback Pollution: Promoting unverified user feedback into training without XRF/XRD assay corrupts model decision boundaries."
+  ]
+}

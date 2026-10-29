@@ -1,0 +1,15 @@
+{
+  "known": {
+    "coal": 20,
+    "manganese": 20,
+    "iron_ore": 20,
+    "bauxite": 20
+  },
+  "ood": {
+    "quartz": 12,
+    "granite": 12,
+    "limestone": 12,
+    "sandstone": 12,
+    "basalt": 12
+  }
+}

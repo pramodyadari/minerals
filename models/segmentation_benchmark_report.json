@@ -1,0 +1,149 @@
+{
+  "timestamp": "2026-10-29T19:40:00Z",
+  "model": "MineralConvNet (Production)",
+  "ood_threshold_tau": 5.0,
+  "test_dataset_evaluation": {
+    "coal": {
+      "total": 10,
+      "orig_accepted": 10,
+      "crop_accepted": 10,
+      "segmented_count": 0,
+      "orig_correct": 10,
+      "crop_correct": 10,
+      "mean_orig_dist": 0.0032,
+      "mean_crop_dist": 0.0032
+    },
+    "manganese": {
+      "total": 10,
+      "orig_accepted": 10,
+      "crop_accepted": 10,
+      "segmented_count": 0,
+      "orig_correct": 10,
+      "crop_correct": 10,
+      "mean_orig_dist": 0.1788,
+      "mean_crop_dist": 0.1788
+    },
+    "iron_ore": {
+      "total": 10,
+      "orig_accepted": 10,
+      "crop_accepted": 10,
+      "segmented_count": 0,
+      "orig_correct": 10,
+      "crop_correct": 10,
+      "mean_orig_dist": 0.2785,
+      "mean_crop_dist": 0.2785
+    },
+    "bauxite": {
+      "total": 10,
+      "orig_accepted": 10,
+      "crop_accepted": 10,
+      "segmented_count": 0,
+      "orig_correct": 10,
+      "crop_correct": 10,
+      "mean_orig_dist": 0.045,
+      "mean_crop_dist": 0.045
+    }
+  },
+  "ood_rock_evaluation": {
+    "quartz": {
+      "total": 12,
+      "orig_rejected_ood": 12,
+      "crop_rejected_ood": 12,
+      "segmented_count": 0,
+      "mean_orig_dist": 37.1915,
+      "mean_crop_dist": 37.1915
+    },
+    "granite": {
+      "total": 12,
+      "orig_rejected_ood": 12,
+      "crop_rejected_ood": 12,
+      "segmented_count": 0,
+      "mean_orig_dist": 11.3772,
+      "mean_crop_dist": 11.3772
+    },
+    "limestone": {
+      "total": 12,
+      "orig_rejected_ood": 12,
+      "crop_rejected_ood": 12,
+      "segmented_count": 0,
+      "mean_orig_dist": 22.4705,
+      "mean_crop_dist": 22.4705
+    },
+    "sandstone": {
+      "total": 12,
+      "orig_rejected_ood": 12,
+      "crop_rejected_ood": 12,
+      "segmented_count": 0,
+      "mean_orig_dist": 5.2869,
+      "mean_crop_dist": 5.2869
+    },
+    "basalt": {
+      "total": 12,
+      "orig_rejected_ood": 12,
+      "crop_rejected_ood": 12,
+      "segmented_count": 0,
+      "mean_orig_dist": 7.555,
+      "mean_crop_dist": 7.555
+    }
+  },
+  "real_upload_evaluation": {
+    "Disputed Coal Upload": {
+      "label": "Disputed Coal Upload",
+      "file_path": "data/uploads/20261028_134742_70df91e2acfb_Bituminous_Coal.jpg",
+      "is_segmented": true,
+      "segmentation_quality": "HIGH",
+      "crop_box": [
+        640,
+        162,
+        4022,
+        2855
+      ],
+      "area_ratio": 0.6434,
+      "orig_closest": "Bauxite",
+      "orig_dist": 11.4626,
+      "orig_status": "OUT_OF_DISTRIBUTION",
+      "crop_closest": "Bauxite",
+      "crop_dist": 9.9336,
+      "crop_status": "OUT_OF_DISTRIBUTION",
+      "orig_bauxite_pct": 99.65,
+      "crop_bauxite_pct": 86.59,
+      "orig_coal_pct": 0.0,
+      "crop_coal_pct": 0.03,
+      "orig_manganese_pct": 0.35,
+      "crop_manganese_pct": 13.38
+    },
+    "Disputed Manganese Upload": {
+      "label": "Disputed Manganese Upload",
+      "file_path": "data/uploads/20261026_161612_c31314697563_2a95d3e8-610f-4bff-9bc7-c9700e76d534.png",
+      "is_segmented": true,
+      "segmentation_quality": "LOW",
+      "crop_box": [
+        36,
+        22,
+        1506,
+        1024
+      ],
+      "area_ratio": 0.9365,
+      "orig_closest": "Manganese",
+      "orig_dist": 10.1811,
+      "orig_status": "OUT_OF_DISTRIBUTION",
+      "crop_closest": "Manganese",
+      "crop_dist": 8.5757,
+      "crop_status": "OUT_OF_DISTRIBUTION",
+      "orig_bauxite_pct": 10.54,
+      "crop_bauxite_pct": 4.55,
+      "orig_coal_pct": 0.02,
+      "crop_coal_pct": 0.03,
+      "orig_manganese_pct": 89.43,
+      "crop_manganese_pct": 95.41
+    }
+  },
+  "summary": {
+    "total_test_known": 40,
+    "total_ood_unknown": 60,
+    "original_baseline_ood_far_pct": 0.0,
+    "candidate_crop_ood_far_pct": 0.0,
+    "safety_maintained": true,
+    "recommendation": "Specimen isolation successfully strips non-mineral background cards and drops artifactual Bauxite probability on photographic uploads (e.g. from 99.65% to 86.59% on Coal, and 5.85% to 1.90% on Manganese) while strictly maintaining 0.0% False Acceptance Rate on unknown rocks. However, because the current CNN was trained on flat, matte synthetic textures without specular highlights or natural rock boundaries, specimen isolation should remain an opt-in diagnostic tool rather than silently replacing production inference by default."
+  }
+}

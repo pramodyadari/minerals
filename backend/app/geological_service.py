@@ -1244,23 +1244,25 @@ def query_geological_evidence(
             occ_item = {
                 **occ,
                 "distance_km": dist_km,
-                "province_name": prov["name"]
+                "province_name": prov["name"],
+                "is_inside_radius": dist_km <= radius_km
             }
 
-            if dist_km <= max(radius_km, 40.0):
+            if dist_km <= max(radius_km, 50.0):
                 occurrences_found.append(occ_item)
 
             if nearest_km is None or dist_km < nearest_km:
                 nearest_km = dist_km
 
-    occurrences_found.sort(key=lambda x: x["distance_km"])
+    occurrences_found.sort(key=lambda x: (not x["is_inside_radius"], x["distance_km"]))
+    occurrences_in_radius = [o for o in occurrences_found if o["distance_km"] <= radius_km]
 
     if not matched_province and occurrences_found and occurrences_found[0]["distance_km"] <= 50.0:
         nearest_prov_name = occurrences_found[0]["province_name"]
         matched_province = next((p for p in matching_provinces if p["name"] == nearest_prov_name), None)
 
     # 4. Determine status
-    if matched_province and any(o["distance_km"] <= radius_km for o in occurrences_found):
+    if matched_province and len(occurrences_in_radius) > 0:
         availability_status = "RECORDS_IDENTIFIED"
     elif matched_province:
         availability_status = "REGIONAL_FRAMEWORK_ONLY"
@@ -1288,6 +1290,9 @@ def query_geological_evidence(
             "matched_province": None,
             "regional_terrane": regional_terrane,
             "documented_occurrences": [],
+            "occurrences_in_radius": [],
+            "occurrences_in_radius_count": 0,
+            "search_radius_km": radius_km,
             "nearest_occurrence_km": nearest_km,
             "host_formations": [terrane_lithology] if terrane_lithology else [],
             "source_attribution": {
@@ -1321,6 +1326,9 @@ def query_geological_evidence(
         } if matched_province else None,
         "regional_terrane": regional_terrane,
         "documented_occurrences": occurrences_found,
+        "occurrences_in_radius": occurrences_in_radius,
+        "occurrences_in_radius_count": len(occurrences_in_radius),
+        "search_radius_km": radius_km,
         "nearest_occurrence_km": nearest_km,
         "host_formations": matched_province["host_formations"] if matched_province else ([terrane_lithology] if terrane_lithology else []),
         "source_attribution": {

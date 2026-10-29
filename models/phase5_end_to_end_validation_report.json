@@ -1,0 +1,210 @@
+{
+  "report_id": "PHASE5_SYSTEM_VALIDATION_REPORT",
+  "title": "Phase 5 End-to-End System Validation and Scientific Evidence Report",
+  "generated_at": "2026-10-29T16:44:32.648310+00:00",
+  "workspace": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo",
+  "production_safeguards": {
+    "production_checkpoint_hash": "f4382a869f1793cec05820a16f42ec7ac574830ef16012090d4a1cfb5cb3485f",
+    "baseline_backup_hash": "f4382a869f1793cec05820a16f42ec7ac574830ef16012090d4a1cfb5cb3485f",
+    "production_weights_intact": true,
+    "ood_rejection_threshold_tau": 5.0,
+    "ood_threshold_intact": true
+  },
+  "dataset_governance": {
+    "total_manifest_records": 636,
+    "unique_sha256_hashes": 373,
+    "total_quarantined_uploads": 274,
+    "user_field_uploads_quarantined": 31,
+    "unverified_in_production_training": 0
+  },
+  "test_suite_metrics": {
+    "python_pytest": {
+      "total_passed": 335,
+      "skipped": 1,
+      "failed": 0,
+      "duration_seconds": 151.7,
+      "key_suites": [
+        {
+          "name": "test_phase5_system_validation.py",
+          "passed": 6,
+          "failed": 0
+        },
+        {
+          "name": "test_phase4_data_governance.py",
+          "passed": 7,
+          "failed": 0
+        },
+        {
+          "name": "test_field_data_readiness.py",
+          "passed": 7,
+          "failed": 0
+        },
+        {
+          "name": "test_candidate_model.py",
+          "passed": 6,
+          "failed": 0
+        },
+        {
+          "name": "test_specimen_segmentation.py",
+          "passed": 11,
+          "failed": 0
+        },
+        {
+          "name": "test_specimen_ood_rejection.py",
+          "passed": 47,
+          "failed": 0
+        },
+        {
+          "name": "test_system_e2e_verification.py",
+          "passed": 8,
+          "failed": 0
+        },
+        {
+          "name": "test_model_registry.py",
+          "passed": 6,
+          "failed": 0
+        },
+        {
+          "name": "test_evidence_engine.py",
+          "passed": 14,
+          "failed": 0
+        }
+      ]
+    },
+    "javascript_node_tests": {
+      "total_passed": 265,
+      "failed": 0,
+      "test_files_count": 25,
+      "duration_seconds": 3.8
+    },
+    "frontend_production_build": {
+      "status": "SUCCESS",
+      "exit_code": 0,
+      "duration_seconds": 4.57,
+      "dist_files": [
+        "index.html",
+        "assets/index-*.js",
+        "assets/index-*.css"
+      ]
+    },
+    "api_endpoint_audit": {
+      "endpoints_tested": 19,
+      "passed": 19,
+      "failed": 0
+    }
+  },
+  "scientific_guardrails": {
+    "uncalibrated_probability_protection": {
+      "enforced": true,
+      "confidence_score_field": "None",
+      "prospectivity_metric": "prediction.prospectivity_index (0.0 to 1.0 spatial index)",
+      "disclaimer_text": "A calibrated probability of mineral occurrence has not been established. Model values represent relative spatial indices only."
+    },
+    "underground_coal_seams": {
+      "guardrail_enforced": true,
+      "policy": "DO NOT infer underground coal seams from satellite spectral indices alone. Subsurface seams require drill-core logs and seismic surveys."
+    },
+    "iron_ore_surface_staining": {
+      "guardrail_enforced": true,
+      "policy": "Surface ferric iron index (B04/B02) reflects weathering/gossans and lateritic crusts, not confirmed commercial hematite or magnetite ore."
+    },
+    "bauxite_duricrust_distinction": {
+      "guardrail_enforced": true,
+      "policy": "Satellite SWIR clay ratios detect aluminous laterite and kaolinitic clays, but cannot distinguish commercial gibbsitic bauxite without XRD/XRF laboratory assays."
+    },
+    "geographic_footprint_confinement": {
+      "manganese_model": "Random Forest v1 (T44QMK Balaghat Sausar belt)",
+      "outside_footprint_behavior": "Returns model_coverage='OUTSIDE_TRAINING_FOOTPRINT' and prediction=None. Never extrapolates to other tiles.",
+      "unsupported_commodities_behavior": "Coal, Iron Ore, Bauxite return model_coverage='NO_MODEL_FOR_COMMODITY' and overall_status='EVIDENCE_ONLY_NO_PREDICTION'."
+    }
+  },
+  "visualization_review": {
+    "two_dimensional_map": {
+      "framework": "Leaflet.js",
+      "capabilities": [
+        "Multi-spectral band rendering (RGB True Color, False Color Infrared, Mineral Composite)",
+        "Spectral index heatmaps (NDVI, NDWI, Clay Ratio, Ferric Iron Ratio)",
+        "Mining lease boundaries & Balaghat T44QMK footprint polygon overlay",
+        "Dynamic interactive cursor coordinate readouts with EPSG:4326/EPSG:32644 projection"
+      ]
+    },
+    "three_dimensional_terrain": {
+      "framework": "Three.js / React Three Fiber",
+      "elevation_source": "Copernicus GLO-30 / SRTM 30m Digital Elevation Model",
+      "fallback_mechanism": {
+        "active_outside_footprint": true,
+        "banner_displayed": "[OUTSIDE_TRAINING_FOOTPRINT] 3D Surface Elevation Only",
+        "behavior": "Visualizes true topographic relief without synthetic prospectivity draping when outside validated footprint",
+        "quick_action": "Provides one-click 2D Satellite View toggle button"
+      }
+    }
+  },
+  "frontend_integration": {
+    "api_base_url": "http://127.0.0.1:8001 (configured in frontend/src/apiConfig.js)",
+    "vite_development_proxy": "Configured in frontend/vite.config.js forwarding /api, /analyze, /classify-image to backend:8001",
+    "cors_configuration": "FastAPI CORSMiddleware enabled for localhost:5173, 5174, 3000, and 127.0.0.1",
+    "stale_result_lifecycle": "React useEffect triggers result reset on location, mineral, or radius change in App.jsx",
+    "multi_mineral_scorecards": "Four independent commodity cards with distinct evidence inventories, avoiding state cross-contamination"
+  },
+  "defects_summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 4,
+    "defects_list": [
+      {
+        "id": "DEF-001",
+        "severity": "LOW / INFORMATIONAL",
+        "component": "Mineral Prospectivity Engine",
+        "title": "Manganese ML model restricted to Sentinel-2 Tile T44QMK",
+        "description": "The Random Forest model is trained strictly on the Balaghat-Nagpur-Bhandara manganese belt. Locations outside this tile return OUTSIDE_TRAINING_FOOTPRINT.",
+        "workaround_or_status": "By design. Prevents dangerous spatial overfitting and maintains strict scientific integrity.",
+        "remediation_path": "Train regional models for Odisha (Keonjhar/Bonai), Karnataka (Sandur), and Andhra Pradesh with dedicated field truth."
+      },
+      {
+        "id": "DEF-002",
+        "severity": "LOW / INFORMATIONAL",
+        "component": "Multi-Mineral Pipeline",
+        "title": "Coal, Iron Ore, and Bauxite operate in evidence-only baseline mode",
+        "description": "No machine learning prospectivity models are deployed for Coal, Iron Ore, or Bauxite; the system provides multi-spectral index evidence and geological rules only.",
+        "workaround_or_status": "Truthful representation. The API explicitly reports model_coverage='NO_MODEL_FOR_COMMODITY'.",
+        "remediation_path": "Curate verified deposit point databases and regional lithology shapefiles for commercial iron ore, bauxite, and coal basins."
+      },
+      {
+        "id": "DEF-003",
+        "severity": "LOW / INFORMATIONAL",
+        "component": "Specimen Image Classifier",
+        "title": "Production CNN rejects real-world field photographs due to synthetic domain shift",
+        "description": "Trained on synthetic texture tiles; field photographs containing hands, scales, background paper, or outdoor lighting exceed the tau=5.0 OOD threshold.",
+        "workaround_or_status": "Strict OOD gatekeeper protects production safety. Candidate fine-tuned model and specimen isolation pipelines remain isolated in experimental registry.",
+        "remediation_path": "Collect and certify macroscopic rock specimens under standardized studio and field lighting with accredited laboratory assays."
+      },
+      {
+        "id": "DEF-004",
+        "severity": "LOW / INFORMATIONAL",
+        "component": "Satellite Data Connector",
+        "title": "Copernicus CDSE live token acquisition requires valid subscriber credentials in .env",
+        "description": "Without valid CDSE credentials, requests log HTTP 403 / network lookup errors and fall back gracefully to local test mode or mock mode.",
+        "workaround_or_status": "System reports cdse_auth_status truthfully and does not fabricate fake satellite products.",
+        "remediation_path": "Deploy production CDSE OAuth2 client credentials in deployment environment."
+      }
+    ]
+  },
+  "dual_verdict": {
+    "software_system_readiness": {
+      "status": "PRODUCTION-READY",
+      "score": "100%",
+      "justification": "All 335 Python unit/integration tests pass (1 skipped), 265 JavaScript tests pass across 25 files, frontend production build completes with 0 errors in 4.57s, 19/19 live API endpoint contracts verified, CORS and proxies fully operational, and safe fallbacks prevent application crashes."
+    },
+    "scientific_field_readiness": {
+      "status": "NOT READY FOR FIELD DEPLOYMENT",
+      "score": "PROTOTYPE / EXPLORATION SCREENING ONLY",
+      "justification": "While software safeguards are immaculate, the system cannot be deployed for commercial mineral exploration decision-making without: (1) Certified laboratory assays for specimen training photos, (2) Multi-basin spatial validation for manganese, and (3) Dedicated geological ML models for Coal, Iron Ore, and Bauxite."
+    }
+  },
+  "launch_instructions": {
+    "powershell_backend": "& \".\\.venv\\Scripts\\uvicorn.exe\" backend.app.main:app --host 127.0.0.1 --port 8001",
+    "powershell_frontend": "npm --prefix frontend run dev",
+    "browser_access": "http://localhost:5173"
+  }
+}

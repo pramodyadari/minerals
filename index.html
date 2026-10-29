@@ -458,6 +458,7 @@
                         <div class="select-wrapper">
                             <select class="glass-select" id="location-select">
                                 <option value="" disabled selected>— Select Target Preset —</option>
+                                <option value="noamundi" data-lat="22.1500" data-lon="85.5000">Noamundi Iron Sector, Jharkhand (Verified L2A Product)</option>
                                 <option value="ghondi" data-lat="21.9455" data-lon="80.4295">Ghondi Manganese Mine (Known Deposit)</option>
                                 <option value="zone-67684" data-lat="22.214160" data-lon="80.063632">Zone 67684 — NW Cluster (97.6%)</option>
                                 <option value="zone-124766" data-lat="21.939738" data-lon="80.602479">Zone 124766 — Central East (97.0%)</option>
@@ -546,6 +547,7 @@
                             <span class="badge-status uncalibrated" id="model-confidence-status">Not Calibrated</span>
                         </div>
                     </div>
+                    <div id="noamundi-quality-warning-container" style="display:none; margin-bottom:12px;"></div>
                     <div class="score-display">
                         <div class="score-ring">
                             <svg viewBox="0 0 200 200" class="score-svg">
@@ -1166,6 +1168,7 @@
                         <div class="select-wrapper">
                             <select class="glass-select" id="map-location-select">
                                 <option value="" disabled selected>— Select Target Preset —</option>
+                                <option value="noamundi" data-lat="22.1500" data-lon="85.5000">Noamundi Iron Sector, Jharkhand (Verified L2A Product)</option>
                                 <option value="ghondi" data-lat="21.9455" data-lon="80.4295">Ghondi Manganese Mine (Known Deposit)</option>
                                 <option value="zone-67684" data-lat="22.214160" data-lon="80.063632">Zone 67684 — NW Cluster (97.6%)</option>
                                 <option value="zone-124766" data-lat="21.939738" data-lon="80.602479">Zone 124766 — Central East (97.0%)</option>
@@ -1280,13 +1283,34 @@
                         Analyze Target in Dashboard
                     </button>
                     <div class="map-legend">
-                        <h4 class="legend-title">Prospectivity Legend</h4>
-                        <div class="legend-items">
-                            <div class="legend-item"><span class="legend-color" style="background: #ff0055"></span> Very High (90-100%)</div>
-                            <div class="legend-item"><span class="legend-color" style="background: #ff4444"></span> High (75-90%)</div>
-                            <div class="legend-item"><span class="legend-color" style="background: #ffaa00"></span> Moderate (50-75%)</div>
-                            <div class="legend-item"><span class="legend-color" style="background: #88cc44"></span> Low (25-50%)</div>
-                            <div class="legend-item"><span class="legend-color" style="background: #00aa44"></span> Very Low (0-25%)</div>
+                        <h4 class="legend-title">Prospectivity &amp; Layer Legend</h4>
+                        <div id="legend-ai-prospectivity" class="legend-section" style="margin-bottom:10px;">
+                            <div style="font-size:0.75rem; font-weight:700; color:var(--cyan); margin-bottom:4px;">1. AI Mineral Prospectivity (Tile T44QMK Validated Only)</div>
+                            <div class="legend-items">
+                                <div class="legend-item"><span class="legend-color" style="background: #ff0055"></span> Very High (90-100%)</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #ff4444"></span> High (75-90%)</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #ffaa00"></span> Moderate (50-75%)</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #88cc44"></span> Low (25-50%)</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #00aa44"></span> Very Low (0-25%)</div>
+                            </div>
+                            <div style="font-size:0.65rem; color:var(--text-dim); margin-top:2px;">* AI model predictions strictly unavailable for Iron Ore, Coal, and Bauxite.</div>
+                        </div>
+                        <div id="legend-spectral-evidence" class="legend-section" style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+                            <div style="font-size:0.75rem; font-weight:700; color:#38bdf8; margin-bottom:4px;">2. Satellite-Derived Surface Spectral Evidence</div>
+                            <div style="font-size:0.7rem; color:var(--text-dim); line-height:1.4;">
+                                <div>• <strong>Ferric Iron (Fe3+):</strong> B04/B02 &gt; 0.95 (Hematite/goethite gossan caps)</div>
+                                <div>• <strong>Ferrous Iron (Fe2+):</strong> B11/B8A &gt; 0.75 (Silicate minerals/BIF)</div>
+                                <div>• <strong>Clay Minerals:</strong> B11/B12 &gt; 1.30 (Phyllosilicate hydrothermal halos)</div>
+                            </div>
+                            <div style="font-size:0.65rem; color:#f59e0b; margin-top:2px;">* Surface reflectance indications only; does NOT prove subsurface ore grade.</div>
+                        </div>
+                        <div id="legend-terrain-elevation" class="legend-section" style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+                            <div style="font-size:0.75rem; font-weight:700; color:#a3e635; margin-bottom:4px;">3. Terrain Elevation (DEM)</div>
+                            <div style="font-size:0.7rem; color:var(--text-dim);">SRTM / Copernicus 30m Global Elevation Baseline (Topographic cuestas &amp; plateaus).</div>
+                        </div>
+                        <div id="legend-geological-context" class="legend-section" style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+                            <div style="font-size:0.75rem; font-weight:700; color:#c084fc; margin-bottom:4px;">4. Geological Context</div>
+                            <div style="font-size:0.7rem; color:var(--text-dim);">GSI Bhukosh Regional Lithology, Basin Boundaries, and Mining Lease Occurrences.</div>
                         </div>
                     </div>
                 </div>

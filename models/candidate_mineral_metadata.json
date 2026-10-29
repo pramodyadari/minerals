@@ -1,0 +1,116 @@
+{
+  "candidate_name": "CandidateMineralNet",
+  "training_timestamp": "2026-10-29T14:33:28Z",
+  "base_model": "MineralConvNet (Warm-Started)",
+  "epochs": 15,
+  "batch_size": 16,
+  "best_val_loss": 0.0008,
+  "best_val_acc_pct": 100.0,
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.415,
+      "train_acc_pct": 90.0,
+      "val_loss": 0.0008,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4288,
+      "train_acc_pct": 88.57,
+      "val_loss": 0.0014,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.3231,
+      "train_acc_pct": 90.71,
+      "val_loss": 0.0017,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5556,
+      "train_acc_pct": 86.43,
+      "val_loss": 0.0021,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.5196,
+      "train_acc_pct": 88.57,
+      "val_loss": 0.0024,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.2704,
+      "train_acc_pct": 92.14,
+      "val_loss": 0.0028,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.2584,
+      "train_acc_pct": 92.14,
+      "val_loss": 0.0034,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.3026,
+      "train_acc_pct": 91.43,
+      "val_loss": 0.0038,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.5026,
+      "train_acc_pct": 88.57,
+      "val_loss": 0.0037,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.2858,
+      "train_acc_pct": 93.57,
+      "val_loss": 0.0037,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.2528,
+      "train_acc_pct": 92.14,
+      "val_loss": 0.0045,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.155,
+      "train_acc_pct": 93.57,
+      "val_loss": 0.0046,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.2256,
+      "train_acc_pct": 92.14,
+      "val_loss": 0.0049,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.2166,
+      "train_acc_pct": 92.86,
+      "val_loss": 0.0041,
+      "val_acc_pct": 100.0
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.3498,
+      "train_acc_pct": 88.57,
+      "val_loss": 0.0036,
+      "val_acc_pct": 100.0
+    }
+  ]
+}

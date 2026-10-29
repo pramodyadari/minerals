@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../apiConfig';
 import {
   TrendingUp,
   X,
@@ -20,7 +21,7 @@ export default function ProductionForecastModal({ isOpen, onClose, selectedMiner
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    fetch(`http://127.0.0.1:8000/production-forecast?mineral=${selectedMineral}`)
+    fetch(getApiUrl(`/production-forecast?mineral=${selectedMineral}`))
       .then((res) => res.json())
       .then((resData) => {
         setData(resData);

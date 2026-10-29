@@ -1,0 +1,197 @@
+{
+  "timestamp": "2026-10-29T22:02:00Z",
+  "tests_run": [
+    {
+      "test_name": "GET /health",
+      "passed": true,
+      "details": {
+        "status": "healthy",
+        "service": "Mineral Exploration and Analysis System",
+        "supported_mineral_classes": [
+          "Coal",
+          "Manganese",
+          "Iron Ore",
+          "Bauxite"
+        ],
+        "image_classifier_available": true,
+        "manganese_geographical_model_available": true,
+        "version": "1.0.0"
+      }
+    },
+    {
+      "test_name": "GET /api/health",
+      "passed": true,
+      "details": {
+        "status": "healthy",
+        "service": "Mineral Exploration and Analysis System",
+        "supported_mineral_classes": [
+          "Coal",
+          "Manganese",
+          "Iron Ore",
+          "Bauxite"
+        ],
+        "image_classifier_available": true,
+        "manganese_geographical_model_available": true,
+        "version": "1.0.0"
+      }
+    },
+    {
+      "test_name": "GET /minerals",
+      "passed": true,
+      "details": {
+        "count": 4
+      }
+    },
+    {
+      "test_name": "GET /api/models/registry",
+      "passed": true,
+      "details": {
+        "registered_models_count": 4
+      }
+    },
+    {
+      "test_name": "POST /analyze Outside India Territory",
+      "passed": true,
+      "details": {
+        "status": "OUTSIDE_INDIA_TERRITORY",
+        "confidence_score": null
+      }
+    },
+    {
+      "test_name": "POST /analyze Manganese Inside Footprint (Relative Score)",
+      "passed": true,
+      "details": {
+        "coverage": "VALIDATED_ACTIVE",
+        "prospectivity_index": 80.7,
+        "calibrated_confidence_withheld": true
+      }
+    },
+    {
+      "test_name": "POST /analyze Manganese Outside Footprint",
+      "passed": true,
+      "details": {
+        "coverage": "OUTSIDE_TRAINING_FOOTPRINT",
+        "overall_status": "INSUFFICIENT_DATA"
+      }
+    },
+    {
+      "test_name": "POST /analyze Coal Geological Disclaimers",
+      "passed": true,
+      "details": {
+        "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+        "disclaimers_count": 4
+      }
+    },
+    {
+      "test_name": "POST /analyze Iron Ore Staining Disclaimers",
+      "passed": true,
+      "details": {
+        "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+        "disclaimers_count": 4
+      }
+    },
+    {
+      "test_name": "POST /analyze Bauxite Laterite Disclaimers",
+      "passed": true,
+      "details": {
+        "overall_status": "EVIDENCE_ONLY_NO_PREDICTION",
+        "disclaimers_count": 4
+      }
+    },
+    {
+      "test_name": "POST /analyze-all Four Minerals",
+      "passed": true,
+      "details": {
+        "commodities": [
+          "Coal",
+          "Manganese",
+          "Iron Ore",
+          "Bauxite"
+        ]
+      }
+    },
+    {
+      "test_name": "POST /analyze-all Custom 2 Minerals",
+      "passed": true,
+      "details": {
+        "commodities": [
+          "Coal",
+          "Manganese"
+        ]
+      }
+    },
+    {
+      "test_name": "POST /analyze-all Custom 1 Mineral Rejection (422)",
+      "passed": true,
+      "details": {
+        "detail": "Custom mineral selection requires exactly 2 or 3 minerals. Received 1."
+      }
+    },
+    {
+      "test_name": "POST /classify-image Known Synthetic Coal Acceptance",
+      "passed": true,
+      "details": {
+        "identified_mineral": "Coal",
+        "display_label": "Coal",
+        "status": "ACCEPTED",
+        "accepted_confidence": 99.81
+      }
+    },
+    {
+      "test_name": "POST /classify-image OOD Quartz Rejection",
+      "passed": true,
+      "details": {
+        "display_label": "Unknown / Unsupported Mineral",
+        "status": "OUT_OF_DISTRIBUTION",
+        "distance": 37.22,
+        "nearest_candidate": "Manganese"
+      }
+    },
+    {
+      "test_name": "POST /classify-image Disputed Coal Upload Rejection",
+      "passed": true,
+      "details": {
+        "display_label": "Unknown / Unsupported Mineral",
+        "status": "OUT_OF_DISTRIBUTION",
+        "distance": 11.81,
+        "raw_favored": "Bauxite"
+      }
+    },
+    {
+      "test_name": "POST /classify-image Corrupt File Rejection",
+      "passed": true,
+      "details": {
+        "status_code": 400,
+        "detail": {
+          "detail": "Could not parse uploaded image: cannot identify image file <_io.BytesIO object at 0x000001FF73E609A0>"
+        }
+      }
+    },
+    {
+      "test_name": "GET /cdse-auth-status Truthful Credentials Report",
+      "passed": true,
+      "details": {
+        "configured": true,
+        "authenticated": false,
+        "status": "AUTHENTICATION_FAILED",
+        "message": "CDSE authentication request rejected or timed out. Check credentials in .env.",
+        "token_valid": false,
+        "instructions": "Verify your CDSE_USERNAME and CDSE_PASSWORD in .env."
+      }
+    },
+    {
+      "test_name": "GET /api/evidence/reliability",
+      "passed": true,
+      "details": {
+        "engine_version": "2.0.0",
+        "eligibility_status": "VALIDATED_FOR_DOMAIN",
+        "layers_audited": 5
+      }
+    }
+  ],
+  "summary": {
+    "passed": 19,
+    "failed": 0,
+    "errors": []
+  }
+}

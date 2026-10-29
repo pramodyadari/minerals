@@ -15,7 +15,10 @@ import os
 import json
 import joblib
 import numpy as np
-import pandas as pd
+try:
+    import pandas as pd
+except Exception:
+    pd = None
 
 def test_production_parity():
     model_path = "models/production_random_forest.pkl"
@@ -63,8 +66,12 @@ def test_production_parity():
 
     print("\n--- Testing Prediction Parity Across Test Cases ---")
     for idx, tc in enumerate(test_cases, 1):
-        df_tc = pd.DataFrame([tc])
-        sk_pred = float(rf.predict(df_tc)[0])
+        if pd is not None:
+            df_tc = pd.DataFrame([tc])
+            sk_pred = float(rf.predict(df_tc)[0])
+        else:
+            x_tc = np.array([[tc[f] for f in exported["features"]]])
+            sk_pred = float(rf.predict(x_tc)[0])
 
         x_vec = [tc[f] for f in exported["features"]]
         json_pred = float(np.mean([eval_json_tree(t, x_vec) for t in exported["trees"]]))
@@ -75,7 +82,10 @@ def test_production_parity():
 
     # 4. Test shortfall calculations
     planned = test_cases[0]["Planned_Production_tonnes"]
-    predicted = float(rf.predict(pd.DataFrame([test_cases[0]]))[0])
+    if pd is not None:
+        predicted = float(rf.predict(pd.DataFrame([test_cases[0]]))[0])
+    else:
+        predicted = float(rf.predict(np.array([[test_cases[0][f] for f in exported["features"]]]))[0])
     shortfall = max(0.0, planned - predicted)
     shortfall_pct = (shortfall / planned) * 100.0
     print(f"\n[OK] Test Case 1 Shortfall: {shortfall:.2f} tonnes ({shortfall_pct:.1f}%)")

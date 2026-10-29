@@ -256,6 +256,13 @@ class MineralTrainer:
                 f"No trained model found for mineral '{clean_mineral}'. Training data required."
             )
 
+        global joblib
+        if not joblib:
+            try:
+                import joblib as _jb
+                joblib = _jb
+            except ImportError:
+                pass
         if not joblib:
             raise RuntimeError("joblib is required to load models.")
 

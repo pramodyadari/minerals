@@ -21,7 +21,15 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
-from dataset_validator import audit_dataset
+import sys
+_ai_dir = os.path.dirname(os.path.abspath(__file__))
+if _ai_dir not in sys.path:
+    sys.path.insert(0, _ai_dir)
+
+try:
+    from dataset_validator import audit_dataset
+except ImportError:
+    from ai.dataset_validator import audit_dataset
 
 CLASSES = ["coal", "manganese", "iron_ore", "bauxite"]
 CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}

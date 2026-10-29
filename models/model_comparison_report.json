@@ -1,0 +1,233 @@
+{
+  "task": "Phase 3 Fair Model Evaluation & Comparison",
+  "timestamp": "2026-10-29T13:33:15Z",
+  "test_set_split": "data/test (10 Coal, 10 Manganese, 10 Iron Ore, 10 Bauxite)",
+  "baseline_model": {
+    "name": "MineralConvNet",
+    "checkpoint": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo\\models\\mineral_image_classifier_baseline_cnn.pth",
+    "metrics": {
+      "total_samples": 40,
+      "accuracy_pct": 100.0,
+      "balanced_accuracy_pct": 100.0,
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "confusion_matrix": [
+        [
+          10,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          10,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10
+        ]
+      ],
+      "per_class_metrics": {
+        "coal": {
+          "display_name": "Coal",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "manganese": {
+          "display_name": "Manganese",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "iron_ore": {
+          "display_name": "Iron Ore",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "bauxite": {
+          "display_name": "Bauxite",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        }
+      }
+    },
+    "field_photograph_results": [
+      {
+        "sample_name": "Disputed Bituminous Coal Upload",
+        "file_path": "data\\uploads\\20261029_125012_70df91e2acfb_Bituminous_Coal.jpg",
+        "expected_mineral": "Coal",
+        "predicted_class": "bauxite",
+        "predicted_mineral": "Bauxite",
+        "confidence_pct": 99.65,
+        "probabilities": {
+          "Coal": 0.0,
+          "Manganese": 0.35,
+          "Iron Ore": 0.0,
+          "Bauxite": 99.65
+        },
+        "ground_truth_status": "Observed specimen photo supplied as Coal (vitreous luster, white card background)"
+      },
+      {
+        "sample_name": "Dark Shiny Manganese Upload",
+        "file_path": "data\\uploads\\20261029_124929_c31314697563_2a95d3e8-610f-4bff-9bc7-c9700e76d534.png",
+        "expected_mineral": "Manganese",
+        "predicted_class": "manganese",
+        "predicted_mineral": "Manganese",
+        "confidence_pct": 89.43,
+        "probabilities": {
+          "Coal": 0.02,
+          "Manganese": 89.43,
+          "Iron Ore": 0.01,
+          "Bauxite": 10.54
+        },
+        "ground_truth_status": "Observed specimen photo supplied as Manganese (metallic specular luster)"
+      },
+      {
+        "sample_name": "Manganese Dark Shiny Test Fixture",
+        "file_path": "data\\test\\manganese_dark_shiny_test.jpg",
+        "expected_mineral": "Manganese",
+        "predicted_class": "manganese",
+        "predicted_mineral": "Manganese",
+        "confidence_pct": 94.3,
+        "probabilities": {
+          "Coal": 3.88,
+          "Manganese": 94.3,
+          "Iron Ore": 1.25,
+          "Bauxite": 0.57
+        },
+        "ground_truth_status": "Dark body with specular highlights test fixture"
+      }
+    ]
+  },
+  "improved_model": {
+    "name": "MineralResNet18",
+    "checkpoint": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo\\models\\mineral_resnet18.pth",
+    "metrics": {
+      "total_samples": 40,
+      "accuracy_pct": 100.0,
+      "balanced_accuracy_pct": 100.0,
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "confusion_matrix": [
+        [
+          10,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          10,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10
+        ]
+      ],
+      "per_class_metrics": {
+        "coal": {
+          "display_name": "Coal",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "manganese": {
+          "display_name": "Manganese",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "iron_ore": {
+          "display_name": "Iron Ore",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "bauxite": {
+          "display_name": "Bauxite",
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        }
+      }
+    },
+    "field_photograph_results": [
+      {
+        "sample_name": "Disputed Bituminous Coal Upload",
+        "file_path": "data\\uploads\\20261029_125012_70df91e2acfb_Bituminous_Coal.jpg",
+        "expected_mineral": "Coal",
+        "predicted_class": "manganese",
+        "predicted_mineral": "Manganese",
+        "confidence_pct": 40.42,
+        "probabilities": {
+          "Coal": 33.13,
+          "Manganese": 40.42,
+          "Iron Ore": 10.89,
+          "Bauxite": 15.56
+        },
+        "ground_truth_status": "Observed specimen photo supplied as Coal (vitreous luster, white card background)"
+      },
+      {
+        "sample_name": "Dark Shiny Manganese Upload",
+        "file_path": "data\\uploads\\20261029_124929_c31314697563_2a95d3e8-610f-4bff-9bc7-c9700e76d534.png",
+        "expected_mineral": "Manganese",
+        "predicted_class": "coal",
+        "predicted_mineral": "Coal",
+        "confidence_pct": 98.37,
+        "probabilities": {
+          "Coal": 98.37,
+          "Manganese": 1.15,
+          "Iron Ore": 0.25,
+          "Bauxite": 0.23
+        },
+        "ground_truth_status": "Observed specimen photo supplied as Manganese (metallic specular luster)"
+      },
+      {
+        "sample_name": "Manganese Dark Shiny Test Fixture",
+        "file_path": "data\\test\\manganese_dark_shiny_test.jpg",
+        "expected_mineral": "Manganese",
+        "predicted_class": "manganese",
+        "predicted_mineral": "Manganese",
+        "confidence_pct": 97.0,
+        "probabilities": {
+          "Coal": 1.63,
+          "Manganese": 97.0,
+          "Iron Ore": 0.69,
+          "Bauxite": 0.67
+        },
+        "ground_truth_status": "Dark body with specular highlights test fixture"
+      }
+    ]
+  }
+}

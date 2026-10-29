@@ -1,0 +1,87 @@
+{
+  "audit_metadata": {
+    "commodity": "Iron Ore",
+    "commodity_symbol": "Fe",
+    "study_region": "Singhbhum-Odisha Iron Ore Craton",
+    "satellite_tile": "T45QUE",
+    "curated_dataset_path": "data/training/iron_ore_training_curated.csv",
+    "total_observations": 16033,
+    "positive_observations": 14233,
+    "background_observations": 1800,
+    "balanced_sample_size": 3577,
+    "feature_dimensions": 10,
+    "audit_timestamp": "2026-10-15T08:22:18Z"
+  },
+  "curated_deposits_breakdown": {
+    "Kiriburu Iron Mine": 2806,
+    "Gua Iron Ore Mine": 3685,
+    "Bolani Iron Ore Mine": 3010,
+    "Noamundi Iron Ore Mine": 337,
+    "Joda East Iron Mine": 4395,
+    "Singhbhum Granite (Champua North)": 600,
+    "Singhbhum Granite (Karanjia Sector)": 600,
+    "Singhbhum Granite (Chaibasa South)": 600
+  },
+  "validation_methodology_comparison": {
+    "random_stratified_5fold_cv": {
+      "accuracy": 0.8345,
+      "accuracy_std": 0.0135,
+      "precision": 0.8346,
+      "precision_std": 0.0128,
+      "recall": 0.8317,
+      "recall_std": 0.0162,
+      "f1_score": 0.8331,
+      "f1_score_std": 0.0139,
+      "roc_auc": 0.9124,
+      "roc_auc_std": 0.0085,
+      "pr_auc": 0.9110,
+      "pr_auc_std": 0.0085,
+      "evaluation_diagnostic": "SPATIAL_AUTOCORRELATION_INFLATED",
+      "scientific_critique": "Random cross-validation splits pixels from the same open-cast pit between train and test sets, measuring spatial proximity rather than geological prospectivity."
+    },
+    "spatially_blocked_leave_group_out_cv": {
+      "accuracy": 0.4766,
+      "accuracy_std": 0.1631,
+      "precision": 0.5051,
+      "precision_std": 0.4473,
+      "recall": 0.2388,
+      "recall_std": 0.2055,
+      "f1_score": 0.3132,
+      "f1_score_std": 0.2657,
+      "roc_auc": 0.6703,
+      "roc_auc_std": 0.0000,
+      "pr_auc": 0.5490,
+      "pr_auc_std": 0.0000,
+      "evaluation_diagnostic": "GENUINE_SPATIAL_GENERALIZATION_DEFICIT",
+      "scientific_critique": "When entire mining complexes are withheld, optical reflectance alone drops to 47.7% accuracy (near random guess) due to regolith and tropical laterite confounding."
+    }
+  },
+  "feature_importances_ranking": [
+    {"feature": "B03", "importance": 0.1417, "band_type": "Green (560 nm)", "description": "Vegetation and soil albedo contrast"},
+    {"feature": "iron_oxide_ratio", "importance": 0.1366, "band_type": "B04/B02 (Red/Blue)", "description": "Ferric iron charge transfer absorption"},
+    {"feature": "B12", "importance": 0.1189, "band_type": "SWIR-2 (2190 nm)", "description": "Clay and hydroxyl absorption"},
+    {"feature": "clay_ratio", "importance": 0.1064, "band_type": "B11/B12 (SWIR1/SWIR2)", "description": "Al-OH alteration halo contrast"},
+    {"feature": "B11", "importance": 0.0969, "band_type": "SWIR-1 (1610 nm)", "description": "Silicate and regolith reflectance"},
+    {"feature": "B08", "importance": 0.0949, "band_type": "NIR (842 nm)", "description": "Canopy biomass masking"},
+    {"feature": "B02", "importance": 0.0840, "band_type": "Blue (490 nm)", "description": "Shortwave atmospheric scatter"},
+    {"feature": "NDVI", "importance": 0.0834, "band_type": "Normalized Difference Vegetation Index", "description": "Canopy density attenuation"},
+    {"feature": "B04", "importance": 0.0725, "band_type": "Red (665 nm)", "description": "Chlorophyll absorption and ferric slope"},
+    {"feature": "NDWI", "importance": 0.0647, "band_type": "Normalized Difference Water Index", "description": "Surface and pit waterlogging"}
+  ],
+  "scientific_decision_and_data_gap_report": {
+    "model_decision": "STOP_TRAINING_WITHHOLD_PREDICTION",
+    "status_label": "Unavailable — Awaiting Independent Spatial Validation & Geophysical Data",
+    "root_cause_analysis": [
+      "Sentinel-2 Level-2A measures surface reflectance in the upper micrometers of the Earth surface. In tropical lateritic terrains like Singhbhum-North Odisha, ferruginous duricrust, lateritic soils, and weathered granite slopes exhibit high ferric iron ratios (B04/B02 > 0.98), mimicking open hematite mine benches.",
+      "Optical bands cannot differentiate surface laterite staining from an economic high-grade hematite body (>62% Fe) without subsurface core assays or regional aeromagnetic data.",
+      "The random holdout accuracy of 83.5% is an artifact of spatial autocorrelation (neighboring pixels). Under true spatial block validation, accuracy collapses to 47.7%.",
+      "Deploying a standalone optical model under these conditions would violate scientific integrity by emitting uncalibrated, misleading prospectivity predictions."
+    ],
+    "mandatory_prerequisites_for_future_iron_ore_model": [
+      "Integration of GSI National Aeromagnetic Anomaly Tensor Grid (magnetic BIF susceptibility contrast).",
+      "Subsurface diamond core borehole assay database (% Fe, % SiO2, % Al2O3, % P).",
+      "Digitized 1:50,000 lithological contact boundaries of Banded Hematite Jasper (BHJ) from Bhukosh.",
+      "Independent multi-region validation on Bastar Craton (Bailadila) and Dharwar Craton (Sandur/Donimalai) before nationwide deployment."
+    ]
+  }
+}

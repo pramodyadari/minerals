@@ -1,0 +1,184 @@
+{
+  "audit_metadata": {
+    "title": "Phase 2 — Multi-Source Geophysical & Geological Data Audit for Iron Ore Prospectivity",
+    "commodity": "Iron Ore",
+    "commodity_symbol": "Fe",
+    "study_region": "Singhbhum-North Odisha Iron Ore Craton (Noamundi-Joda-Kiriburu-Gua-Bolani Belt)",
+    "satellite_tile": "T45QUE",
+    "target_crs": "EPSG:32645 (WGS 84 / UTM Zone 45N)",
+    "audit_timestamp": "2026-10-15T09:40:00Z",
+    "status": "DATA_AUDIT_COMPLETE_ACQUISITION_BLOCKED",
+    "scientific_recommendation": "RETAIN_UNAVAILABLE_STATUS_PENDING_GOVERNMENT_GRID_DISPATCH"
+  },
+  "data_sources_audit": [
+    {
+      "source_id": "GSI_NAGMP_HRAS",
+      "agency": "Geological Survey of India (GSI) / National Geoscience Data Repository (NGDR)",
+      "dataset_name": "National Aero-geophysical Mapping Program (NAGMP) — High-Resolution Aeromagnetic Survey (HRAS)",
+      "target_geography": "Singhbhum-Odisha Craton (Block-A / Toposheet 73F)",
+      "survey_parameters": {
+        "flight_altitude_agl_m": 80,
+        "line_spacing_m": 200,
+        "tie_line_spacing_m": 2000,
+        "flight_direction": "E-W (090°-270°)",
+        "sensor": "Cesium Vapor Magnetometer (sampling rate 10 Hz, sensitivity 0.001 nT)",
+        "nominal_flight_speed_kmh": 220
+      },
+      "derived_products": [
+        "Total Magnetic Intensity (TMI) Grid (50m cell size, nT)",
+        "Reduced to Magnetic Pole (RTP) Grid (50m cell size, nT)",
+        "First Vertical Derivative (1VD) (nT/m)",
+        "Analytical Signal Amplitude (AS) (nT/m)",
+        "Tilt Derivative (TDR) (radians)"
+      ],
+      "access_status": "BLOCKED_PORTAL_AUTHENTICATION_REQUIRED",
+      "portal_url": "https://ngdr.gsi.gov.in",
+      "licensing": "Government Open Data License - India (GODL) with Mandatory End-User Registration",
+      "blocker_details": "GSI NGDR / Bhukosh portals require registered Indian citizen credentials, Aadhaar/corporate PAN verification, cart selection, and offline institutional email dispatch for GIS raster grid formats (Geosoft .grd / GeoTIFF). No unauthenticated programmatic REST API exists for direct raster downloads. In accordance with strict scientific integrity rules, synthetic or estimated magnetic values are rejected.",
+      "acquisition_plan": "Submit formal institutional data request via NGDR portal for Quadrangle 73F aeromagnetic tensor grids."
+    },
+    {
+      "source_id": "GSI_BHUKOSH_GEOLOGY_1_50K",
+      "agency": "Geological Survey of India (GSI)",
+      "dataset_name": "1:50,000 Quadrangle Geological Mapping Vector Layers (Sheets 73F/4, 73F/8, 73F/12)",
+      "target_geography": "Noamundi-Barbil-Kiriburu Sector",
+      "vector_layers": [
+        "Lithological Formations (Banded Hematite Jasper Member, Upper Shales, Lower Volcanics, Singhbhum Granite)",
+        "Structural Lineaments (Faults, Shear Zones, Synclinal Axes)",
+        "Bedding and Cleavage Attitude Measurements (Strike/Dip)"
+      ],
+      "access_status": "BLOCKED_VECTOR_DOWNLOAD_RESTRICTED",
+      "portal_url": "https://bhukosh.gsi.gov.in",
+      "licensing": "GSI Spatial Data Infrastructure Policy",
+      "blocker_details": "Bhukosh offers open WMS viewing in browser, but machine-readable vector GIS downloads (.shp/.geojson) require verified institutional login and cart checkout. WMS tile scraping is uncalibrated and forbidden under data integrity rules.",
+      "acquisition_plan": "Download verified vector shapefiles through official authenticated GSI Bhukosh account."
+    },
+    {
+      "source_id": "NOAA_NCEI_EMAG2V3",
+      "agency": "National Oceanic and Atmospheric Administration (NOAA) / NCEI",
+      "dataset_name": "Earth Magnetic Anomaly Grid (2-arc-minute resolution) — EMAG2v3",
+      "target_geography": "Global (enclosing 21.0°N to 23.0°N, 85.0°E to 86.5°E)",
+      "resolution": "2 arc-minutes (~3.7 km cell size at 22°N)",
+      "units": "nT (at 4 km altitude above geoid)",
+      "access_status": "VERIFIED_ACCESSIBLE_BUT_SCIENTIFICALLY_INADEQUATE",
+      "portal_url": "https://www.ncei.noaa.gov/products/earth-magnetic-anomaly-grid-2-arc-minute",
+      "licensing": "Public Domain (US Government Work)",
+      "scientific_critique": "While EMAG2v3 is openly downloadable, its native spatial resolution of ~3.7 km is two orders of magnitude too coarse to resolve individual Banded Iron Formation ridges (typically 100 m to 800 m wide) or open-cast hematite mine pits. Resampling a 3.7 km grid to 20 m produces fictitious spatial smoothness with zero exploration utility."
+    },
+    {
+      "source_id": "ESA_COPERNICUS_DEM_GLO30",
+      "agency": "European Space Agency (ESA) / Airbus",
+      "dataset_name": "Copernicus Digital Elevation Model (GLO-30)",
+      "target_geography": "Tile T45QUE (Noamundi-Kiriburu Ridge Terrain)",
+      "resolution": "30 m (1 arc-second)",
+      "units": "Metres above ellipsoid / geoid",
+      "derived_terrain_features": [
+        "Elevation (m ASL)",
+        "Slope Gradient (degrees)",
+        "Topographic Position Index (TPI) — identifying prominent ridge crests (>800m ASL) where resistant BHJ caps occur",
+        "Terrain Aspect & Solar Insolation"
+      ],
+      "access_status": "VERIFIED_ACQUISITION_PLAN_DEFINED",
+      "portal_url": "https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model",
+      "licensing": "Copernicus Open Access CC-BY"
+    }
+  ],
+  "petrophysical_and_geological_suitability_audit": {
+    "magnetite_vs_hematite_paradox": {
+      "summary": "Primary BIF proto-ore is strongly magnetic, but high-grade supergene hematite is weakly magnetic.",
+      "mineralogical_physics": [
+        "Primary Banded Magnetite Quartzite (BMQ) and unaltered Banded Hematite Jasper (BHJ) contain ferromagnetic magnetite (Fe3O4) with high magnetic susceptibility (k = 0.1 to 1.0 SI).",
+        "Supergene tropical enrichment leaches silica (quartz/chert) and oxidizes magnetite to martite/hematite (alpha-Fe2O3) and goethite (FeOOH).",
+        "Hematite is canted antiferromagnetic with very low magnetic susceptibility (k = 10^-4 to 10^-3 SI) — three orders of magnitude lower than magnetite.",
+        "CRITICAL SCIENTIFIC IMPLICATION: High-grade enriched hematite ore bodies (>62% Fe) often sit within or directly adjacent to magnetic lows relative to unweathered proto-ore BIF ridges. A naive machine-learning model trained on magnetic highs will prioritize low-grade unweathered magnetite-silica proto-ore and miss supergene high-grade hematite deposits."
+      ]
+    },
+    "newer_dolerite_false_positives": {
+      "summary": "Proterozoic dolerite dykes produce intense false magnetic anomaly lineaments.",
+      "details": "The Singhbhum Craton is extensively cross-cut by the Newer Dolerite Dyke Swarm (NNE-SSW and NW-SE trending tholeiitic dolerites/gabbros). These mafic rocks contain abundant titanomagnetite and produce strong linear aeromagnetic anomalies (TMI highs > 500 nT) that do not correlate with iron ore mineralization. Without mapped geological dyke masks, aeromagnetic data alone will yield massive false-positive classifications."
+    },
+    "deposit_boundary_accuracy": {
+      "summary": "Nominal point coordinates do not capture non-linear deposit morphology.",
+      "details": "The 5 curated mines (Noamundi, Joda East, Kiriburu, Gua, Bolani) are non-linear, structurally folded hematite ridges spanning 2 km to 8 km in strike length and 200 m to 1,200 m in width. Using circular buffer radii around nominal pit centroids introduces mixed boundary pixels containing country rock shales, haulage roads, and overburden dumps. Authoritative digitized mining lease polygon vectors (from IBM / State DGM) are required before sub-deposit spatial training can be defensibly executed."
+    }
+  },
+  "multi_source_feature_integration_plan": {
+    "target_coordinate_system": "EPSG:32645 (UTM Zone 45N)",
+    "feature_groups": [
+      {
+        "group_name": "Group A: Optical Remote Sensing (Sentinel-2 L2A)",
+        "source": "Copernicus Sentinel-2 MSI (Verified On Disk)",
+        "native_resolution": "10 m / 20 m",
+        "features": ["B02", "B03", "B04", "B08", "B11", "B12", "NDVI", "NDWI", "clay_ratio", "iron_oxide_ratio"],
+        "status": "ACQUIRED_AND_AUDITED"
+      },
+      {
+        "group_name": "Group B: High-Resolution Aeromagnetics (GSI NAGMP)",
+        "source": "GSI NGDR / HRAS Survey (Quadrangle 73F)",
+        "native_resolution": "50 m grid (200 m line spacing)",
+        "resampling_method": "Bilinear interpolation to 20 m grid",
+        "features": ["TMI_nT", "RTP_nT", "1VD_nT_per_m", "AnalyticSignal_nT_per_m", "TiltDerivative_rad"],
+        "status": "BLOCKED_PENDING_GOVERNMENT_PORTAL_DISPATCH"
+      },
+      {
+        "group_name": "Group C: Terrain Morphometry (Copernicus DEM)",
+        "source": "ESA Copernicus GLO-30",
+        "native_resolution": "30 m (1 arc-sec)",
+        "resampling_method": "Bilinear interpolation to 20 m grid",
+        "features": ["Elevation_m", "Slope_deg", "TPI_Ridge_Index"],
+        "status": "ACQUISITION_PLAN_DEFINED"
+      },
+      {
+        "group_name": "Group D: Geological Lithology & Structure (GSI Bhukosh)",
+        "source": "GSI 1:50,000 Quadrangle Maps (Sheets 73F/4, 73F/8)",
+        "native_format": "Vector Polygon & Line GIS (.geojson / .shp)",
+        "rasterization_method": "Rasterized at 20 m with exact polygon boundary clipping",
+        "features": [
+          "is_BHJ_formation (binary categorical: 1=Banded Hematite Jasper, 0=Other)",
+          "dist_to_BHJ_contact_m (continuous Euclidean distance)",
+          "dist_to_synclinal_axis_m (continuous distance to regional fold hinge)",
+          "is_dolerite_dyke (binary exclusion mask)"
+        ],
+        "status": "BLOCKED_PENDING_GOVERNMENT_PORTAL_DISPATCH"
+      }
+    ]
+  },
+  "baseline_comparison_architecture": {
+    "evaluation_methodology": "Strict Spatially Blocked Leave-One-Deposit-Out Cross-Validation (5 Folds: Noamundi, Joda East, Kiriburu, Gua, Bolani)",
+    "planned_model_comparisons": [
+      {
+        "model_id": "Baseline_A_Optical_Only",
+        "features": "Group A (10 features)",
+        "empirical_status": "EVALUATED",
+        "random_cv_accuracy_pct": 83.45,
+        "spatially_blocked_cv_accuracy_pct": 47.66,
+        "spatially_blocked_f1": 0.3132,
+        "limitation": "Fails across unseen deposits due to laterite/regolith spectral confounding."
+      },
+      {
+        "model_id": "Model_B_Optical_Plus_Terrain",
+        "features": "Group A + Group C (13 features)",
+        "empirical_status": "AWAITING_DEM_INGESTION",
+        "expected_effect": "Filters out low-lying alluvium, but cannot differentiate BHJ ridge crests from unmineralized granite hills."
+      },
+      {
+        "model_id": "Model_C_Optical_Plus_Geophysics",
+        "features": "Group A + Group B (15 features)",
+        "empirical_status": "BLOCKED_PENDING_AEROMAG_GRID",
+        "expected_effect": "Provides structural BIF detection, but requires dolerite dyke discrimination."
+      },
+      {
+        "model_id": "Model_D_Full_Multi_Source",
+        "features": "Group A + Group B + Group C + Group D (19 features)",
+        "empirical_status": "BLOCKED_PENDING_DATA_DISPATCH",
+        "expected_effect": "Highest theoretical prospectivity skill; constrains spectral anomalies to verified BHJ horizons and magnetic structural keels."
+      }
+    ]
+  },
+  "scientific_verdict": {
+    "status": "UNAVAILABLE_INSUFFICIENT_SPATIAL_VALIDATION",
+    "ai_prospectivity_score": null,
+    "model_confidence": null,
+    "rationale": "High-resolution aeromagnetic grids and 1:50,000 vector lithological shapefiles are currently held behind Indian government portal authentication (GSI NGDR / Bhukosh) and are not accessible via unauthenticated REST endpoints. Without these real datasets, training a multi-source model would require fabricating synthetic geophysical rasters, directly violating scientific integrity. The system correctly maintains Iron Ore AI prospectivity scores as UNAVAILABLE while serving authentic Sentinel-2 surface spectral ratios and published GSI/IBM geological descriptions."
+  }
+}

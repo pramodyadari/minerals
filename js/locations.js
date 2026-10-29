@@ -23,6 +23,7 @@
     } else if (typeof module === 'object' && module.exports) {
         const GeoEngine = require('./geo');
         const MineralData = require('./data');
+
         module.exports = factory(GeoEngine, MineralData);
     } else {
         root.LocationResolver = factory(root.GeoEngine, root.MineralData);
@@ -34,6 +35,21 @@
     // 1. AUTHENTIC GEOGRAPHICAL PLACES (SENTINEL-2 T44QMK TILE FOOTPRINT)
     // ------------------------------------------------------------------------
     const KNOWN_PLACES = [
+        // Real verified satellite ingestion target (Phase 2 & 3: Noamundi Tile T45QUE)
+        {
+            id: 'noamundi-iron-mine',
+            name: 'Noamundi',
+            displayName: 'Noamundi Iron Sector, Jharkhand',
+            subArea: 'West Singhbhum District, Jharkhand (Tile T45QUE)',
+            district: 'West Singhbhum District',
+            state: 'Jharkhand',
+            lat: 22.1500,
+            lon: 85.5000,
+            type: 'deposit',
+            badge: 'Verified L2A Product',
+            importance: 10,
+            minZoom: 8
+        },
         // Known mining sites and reference deposits
         {
             id: 'ghondi-mine',
@@ -323,25 +339,25 @@
     // 2. CANDIDATE DISCOVERY ZONES DIRECTORY
     // ------------------------------------------------------------------------
     const ZONE_METADATA = {
-        67684:  { sector: 'NW Cluster', subArea: 'Paraswada / Lamta Sector, Balaghat', rank: 1, score: 97.6 },
-        67387:  { sector: 'NW Cluster North', subArea: 'Paraswada Sector, Balaghat', rank: 2, score: 97.3 },
+        67684: { sector: 'NW Cluster', subArea: 'Paraswada / Lamta Sector, Balaghat', rank: 1, score: 97.6 },
+        67387: { sector: 'NW Cluster North', subArea: 'Paraswada Sector, Balaghat', rank: 2, score: 97.3 },
         124766: { sector: 'Central East', subArea: 'Baihar East Sector, Balaghat', rank: 3, score: 97.0 },
         187925: { sector: 'South East', subArea: 'Lanji Sector, Balaghat', rank: 4, score: 96.9 },
         160475: { sector: 'Eastern Range', subArea: 'Lanji / Amgaon Border, Balaghat', rank: 5, score: 96.8 },
-        35688:  { sector: 'Northern Ridge', subArea: 'Nainpur South Sector, Mandla/Balaghat', rank: 6, score: 96.8 },
+        35688: { sector: 'Northern Ridge', subArea: 'Nainpur South Sector, Mandla/Balaghat', rank: 6, score: 96.8 },
         189867: { sector: 'Southern Anomaly', subArea: 'Kirnapur South Sector, Balaghat', rank: 7, score: 96.8 },
         167254: { sector: 'South Central', subArea: 'Waraseoni / Balaghat West Sector', rank: 8, score: 96.7 },
         180345: { sector: 'SW Cluster', subArea: 'Waraseoni SW Sector, Balaghat', rank: 9, score: 96.7 },
-        39890:  { sector: 'NW Edge', subArea: 'Lamta North Sector, Balaghat', rank: 10, score: 96.7 },
+        39890: { sector: 'NW Edge', subArea: 'Lamta North Sector, Balaghat', rank: 10, score: 96.7 },
         162862: { sector: 'Central West', subArea: 'Waraseoni Sector, Balaghat', rank: 11, score: 96.7 },
         179466: { sector: 'SW Anomaly', subArea: 'Waraseoni SW Sector, Balaghat', rank: 12, score: 96.7 },
         103786: { sector: 'Central Belt', subArea: 'Ukwa / Baihar Corridor, Balaghat', rank: 13, score: 96.7 },
         180659: { sector: 'SW Ridge', subArea: 'Waraseoni Sector, Balaghat', rank: 14, score: 96.6 },
         191911: { sector: 'Southern Belt', subArea: 'Kirnapur Sector, Balaghat', rank: 15, score: 96.6 },
-        91324:  { sector: 'West Central', subArea: 'Lalburra North Sector, Balaghat', rank: 16, score: 96.6 },
-        32809:  { sector: 'Far North', subArea: 'Baihar North Sector, Balaghat', rank: 17, score: 96.6 },
+        91324: { sector: 'West Central', subArea: 'Lalburra North Sector, Balaghat', rank: 16, score: 96.6 },
+        32809: { sector: 'Far North', subArea: 'Baihar North Sector, Balaghat', rank: 17, score: 96.6 },
         113980: { sector: 'Balaghat NW', subArea: 'Balaghat NW Sector, Balaghat', rank: 18, score: 96.6 },
-        92467:  { sector: 'Central West Anomaly', subArea: 'Lalburra Sector, Balaghat', rank: 19, score: 96.6 },
+        92467: { sector: 'Central West Anomaly', subArea: 'Lalburra Sector, Balaghat', rank: 19, score: 96.6 },
         115839: { sector: 'North Corridor', subArea: 'Ghondi / Ukwa West Sector, Balaghat', rank: 20, score: 96.6 }
     };
 
@@ -352,7 +368,7 @@
         const dLat = lat2 - lat1;
         const dLon = lon2 - lon1;
         const angle = (Math.atan2(dLon, dLat) * 180 / Math.PI + 360) % 360;
-        
+
         const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'];
         const index = Math.round(angle / 45);
         return directions[index];

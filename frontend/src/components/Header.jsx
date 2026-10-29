@@ -10,20 +10,23 @@ import {
   User,
   Activity,
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  ShieldCheck
 } from 'lucide-react';
+import { getApiUrl } from '../apiConfig';
 
 export default function Header({
   activeTab = 'home',
   onTabChange,
   onOpenSpecimenClassifier,
   onOpenProductionForecast,
+  onOpenFieldVerification,
 }) {
   const [healthStatus, setHealthStatus] = useState('checking');
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/health')
+    fetch(getApiUrl('/health'))
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 'healthy') {
@@ -95,6 +98,25 @@ export default function Header({
 
       {/* Right User & Specimen Classifier Actions */}
       <div className="header-actions-right">
+        {/* Field Verification Trigger */}
+        <button
+          className="btn-specimen-classifier"
+          onClick={onOpenFieldVerification}
+          title="Open Field Verification Feedback System"
+          id="btn-open-field-verification"
+          style={{
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid #10b981',
+            color: '#34d399',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+          }}
+        >
+          <ShieldCheck size={15} color="#10b981" />
+          <span>Field Verification</span>
+        </button>
+
         {/* Specimen Classifier Trigger */}
         <button
           className="btn-specimen-classifier"

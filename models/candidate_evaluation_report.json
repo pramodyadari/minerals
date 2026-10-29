@@ -1,0 +1,549 @@
+{
+  "timestamp": "2026-10-29T20:04:00Z",
+  "evaluation_scope": "Curated Held-out Test Set (N=40), OOD Lithologies (N=60), Real Field Uploads (N=3)",
+  "models": {
+    "baseline_production": {
+      "architecture": "convnet",
+      "weights_path": "models/mineral_image_classifier.pth",
+      "test_set_metrics": {
+        "total_samples": 40,
+        "accuracy_pct": 100.0,
+        "balanced_accuracy_pct": 100.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            10,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            10
+          ]
+        ],
+        "per_class": {
+          "coal": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "manganese": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "iron_ore": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "bauxite": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          }
+        },
+        "false_rejection_rate_frr_pct": 0.0
+      },
+      "ood_rejection_benchmark": {
+        "total_ood_samples": 60,
+        "false_acceptance_rate_far_pct": 0.0,
+        "lithology_breakdown": {
+          "quartz": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "granite": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "limestone": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "sandstone": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "basalt": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          }
+        }
+      },
+      "field_photograph_evaluations": [
+        {
+          "sample_label": "Disputed Bituminous Coal Upload",
+          "supplied_label": "Coal (Supplied)",
+          "original": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 99.65,
+            "closest_candidate": "bauxite",
+            "distance": 11.4626,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 0.35,
+              "Iron Ore": 0.0,
+              "Bauxite": 99.65
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 86.59,
+            "closest_candidate": "bauxite",
+            "distance": 9.9336,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.03,
+              "Manganese": 13.38,
+              "Iron Ore": 0.01,
+              "Bauxite": 86.59
+            }
+          }
+        },
+        {
+          "sample_label": "Disputed Manganese Upload",
+          "supplied_label": "Manganese (Supplied)",
+          "original": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 89.43,
+            "closest_candidate": "manganese",
+            "distance": 10.1811,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.02,
+              "Manganese": 89.43,
+              "Iron Ore": 0.01,
+              "Bauxite": 10.54
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 95.41,
+            "closest_candidate": "manganese",
+            "distance": 8.5757,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.03,
+              "Manganese": 95.41,
+              "Iron Ore": 0.01,
+              "Bauxite": 4.55
+            }
+          }
+        },
+        {
+          "sample_label": "Macroscopic Rock Upload",
+          "supplied_label": "Unverified Rock",
+          "original": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 100.0,
+            "closest_candidate": "bauxite",
+            "distance": 19.2868,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 0.0,
+              "Iron Ore": 0.0,
+              "Bauxite": 100.0
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 100.0,
+            "closest_candidate": "bauxite",
+            "distance": 16.8289,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 0.0,
+              "Iron Ore": 0.0,
+              "Bauxite": 100.0
+            }
+          }
+        }
+      ]
+    },
+    "candidate_finetuned": {
+      "architecture": "convnet",
+      "weights_path": "models/candidate_mineral_fine_tuned.pth",
+      "test_set_metrics": {
+        "total_samples": 40,
+        "accuracy_pct": 100.0,
+        "balanced_accuracy_pct": 100.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            10,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            10
+          ]
+        ],
+        "per_class": {
+          "coal": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "manganese": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "iron_ore": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "bauxite": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          }
+        },
+        "false_rejection_rate_frr_pct": 0.0
+      },
+      "ood_rejection_benchmark": {
+        "total_ood_samples": 60,
+        "false_acceptance_rate_far_pct": 0.0,
+        "lithology_breakdown": {
+          "quartz": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "granite": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "limestone": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "sandstone": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "basalt": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          }
+        }
+      },
+      "field_photograph_evaluations": [
+        {
+          "sample_label": "Disputed Bituminous Coal Upload",
+          "supplied_label": "Coal (Supplied)",
+          "original": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 91.33,
+            "closest_candidate": "bauxite",
+            "distance": 12.853,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 8.67,
+              "Iron Ore": 0.0,
+              "Bauxite": 91.33
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 62.42,
+            "closest_candidate": "bauxite",
+            "distance": 16.4799,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.08,
+              "Manganese": 62.42,
+              "Iron Ore": 0.02,
+              "Bauxite": 37.47
+            }
+          }
+        },
+        {
+          "sample_label": "Disputed Manganese Upload",
+          "supplied_label": "Manganese (Supplied)",
+          "original": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 99.19,
+            "closest_candidate": "manganese",
+            "distance": 64.9738,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.01,
+              "Manganese": 99.19,
+              "Iron Ore": 0.01,
+              "Bauxite": 0.79
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 99.6,
+            "closest_candidate": "manganese",
+            "distance": 73.679,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.01,
+              "Manganese": 99.6,
+              "Iron Ore": 0.01,
+              "Bauxite": 0.38
+            }
+          }
+        },
+        {
+          "sample_label": "Macroscopic Rock Upload",
+          "supplied_label": "Unverified Rock",
+          "original": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 99.91,
+            "closest_candidate": "manganese",
+            "distance": 85.4882,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 0.09,
+              "Iron Ore": 0.0,
+              "Bauxite": 99.91
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 99.9,
+            "closest_candidate": "bauxite",
+            "distance": 92.7829,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 0.0,
+              "Manganese": 0.1,
+              "Iron Ore": 0.0,
+              "Bauxite": 99.9
+            }
+          }
+        }
+      ]
+    },
+    "scratch_resnet18": {
+      "architecture": "resnet18",
+      "weights_path": "models/mineral_resnet18.pth",
+      "test_set_metrics": {
+        "total_samples": 40,
+        "accuracy_pct": 100.0,
+        "balanced_accuracy_pct": 100.0,
+        "macro_f1": 1.0,
+        "confusion_matrix": [
+          [
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            10,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            10
+          ]
+        ],
+        "per_class": {
+          "coal": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "manganese": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "iron_ore": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          },
+          "bauxite": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0
+          }
+        },
+        "false_rejection_rate_frr_pct": 0.0
+      },
+      "ood_rejection_benchmark": {
+        "total_ood_samples": 60,
+        "false_acceptance_rate_far_pct": 80.0,
+        "lithology_breakdown": {
+          "quartz": {
+            "support": 12,
+            "rejection_rate_pct": 0.0
+          },
+          "granite": {
+            "support": 12,
+            "rejection_rate_pct": 100.0
+          },
+          "limestone": {
+            "support": 12,
+            "rejection_rate_pct": 0.0
+          },
+          "sandstone": {
+            "support": 12,
+            "rejection_rate_pct": 0.0
+          },
+          "basalt": {
+            "support": 12,
+            "rejection_rate_pct": 0.0
+          }
+        }
+      },
+      "field_photograph_evaluations": [
+        {
+          "sample_label": "Disputed Bituminous Coal Upload",
+          "supplied_label": "Coal (Supplied)",
+          "original": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 40.42,
+            "closest_candidate": "manganese",
+            "distance": 12.2125,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 33.13,
+              "Manganese": 40.42,
+              "Iron Ore": 10.89,
+              "Bauxite": 15.56
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "manganese",
+            "confidence_pct": 47.38,
+            "closest_candidate": "manganese",
+            "distance": 12.3846,
+            "status": "OUT_OF_DISTRIBUTION",
+            "probabilities": {
+              "Coal": 41.27,
+              "Manganese": 47.38,
+              "Iron Ore": 5.23,
+              "Bauxite": 6.12
+            }
+          }
+        },
+        {
+          "sample_label": "Disputed Manganese Upload",
+          "supplied_label": "Manganese (Supplied)",
+          "original": {
+            "raw_prediction": "coal",
+            "confidence_pct": 98.37,
+            "closest_candidate": "coal",
+            "distance": 2.1284,
+            "status": "ACCEPTED",
+            "probabilities": {
+              "Coal": 98.37,
+              "Manganese": 1.15,
+              "Iron Ore": 0.25,
+              "Bauxite": 0.23
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "coal",
+            "confidence_pct": 98.83,
+            "closest_candidate": "coal",
+            "distance": 2.4801,
+            "status": "ACCEPTED",
+            "probabilities": {
+              "Coal": 98.83,
+              "Manganese": 0.87,
+              "Iron Ore": 0.15,
+              "Bauxite": 0.14
+            }
+          }
+        },
+        {
+          "sample_label": "Macroscopic Rock Upload",
+          "supplied_label": "Unverified Rock",
+          "original": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 89.91,
+            "closest_candidate": "bauxite",
+            "distance": 3.7633,
+            "status": "ACCEPTED",
+            "probabilities": {
+              "Coal": 1.98,
+              "Manganese": 3.52,
+              "Iron Ore": 4.59,
+              "Bauxite": 89.91
+            }
+          },
+          "candidate_crop": {
+            "raw_prediction": "bauxite",
+            "confidence_pct": 88.85,
+            "closest_candidate": "bauxite",
+            "distance": 4.3841,
+            "status": "ACCEPTED",
+            "probabilities": {
+              "Coal": 2.19,
+              "Manganese": 3.82,
+              "Iron Ore": 5.14,
+              "Bauxite": 88.85
+            }
+          }
+        }
+      ]
+    }
+  }
+}

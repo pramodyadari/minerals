@@ -1,0 +1,370 @@
+{
+  "splits": {
+    "train": {
+      "coal": 35,
+      "manganese": 35,
+      "iron_ore": 35,
+      "bauxite": 35
+    },
+    "validation": {
+      "coal": 10,
+      "manganese": 10,
+      "iron_ore": 10,
+      "bauxite": 10
+    },
+    "test": {
+      "coal": 10,
+      "manganese": 10,
+      "iron_ore": 10,
+      "bauxite": 10
+    }
+  },
+  "ood": {
+    "quartz": 12,
+    "granite": 12,
+    "limestone": 12,
+    "sandstone": 12,
+    "basalt": 12
+  },
+  "file_hashes": {},
+  "cross_split_leakage": [],
+  "corrupt_files": [],
+  "class_counts": {
+    "train": {
+      "coal": 35,
+      "manganese": 35,
+      "iron_ore": 35,
+      "bauxite": 35
+    },
+    "validation": {
+      "coal": 10,
+      "manganese": 10,
+      "iron_ore": 10,
+      "bauxite": 10
+    },
+    "test": {
+      "coal": 10,
+      "manganese": 10,
+      "iron_ore": 10,
+      "bauxite": 10
+    }
+  },
+  "image_dimensions": {
+    "train/coal": [
+      [
+        224,
+        224
+      ]
+    ],
+    "train/manganese": [
+      [
+        224,
+        224
+      ]
+    ],
+    "train/iron_ore": [
+      [
+        224,
+        224
+      ]
+    ],
+    "train/bauxite": [
+      [
+        224,
+        224
+      ]
+    ],
+    "validation/coal": [
+      [
+        224,
+        224
+      ]
+    ],
+    "validation/manganese": [
+      [
+        224,
+        224
+      ]
+    ],
+    "validation/iron_ore": [
+      [
+        224,
+        224
+      ]
+    ],
+    "validation/bauxite": [
+      [
+        224,
+        224
+      ]
+    ],
+    "test/coal": [
+      [
+        224,
+        224
+      ]
+    ],
+    "test/manganese": [
+      [
+        224,
+        224
+      ]
+    ],
+    "test/iron_ore": [
+      [
+        224,
+        224
+      ]
+    ],
+    "test/bauxite": [
+      [
+        224,
+        224
+      ]
+    ]
+  },
+  "image_formats": {
+    "train/coal": [
+      "JPEG"
+    ],
+    "train/manganese": [
+      "JPEG"
+    ],
+    "train/iron_ore": [
+      "JPEG"
+    ],
+    "train/bauxite": [
+      "JPEG"
+    ],
+    "validation/coal": [
+      "JPEG"
+    ],
+    "validation/manganese": [
+      "JPEG"
+    ],
+    "validation/iron_ore": [
+      "JPEG"
+    ],
+    "validation/bauxite": [
+      "JPEG"
+    ],
+    "test/coal": [
+      "JPEG"
+    ],
+    "test/manganese": [
+      "JPEG"
+    ],
+    "test/iron_ore": [
+      "JPEG"
+    ],
+    "test/bauxite": [
+      "JPEG"
+    ]
+  },
+  "color_statistics": {
+    "train/coal": {
+      "mean_rgb": [
+        25.12,
+        24.65,
+        28.1
+      ],
+      "std_rgb": [
+        5.44,
+        5.5,
+        5.64
+      ]
+    },
+    "train/manganese": {
+      "mean_rgb": [
+        70.96,
+        71.96,
+        75.96
+      ],
+      "std_rgb": [
+        19.64,
+        19.64,
+        19.64
+      ]
+    },
+    "train/iron_ore": {
+      "mean_rgb": [
+        115.63,
+        45.34,
+        32.81
+      ],
+      "std_rgb": [
+        33.51,
+        13.87,
+        10.83
+      ]
+    },
+    "train/bauxite": {
+      "mean_rgb": [
+        185.37,
+        126.26,
+        79.07
+      ],
+      "std_rgb": [
+        21.5,
+        19.85,
+        14.56
+      ]
+    },
+    "validation/coal": {
+      "mean_rgb": [
+        25.26,
+        24.79,
+        28.24
+      ],
+      "std_rgb": [
+        5.29,
+        5.37,
+        5.5
+      ]
+    },
+    "validation/manganese": {
+      "mean_rgb": [
+        73.66,
+        74.66,
+        78.66
+      ],
+      "std_rgb": [
+        20.01,
+        20.01,
+        20.01
+      ]
+    },
+    "validation/iron_ore": {
+      "mean_rgb": [
+        114.07,
+        44.71,
+        32.39
+      ],
+      "std_rgb": [
+        34.4,
+        14.23,
+        11.08
+      ]
+    },
+    "validation/bauxite": {
+      "mean_rgb": [
+        184.55,
+        125.59,
+        78.57
+      ],
+      "std_rgb": [
+        22.3,
+        20.4,
+        15.06
+      ]
+    },
+    "test/coal": {
+      "mean_rgb": [
+        24.88,
+        24.41,
+        27.84
+      ],
+      "std_rgb": [
+        5.22,
+        5.3,
+        5.43
+      ]
+    },
+    "test/manganese": {
+      "mean_rgb": [
+        70.67,
+        71.67,
+        75.67
+      ],
+      "std_rgb": [
+        18.74,
+        18.74,
+        18.74
+      ]
+    },
+    "test/iron_ore": {
+      "mean_rgb": [
+        116.11,
+        45.58,
+        32.99
+      ],
+      "std_rgb": [
+        35.43,
+        14.44,
+        11.25
+      ]
+    },
+    "test/bauxite": {
+      "mean_rgb": [
+        186.34,
+        127.08,
+        79.66
+      ],
+      "std_rgb": [
+        20.36,
+        18.99,
+        13.91
+      ]
+    },
+    "ood/quartz": {
+      "mean_rgb": [
+        231.27,
+        231.07,
+        234.51
+      ],
+      "std_rgb": [
+        8.36,
+        8.52,
+        8.61
+      ]
+    },
+    "ood/granite": {
+      "mean_rgb": [
+        181.23,
+        162.57,
+        154.21
+      ],
+      "std_rgb": [
+        41.0,
+        38.02,
+        37.1
+      ]
+    },
+    "ood/limestone": {
+      "mean_rgb": [
+        207.01,
+        199.18,
+        181.09
+      ],
+      "std_rgb": [
+        4.21,
+        4.13,
+        4.0
+      ]
+    },
+    "ood/sandstone": {
+      "mean_rgb": [
+        194.45,
+        159.53,
+        109.52
+      ],
+      "std_rgb": [
+        8.54,
+        8.51,
+        8.35
+      ]
+    },
+    "ood/basalt": {
+      "mean_rgb": [
+        51.02,
+        51.02,
+        53.01
+      ],
+      "std_rgb": [
+        5.91,
+        5.91,
+        5.91
+      ]
+    }
+  }
+}

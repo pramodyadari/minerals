@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { RotateCcw, Eye, Layers, Compass, Zap, Info, ShieldAlert, Sparkles, Maximize2 } from 'lucide-react';
+import { RotateCcw, Eye, Layers, Compass, Zap, Info, ShieldAlert, Sparkles, Maximize2, Mountain } from 'lucide-react';
 
 // Spectral Prospectivity Color Map (0.0 to 1.0 -> Blue, Cyan, Green, Yellow, Orange, Red)
 function getProspectivityColor(val) {
@@ -36,7 +36,9 @@ export default function Prospectivity3DMap({
   targetMineral,
   radiusKm,
   analysisResult,
-  onLocationChange
+  onLocationChange,
+  onSwitchToTerrain,
+  onSwitchTo2D
 }) {
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
@@ -50,14 +52,29 @@ export default function Prospectivity3DMap({
   const [showCallout, setShowCallout] = useState(true);
   const [exaggeration, setExaggeration] = useState(1.8);
   const [isRotating, setIsRotating] = useState(true);
-  const [peakScore, setPeakScore] = useState(87.5);
-  const [peakZone, setPeakZone] = useState('Zone 67684');
+  const [peakScore, setPeakScore] = useState(null);
+  const [peakZone, setPeakZone] = useState(null);
 
   // Mouse interaction state
   const isDraggingRef = useRef(false);
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
   const rotationRef = useRef({ x: 0.65, y: -0.45 });
   const zoomRef = useRef(75);
+
+  // Authoritative validation check: Genuine prediction and calibrated grid must exist for the active mineral
+  // Validated strictly for Manganese within verified footprint (never for Coal, Iron Ore, Bauxite)
+  const isProspectivityAvailable = Boolean(
+    analysisResult &&
+    targetMineral === 'Manganese' &&
+    (!analysisResult.mineral || analysisResult.mineral === targetMineral) &&
+    analysisResult.prediction &&
+    typeof analysisResult.prediction.prospectivity_index === 'number' &&
+    analysisResult.prospectivity_grid &&
+    analysisResult.prospectivity_grid.status === 'AVAILABLE' &&
+    analysisResult.prospectivity_grid.is_calibrated === true &&
+    Array.isArray(analysisResult.prospectivity_grid.grid) &&
+    analysisResult.prospectivity_grid.grid.length > 0
+  );
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -105,54 +122,53 @@ export default function Prospectivity3DMap({
     gridHelper.position.z = -5;
     scene.add(gridHelper);
 
-    // Build 3D Prospectivity Mesh from analysis grid or default synthetic surface
-    const gridSize = 40;
-    const planeGeo = new THREE.PlaneGeometry(80, 80, gridSize - 1, gridSize - 1);
-    
-    // Obtain raw grid
-    let gridValues = [];
-    if (analysisResult?.prospectivity_grid?.grid) {
-      gridValues = analysisResult.prospectivity_grid.grid;
-    } else {
-      // Default ridge-anomaly prospectivity pattern around center
-      for (let r = 0; r < gridSize; r++) {
-        const row = [];
-        const dy = (r - gridSize / 2) / (gridSize / 2);
-        for (let c = 0; c < gridSize; c++) {
-          const dx = (c - gridSize / 2) / (gridSize / 2);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          // High peak anomaly at (dx: 0.1, dy: -0.15) representing Balaghat corridor
-          const peak1 = 0.88 * Math.exp(-((dx - 0.1) ** 2 + (dy + 0.15) ** 2) / 0.12);
-          const peak2 = 0.72 * Math.exp(-((dx + 0.35) ** 2 + (dy - 0.25) ** 2) / 0.25);
-          const ridge = 0.45 * Math.exp(-Math.abs(dy - 0.5 * dx) / 0.3);
-          const val = Math.max(0.08, Math.min(0.98, peak1 + peak2 * 0.5 + ridge * 0.4));
-          row.push(val);
-        }
-        gridValues.push(row);
+    let planeGeo;
+    let colors;
+
+    if (isProspectivityAvailable) {
+      // Genuine spatial prediction output from calibrated model
+      const gridValues = analysisResult.prospectivity_grid.grid;
+      const rows = gridValues.length;
+      const cols = gridValues[0]?.length || rows;
+      planeGeo = new THREE.PlaneGeometry(80, 80, cols - 1, rows - 1);
+
+      const posAttr = planeGeo.attributes.position;
+      const count = posAttr.count;
+      colors = new Float32Array(count * 3);
+
+      for (let i = 0; i < count; i++) {
+        const r = Math.floor(i / cols);
+        const c = i % cols;
+        const rawVal = gridValues[r] && gridValues[r][c] !== undefined ? gridValues[r][c] : 0.0;
+
+        // Z height corresponds strictly to authentic prospectivity score
+        const zHeight = rawVal * 18 * exaggeration;
+        posAttr.setZ(i, zHeight);
+
+        const clr = getProspectivityColor(rawVal);
+        colors[i * 3] = clr.r;
+        colors[i * 3 + 1] = clr.g;
+        colors[i * 3 + 2] = clr.b;
       }
+      setPeakScore(analysisResult.prediction.prospectivity_index);
+      setPeakZone(analysisResult.prediction.candidate_zone || null);
+    } else {
+      // Clean flat reference plane — strictly NO fake peaks or default scores
+      const gridSize = 32;
+      planeGeo = new THREE.PlaneGeometry(80, 80, gridSize - 1, gridSize - 1);
+      const posAttr = planeGeo.attributes.position;
+      const count = posAttr.count;
+      colors = new Float32Array(count * 3);
+
+      for (let i = 0; i < count; i++) {
+        posAttr.setZ(i, 0); // Flat neutral baseline
+        colors[i * 3] = 0.12;
+        colors[i * 3 + 1] = 0.16;
+        colors[i * 3 + 2] = 0.24;
+      }
+      setPeakScore(null);
+      setPeakZone(null);
     }
-
-    const posAttr = planeGeo.attributes.position;
-    const count = posAttr.count;
-    const colors = new Float32Array(count * 3);
-
-    let maxVal = 0;
-    for (let i = 0; i < count; i++) {
-      const r = Math.floor(i / gridSize);
-      const c = i % gridSize;
-      const rawVal = gridValues[r] && gridValues[r][c] !== undefined ? gridValues[r][c] : 0.2;
-      if (rawVal > maxVal) maxVal = rawVal;
-
-      // Z height corresponds to prospectivity score
-      const zHeight = rawVal * 18 * exaggeration;
-      posAttr.setZ(i, zHeight);
-
-      const clr = getProspectivityColor(rawVal);
-      colors[i * 3] = clr.r;
-      colors[i * 3 + 1] = clr.g;
-      colors[i * 3 + 2] = clr.b;
-    }
-    setPeakScore(Math.round(maxVal * 100));
 
     planeGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     planeGeo.computeVertexNormals();
@@ -160,8 +176,8 @@ export default function Prospectivity3DMap({
     // Solid Surface Mesh
     const mat = new THREE.MeshStandardMaterial({
       vertexColors: true,
-      roughness: 0.35,
-      metalness: 0.2,
+      roughness: isProspectivityAvailable ? 0.35 : 0.7,
+      metalness: isProspectivityAvailable ? 0.2 : 0.05,
       side: THREE.DoubleSide,
     });
     const mesh = new THREE.Mesh(planeGeo, mat);
@@ -170,10 +186,10 @@ export default function Prospectivity3DMap({
 
     // Wireframe Overlay
     const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x00f0ff,
+      color: isProspectivityAvailable ? 0x00f0ff : 0x38bdf8,
       wireframe: true,
       transparent: true,
-      opacity: 0.22,
+      opacity: isProspectivityAvailable ? 0.22 : 0.12,
     });
     const wireMesh = new THREE.Mesh(planeGeo, wireMat);
     wireMesh.position.z = 0.08;
@@ -241,26 +257,32 @@ export default function Prospectivity3DMap({
     };
     animate();
 
-    // Resize Handler
+    // Resize Handler & ResizeObserver
     const handleResize = () => {
-      if (!container) return;
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      if (!container || !rendererRef.current || !cameraRef.current) return;
+      const w = container.clientWidth || 800;
+      const h = container.clientHeight || 500;
+      cameraRef.current.aspect = w / h;
+      cameraRef.current.updateProjectionMatrix();
+      rendererRef.current.setSize(w, h);
     };
     window.addEventListener('resize', handleResize);
 
+    const ro = new ResizeObserver(() => {
+      handleResize();
+    });
+    ro.observe(container);
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      ro.disconnect();
       if (animFrameIdRef.current) cancelAnimationFrame(animFrameIdRef.current);
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
-  }, [analysisResult, exaggeration, isRotating]);
+  }, [analysisResult, exaggeration, isRotating, targetMineral, isProspectivityAvailable]);
 
   // Wireframe toggle effect
   useEffect(() => {
@@ -320,8 +342,8 @@ export default function Prospectivity3DMap({
       {/* Three.js Canvas Container */}
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
 
-      {/* Target Anomaly Callout Overlay (Inspired directly by reference image) */}
-      {showCallout && (
+      {/* Target Anomaly Callout Overlay — Rendered ONLY when a genuine, validated prediction exists */}
+      {isProspectivityAvailable && showCallout && (
         <div
           style={{
             position: 'absolute',
@@ -357,7 +379,7 @@ export default function Prospectivity3DMap({
                 {targetMineral} Prospectivity Peak
               </div>
               <div style={{ fontWeight: 800, color: '#38bdf8', fontSize: '0.92rem' }}>
-                Score: {analysisResult?.prediction?.prospectivity_index || peakScore}% &rarr;
+                Score: {analysisResult.prediction.prospectivity_index}% &rarr;
               </div>
             </div>
           </div>
@@ -375,8 +397,8 @@ export default function Prospectivity3DMap({
           left: 16,
           right: 16,
           zIndex: 20,
-          background: 'rgba(15, 23, 42, 0.85)',
-          border: '1px solid rgba(0, 240, 255, 0.3)',
+          background: 'rgba(15, 23, 42, 0.88)',
+          border: isProspectivityAvailable ? '1px solid rgba(0, 240, 255, 0.3)' : '1px solid rgba(245, 158, 11, 0.35)',
           borderRadius: '8px',
           padding: '8px 14px',
           display: 'flex',
@@ -387,16 +409,117 @@ export default function Prospectivity3DMap({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Sparkles size={16} color="#00f0ff" />
-          <span style={{ fontSize: '0.78rem', color: '#e2e8f0', fontWeight: 600 }}>
-            3D Prospectivity Mesh &bull; <span style={{ color: '#00f0ff' }}>Z = AI Relative Prospectivity Score</span>
-          </span>
+          {isProspectivityAvailable ? (
+            <>
+              <Sparkles size={16} color="#00f0ff" />
+              <span style={{ fontSize: '0.78rem', color: '#e2e8f0', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                3D Prospectivity Mesh &bull; <span style={{ color: '#00f0ff' }}>Z = AI Relative Prospectivity Score ({targetMineral})</span>
+                <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(0, 240, 255, 0.15)', border: '1px solid #00f0ff', color: '#00f0ff', fontWeight: 700 }}>
+                  [PROSPECTIVITY_AVAILABLE]
+                </span>
+              </span>
+            </>
+          ) : (
+            <>
+              <ShieldAlert size={16} color="#f59e0b" />
+              <span style={{ fontSize: '0.78rem', color: '#e2e8f0', fontWeight: 600 }}>
+                3D Prospectivity Mesh &bull; <span style={{ color: '#f59e0b' }}>Spatial AI Model Unavailable for {targetMineral}</span>
+              </span>
+            </>
+          )}
         </div>
         <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 6 }}>
           <ShieldAlert size={13} color="#f59e0b" />
           <span>Surface AI screening index — not subsurface drilling depth</span>
         </div>
       </div>
+
+      {/* Dedicated Card when prospectivity model is unavailable */}
+      {!isProspectivityAvailable && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 15,
+            background: 'rgba(15, 23, 42, 0.92)',
+            border: '1px solid rgba(245, 158, 11, 0.4)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.15)',
+            borderRadius: '12px',
+            padding: '22px 26px',
+            maxWidth: '460px',
+            width: '90%',
+            backdropFilter: 'blur(12px)',
+            textAlign: 'center',
+            color: '#f8fafc',
+          }}
+        >
+          <div style={{ display: 'inline-flex', padding: '10px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)', marginBottom: '12px', color: '#f59e0b' }}>
+            <ShieldAlert size={28} />
+          </div>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: '0 0 8px 0', color: '#f1f5f9' }}>
+            3D Prospectivity Mesh Unavailable
+          </h3>
+          <p style={{ fontSize: '0.78rem', color: '#cbd5e1', lineHeight: 1.5, margin: '0 0 14px 0' }}>
+            {!analysisResult
+              ? `Select an exploration target and run geographical analysis to inspect available spatial data for ${targetMineral}.`
+              : targetMineral !== 'Manganese'
+              ? `No validated spatial machine-learning model exists for ${targetMineral}. Spatial AI scores and 3D prospectivity meshes are strictly withheld to preserve scientific integrity. Consult the evidence dossier below for certified geological records.`
+              : 'The validated Manganese Random Forest model is trained specifically on Sentinel-2 Tile T44QMK (Balaghat corridor). Target coordinates lie outside this validated training footprint.'}
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            {onSwitchToTerrain && (
+              <button
+                type="button"
+                onClick={onSwitchToTerrain}
+                style={{
+                  background: 'linear-gradient(135deg, #d97706, #b45309)',
+                  border: 'none',
+                  borderRadius: '6px',
+                  color: '#fff',
+                  padding: '7px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6
+                }}
+                id="btn-prospectivity-switch-terrain"
+              >
+                <Mountain size={14} />
+                <span>Switch to 3D Terrain View</span>
+              </button>
+            )}
+            {onSwitchTo2D && (
+              <button
+                type="button"
+                onClick={onSwitchTo2D}
+                style={{
+                  background: 'rgba(2, 132, 199, 0.25)',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  borderRadius: '6px',
+                  color: '#38bdf8',
+                  padding: '7px 14px',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6
+                }}
+                id="btn-prospectivity-fallback-2d"
+              >
+                <span>Switch to 2D Map</span>
+              </button>
+            )}
+            <div style={{ fontSize: '0.72rem', color: '#94a3b8', background: 'rgba(255, 255, 255, 0.05)', padding: '6px 12px', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              Status: <span style={{ color: '#f59e0b', fontWeight: 600 }}>{analysisResult?.coverage_status?.coverage_status || analysisResult?.prediction_availability || (analysisResult ? 'OUTSIDE_TRAINING_FOOTPRINT' : 'AWAITING_ANALYSIS')}</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating 3D Controls Toolbar */}
       <div
@@ -457,26 +580,28 @@ export default function Prospectivity3DMap({
           <span>{isRotating ? 'Rotating' : 'Paused'}</span>
         </button>
 
-        <button
-          type="button"
-          onClick={() => setShowCallout(!showCallout)}
-          style={{
-            background: showCallout ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-            border: '1px solid ' + (showCallout ? '#f59e0b' : 'rgba(255,255,255,0.15)'),
-            color: showCallout ? '#f59e0b' : '#94a3b8',
-            borderRadius: '6px',
-            padding: '5px 10px',
-            fontSize: '0.72rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 5
-          }}
-          title="Toggle High-Prospectivity Callout"
-        >
-          <Eye size={13} />
-          <span>Callout Pin</span>
-        </button>
+        {isProspectivityAvailable && (
+          <button
+            type="button"
+            onClick={() => setShowCallout(!showCallout)}
+            style={{
+              background: showCallout ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
+              border: '1px solid ' + (showCallout ? '#f59e0b' : 'rgba(255,255,255,0.15)'),
+              color: showCallout ? '#f59e0b' : '#94a3b8',
+              borderRadius: '6px',
+              padding: '5px 10px',
+              fontSize: '0.72rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5
+            }}
+            title="Toggle High-Prospectivity Callout"
+          >
+            <Eye size={13} />
+            <span>Callout Pin</span>
+          </button>
+        )}
 
         <button
           type="button"
@@ -518,19 +643,27 @@ export default function Prospectivity3DMap({
         <div style={{ fontSize: '0.68rem', color: '#94a3b8', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
           Prospectivity Index (Z)
         </div>
-        <div
-          style={{
-            height: '10px',
-            borderRadius: '4px',
-            background: 'linear-gradient(to right, #0d2b6b, #00b4d8, #10b981, #facc15, #f97316, #ef4444)',
-            marginBottom: 4
-          }}
-        />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#cbd5e1' }}>
-          <span>Low (0%)</span>
-          <span>Moderate (50%)</span>
-          <span style={{ color: '#ef4444', fontWeight: 700 }}>Peak (&gt;85%)</span>
-        </div>
+        {isProspectivityAvailable ? (
+          <>
+            <div
+              style={{
+                height: '10px',
+                borderRadius: '4px',
+                background: 'linear-gradient(to right, #0d2b6b, #00b4d8, #10b981, #facc15, #f97316, #ef4444)',
+                marginBottom: 4
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#cbd5e1' }}>
+              <span>Low (0%)</span>
+              <span>Moderate (50%)</span>
+              <span style={{ color: '#ef4444', fontWeight: 700 }}>Peak (&gt;85%)</span>
+            </div>
+          </>
+        ) : (
+          <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontStyle: 'italic', padding: '4px 0' }}>
+            Score: Unavailable (Withheld)
+          </div>
+        )}
       </div>
     </div>
   );

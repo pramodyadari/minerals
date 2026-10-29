@@ -1,0 +1,62 @@
+{
+  "provenance_meta": {
+    "commodity": "Iron Ore",
+    "methodology": "Geologically Defensible Pseudo-Absence Stratification",
+    "study_region": "Singhbhum Granite Batholith (East of the Iron Ore Group)",
+    "satellite_tile": "T45QUE",
+    "crs_projected": "EPSG:32645",
+    "crs_geographic": "EPSG:4326",
+    "date": "2026-10-15"
+  },
+  "scientific_justification": [
+    "Archean Singhbhum Granite Batholith (Phases II & III) is a massive composite plutonic basement body (~3.3 to 3.1 Ga) completely devoid of Banded Iron Formation (BIF), Banded Hematite Jasper (BHJ), or sedimentary iron measures.",
+    "Background sectors are geographically situated 15 km to 35 km east of the Iron Ore Group Horse-Shoe Synclinorium, avoiding contact metamorphism zones or mineralized shear lineaments.",
+    "All background pixels were confirmed cloud-free and valid via Sentinel-2 Scene Classification Layer (SCL classes 4 vegetation and 5 bare ground).",
+    "CRITICAL SCIENTIFIC INTEGRITY STATEMENT: Background locations represent remote-sensing pseudo-absences sampled from unmineralized granitic and alluvial terrain; they must NOT be represented as confirmed barren diamond drill holes."
+  ],
+  "sectors": [
+    {
+      "sector_id": "BG_SEC_001",
+      "name": "Singhbhum Granite Batholith (Champua North)",
+      "geological_terrane": "Singhbhum Craton Crystalline Core",
+      "formation": "Singhbhum Granite Phase II (Unaltered TTG Suite)",
+      "lithology": "Coarse-grained biotite-granodiorite to tonalite",
+      "latitude": 22.1200,
+      "longitude": 85.7200,
+      "easting": 368020.0,
+      "northing": 2446730.0,
+      "radius_m": 2500,
+      "samples_extracted": 600,
+      "source": "GSI Memoir Vol. 114 (The Archean Nucleus of Eastern India)"
+    },
+    {
+      "sector_id": "BG_SEC_002",
+      "name": "Singhbhum Granite Batholith (Karanjia Sector)",
+      "geological_terrane": "Singhbhum Craton Crystalline Core",
+      "formation": "Singhbhum Granite Phase III (Porphyritic Granite)",
+      "lithology": "Pink microcline granite with minor dolerite dykes",
+      "latitude": 21.9000,
+      "longitude": 85.8000,
+      "easting": 376040.0,
+      "northing": 2422310.0,
+      "radius_m": 2500,
+      "samples_extracted": 600,
+      "source": "GSI Quadrangle Sheet 73J/4 & IBM Eastern Region Inventory"
+    },
+    {
+      "sector_id": "BG_SEC_003",
+      "name": "Singhbhum Granite Batholith (Chaibasa South Plains)",
+      "geological_terrane": "Singhbhum Craton / Quaternary Cover",
+      "formation": "Singhbhum Granite with Alluvial Soil Overburden",
+      "lithology": "Granitic saprolite weathered to sandy clay loam",
+      "latitude": 22.4200,
+      "longitude": 85.7500,
+      "easting": 371250.0,
+      "northing": 2479910.0,
+      "radius_m": 2500,
+      "samples_extracted": 600,
+      "source": "GSI Miscellaneous Publication 30, Pt. 3"
+    }
+  ],
+  "total_background_samples": 1800
+}

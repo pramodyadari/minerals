@@ -1,0 +1,117 @@
+{
+  "title": "AI Mineral Intelligence \u2014 Specimen OOD Rejection Benchmark Report",
+  "method": "Class-Conditional Scale-Robust Manifold Ray Distance",
+  "calibrated_threshold": 5.0,
+  "scale_bounds": {
+    "coal": [
+      0.92,
+      1.15
+    ],
+    "manganese": [
+      0.18,
+      1.31
+    ],
+    "iron_ore": [
+      0.34,
+      1.25
+    ],
+    "bauxite": [
+      0.05,
+      1.45
+    ]
+  },
+  "validation_metrics": {
+    "known_false_rejection_rate_pct": 0.0,
+    "ood_false_acceptance_rate_pct": 0.0,
+    "max_known_distance": 0.39,
+    "min_ood_distance": 5.23
+  },
+  "test_metrics": {
+    "test_known_samples": 40,
+    "test_ood_samples": 30,
+    "test_false_rejection_rate_pct": 0.0,
+    "test_false_acceptance_rate_pct": 0.0,
+    "overall_ood_detection_accuracy_pct": 100.0,
+    "per_class_known_breakdown": {
+      "coal": {
+        "total_samples": 10,
+        "false_rejections": 0,
+        "false_rejection_rate_pct": 0.0,
+        "min_distance": 0.0,
+        "mean_distance": 0.0,
+        "max_distance": 0.0
+      },
+      "manganese": {
+        "total_samples": 10,
+        "false_rejections": 0,
+        "false_rejection_rate_pct": 0.0,
+        "min_distance": 0.08,
+        "mean_distance": 0.18,
+        "max_distance": 0.29
+      },
+      "iron_ore": {
+        "total_samples": 10,
+        "false_rejections": 0,
+        "false_rejection_rate_pct": 0.0,
+        "min_distance": 0.02,
+        "mean_distance": 0.28,
+        "max_distance": 0.73
+      },
+      "bauxite": {
+        "total_samples": 10,
+        "false_rejections": 0,
+        "false_rejection_rate_pct": 0.0,
+        "min_distance": 0.0,
+        "mean_distance": 0.04,
+        "max_distance": 0.09
+      }
+    },
+    "per_rock_ood_breakdown": {
+      "quartz": {
+        "total_samples": 6,
+        "rejected_as_unknown": 6,
+        "incorrectly_accepted": 0,
+        "rejection_rate_pct": 100.0,
+        "false_acceptance_rate_pct": 0.0,
+        "min_observed_distance": 36.98,
+        "mean_observed_distance": 37.27
+      },
+      "granite": {
+        "total_samples": 6,
+        "rejected_as_unknown": 6,
+        "incorrectly_accepted": 0,
+        "rejection_rate_pct": 100.0,
+        "false_acceptance_rate_pct": 0.0,
+        "min_observed_distance": 9.76,
+        "mean_observed_distance": 11.35
+      },
+      "limestone": {
+        "total_samples": 6,
+        "rejected_as_unknown": 6,
+        "incorrectly_accepted": 0,
+        "rejection_rate_pct": 100.0,
+        "false_acceptance_rate_pct": 0.0,
+        "min_observed_distance": 21.78,
+        "mean_observed_distance": 22.37
+      },
+      "sandstone": {
+        "total_samples": 6,
+        "rejected_as_unknown": 6,
+        "incorrectly_accepted": 0,
+        "rejection_rate_pct": 100.0,
+        "false_acceptance_rate_pct": 0.0,
+        "min_observed_distance": 5.23,
+        "mean_observed_distance": 5.27
+      },
+      "basalt": {
+        "total_samples": 6,
+        "rejected_as_unknown": 6,
+        "incorrectly_accepted": 0,
+        "rejection_rate_pct": 100.0,
+        "false_acceptance_rate_pct": 0.0,
+        "min_observed_distance": 7.35,
+        "mean_observed_distance": 7.51
+      }
+    }
+  }
+}

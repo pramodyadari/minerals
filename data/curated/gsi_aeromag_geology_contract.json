@@ -1,0 +1,85 @@
+{
+  "contract_metadata": {
+    "title": "GSI Aeromagnetic & Geological Vector Ingestion Contract Specification",
+    "version": "1.0.0",
+    "target_region": "Singhbhum-North Odisha Iron Ore Craton (Quadrangle 73F)",
+    "target_crs": "EPSG:32645 (WGS 84 / UTM Zone 45N)",
+    "status": "AWAITING_AUTHENTICATED_GOVERNMENT_DISPATCH",
+    "last_audit_timestamp": "2026-10-15T12:35:00Z"
+  },
+  "aeromagnetic_grid_contract": {
+    "dataset": "GSI National Aero-geophysical Mapping Program (NAGMP) HRAS",
+    "agency": "Geological Survey of India (GSI) / NGDR",
+    "accepted_formats": [
+      ".grd (Geosoft Oasis Montaj binary grid)",
+      ".tif (Cloud Optimized GeoTIFF, float32)"
+    ],
+    "native_grid_resolution_m": 50.0,
+    "resampling_to_study_grid": {
+      "target_grid_resolution_m": 20.0,
+      "target_crs": "EPSG:32645",
+      "method": "Bilinear Interpolation",
+      "documentation": "Continuous field resampling with documented native 50m resolution"
+    },
+    "mandatory_survey_parameters": {
+      "nominal_sensor_altitude_agl_m": 80.0,
+      "flight_line_spacing_m": 200.0,
+      "tie_line_spacing_m": 2000.0,
+      "flight_azimuth_deg": 90.0,
+      "magnetometer": "Cesium Vapor Magnetometer (sensitivity 0.001 nT, rate 10 Hz)"
+    },
+    "expected_channels": [
+      {"channel": "TMI", "description": "Total Magnetic Intensity", "units": "nT"},
+      {"channel": "RTP", "description": "Reduced to Magnetic Pole", "units": "nT"},
+      {"channel": "1VD", "description": "First Vertical Derivative", "units": "nT/m"},
+      {"channel": "AS", "description": "Analytic Signal Amplitude", "units": "nT/m"},
+      {"channel": "TDR", "description": "Tilt Derivative", "units": "radians"}
+    ],
+    "rejection_triggers": [
+      "Any raster marked as synthetic, simulated, or interpolated from distant stations",
+      "Rasters derived from uncalibrated browser screen captures of WMS viewers",
+      "Missing flight altitude or line spacing metadata"
+    ]
+  },
+  "geological_vector_contract": {
+    "dataset": "GSI 1:50,000 Quadrangle Geological Mapping Series",
+    "toposheets": ["73F/4", "73F/8", "73F/12"],
+    "accepted_formats": [
+      ".geojson (RFC 7946 GeoJSON in EPSG:4326 or EPSG:32645)",
+      ".shp (ESRI Shapefile with mandatory .prj, .shx, and .dbf)",
+      ".gpkg (OGC GeoPackage)"
+    ],
+    "mandatory_layers": [
+      {
+        "layer_name": "lithological_formations",
+        "geometry_type": "Polygon / MultiPolygon",
+        "mandatory_fields": ["LITHO_NAME", "STRAT_UNIT", "FORMATION", "SUPERGROUP"],
+        "critical_units": ["Banded Hematite Jasper Member", "Upper Shales", "Lower Volcanics", "Singhbhum Granite Complex"]
+      },
+      {
+        "layer_name": "structural_lineaments",
+        "geometry_type": "LineString / MultiLineString",
+        "mandatory_fields": ["LINE_TYPE", "CONFIDENCE"],
+        "critical_types": ["Fault", "Shear Zone", "Synclinal Axial Trace", "Anticlinal Axial Trace"]
+      },
+      {
+        "layer_name": "newer_dolerite_dykes_exclusion_mask",
+        "geometry_type": "Polygon / LineString",
+        "critical_role": "Mandatory exclusion mask to prevent false-positive magnetic high classifications from titanomagnetite-bearing mafic dykes"
+      }
+    ],
+    "rejection_triggers": [
+      "Vector layers digitized by tracing low-resolution unreferenced raster maps",
+      "Missing attribute tables with formational names",
+      "Invalid or self-intersecting polygon topology"
+    ]
+  },
+  "validation_workflow_upon_data_arrival": [
+    "Step 1: Checksum verification (SHA-256) and file integrity check",
+    "Step 2: Coordinate reference system transform to EPSG:32645",
+    "Step 3: Boundary clipping to Singhbhum Iron Ore Craton study envelope (Lat 21.60-22.60, Lon 85.05-86.15)",
+    "Step 4: Dolerite dyke exclusion masking applied to aeromagnetic TMI highs",
+    "Step 5: Leave-One-Deposit-Out spatial cross-validation evaluation across the 5 confirmed mines",
+    "Step 6: Only if spatially blocked F1 > 0.65 and ROC-AUC > 0.75 across unseen deposits, evaluate model deployment criteria"
+  ]
+}

@@ -1,141 +1,153 @@
-# AI Mineral Exploration and Analysis System
+# AI Mineral Exploration and Terrain Intelligence System
 
-An integrated, evidence-based geographical mineral prospectivity dashboard and 4-class rock specimen classification system built with **React**, **Vite**, **Leaflet**, **FastAPI**, and **PyTorch**.
+An integrated, evidence-based geospatial mineral prospectivity dashboard, 3D terrain intelligence engine, and 4-class rock specimen classification system built with **React 18**, **Vite**, **Leaflet**, **MapLibre GL JS**, **FastAPI**, **Rasterio**, and **PyTorch**.
 
 ---
 
 ## 1. System Overview & Core Philosophy
 
-The system provides dual capabilities with clear scientific demarcation:
-1. **Geographical Mineral Prospectivity Analysis**: Geospatial exploration mapping across satellite/geological footprints, calculating prospectivity indices based on multi-spectral features without claiming certainty where data is absent.
-2. **AI Specimen Image Classification**: A genuine PyTorch 4-class Convolutional Neural Network trained on rock and ore specimens. The application explicitly distinguishes visual rock identification from subsurface geological occurrences.
-3. **Interactive 2D / 3D Terrain Exploration**: A dual-engine mapping interface providing both a lightweight 2D Leaflet cartographic map and an interactive 3D terrain elevation model powered by MapLibre GL JS and AWS Open Data (USGS 3DEP / SRTM Terrarium DEM).
-
-### Strictly Fixed Mineral Classes (Exactly Four)
-The system supports **strictly four mineral classes** across all frontend cards, API payloads, model weights, and pipelines:
-1. **Coal** (`C`)
-2. **Manganese** (`Mn`)
-3. **Iron Ore** (`Fe`)
-4. **Bauxite** (`Al`)
-
-*No fifth mineral class exists or will ever be added.*
+The system provides dual capabilities with rigorous scientific integrity:
+1. **Geographical Mineral Prospectivity & Terrain Analysis**: Geospatial exploration mapping across authentic Copernicus Sentinel-2 Level-2A multi-spectral rasters, official Copernicus GLO-30 Digital Elevation Models, and Geological Survey of India (GSI) / Indian Bureau of Mines (IBM) occurrence inventories.
+2. **AI Specimen Image Classification**: A PyTorch 4-class Convolutional Neural Network (`MineralConvNet`) trained on verified rock and ore hand samples. The application explicitly distinguishes photographed surface hand-specimens from subsurface geological occurrence modeling.
+3. **Interactive 2D / 3D Visualizations**:
+   - **2D Cartographic Map**: Dynamic Leaflet map with OpenStreetMap basemap, accurate metric radius buffer circles, and 20 verified high-prospectivity anomaly zones.
+   - **3D Terrain Model**: Real-time terrain elevation viewer powered by MapLibre GL JS with customizable pitch, bearing, and terrain vertical exaggeration.
+   - **3D Mineral Prospectivity Surface**: High-resolution Three.js prospectivity surface rendered **strictly** when a validated, calibrated prediction grid exists. When a model or grid is unavailable, an honest unavailable notice is displayed with an option to switch to 3D Terrain View. Never generates synthetic or fabricated prospectivity grids.
 
 ---
 
-## 2. Architecture & Tech Stack
+## 2. Four Selectable Minerals & Model Status
 
-```
-ai_mineral_explo/
-├── frontend/                     # React + Vite + Leaflet + MapLibre GL 3D
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Header.jsx
-│   │   │   ├── LocationSearch.jsx
-│   │   │   ├── InteractiveMap.jsx       # Dual-engine 2D/3D container with switcher
-│   │   │   ├── TerrainMap3D.jsx         # 3D Terrain elevation viewer (MapLibre GL)
-│   │   │   ├── MineralSelector.jsx      # Exactly 4 mineral selection cards
-│   │   │   ├── RadiusSelector.jsx       # 1, 5, 10, 25 km pills + area in km²
-│   │   │   ├── ResultsPanel.jsx         # Explainable results dossier with tabs
-│   │   │   └── SpecimenClassifierModal.jsx
-│   │   ├── App.jsx
-│   │   ├── index.css                    # Earthy ancient-map design system
-│   │   └── main.jsx
-│   ├── package.json
-│   └── vite.config.js
-│
-├── backend/                      # Python + FastAPI REST API
-│   ├── app/
-│   │   ├── main.py               # REST endpoints (/health, /minerals, /analyze, /classify-image)
-│   │   ├── mineral_service.py    # Explainable geographical prospectivity & evidence engine
-│   │   └── vision_service.py     # Specimen PyTorch model loader & inference
-│   └── requirements.txt
-```
-│
-├── ai/                           # AI Model Pipeline
-│   ├── dataset/                  # Structured dataset (train/, validation/, test/)
-│   │   ├── train/{coal, manganese, iron_ore, bauxite}
-│   │   ├── validation/{coal, manganese, iron_ore, bauxite}
-│   │   └── test/{coal, manganese, iron_ore, bauxite}
-│   ├── dataset_validator.py      # Dataset integrity, corruption & leakage checks
-│   ├── train.py                  # PyTorch 4-class training script
-│   ├── evaluate.py               # Test split evaluation (precision, recall, F1, confusion matrix)
-│   └── predict.py                # Command-line specimen inference
-│
-├── models/                       # Model Weights & Reports
-│   ├── mineral_image_classifier.pth             # PyTorch CNN weights
-│   ├── mineral_image_classifier_metadata.json   # Training hyperparams & validation accuracy
-│   ├── evaluation_report.json                   # Independent test metrics & confusion matrix
-│   └── manganese_random_forest.pkl              # Sentinel-2 Tile T44QMK trained model
-│
-└── tests/
-    └── test_backend_api.py       # Automated integration test suite
-```
+The platform supports **strictly four selectable mineral commodities**, each with its own verified data sources, evidence logic, model status, validation metadata, and response behavior:
+
+| Mineral | Category | Model Status | AI Prospectivity Score | Genuine Data Sources |
+| :--- | :--- | :--- | :--- | :--- |
+| **Manganese (`Mn`)** | Strategic Ferroalloy | `VALIDATED_ACTIVE` (Tile `T44QMK`) | Active (Uncalibrated Spatial Index %) | Sentinel-2 L2A (B02, B03, B04, B08, B11, B12), GSI Sausar Group lithology, Balaghat-Nagpur mining belt |
+| **Iron Ore (`Fe`)** | Ferrous Metal Ore | `UNAVAILABLE_INSUFFICIENT_SPATIAL_VALIDATION` | **Strictly Null** (`None`) | Copernicus DEM GLO-30 (30m), Sentinel-2 L2A (Noamundi), GSI Singhbhum Craton Iron Ore Group (BIF/BHQ) |
+| **Coal (`C`)** | Energy Commodity | `UNAVAILABLE_NO_MODEL` | **Strictly Null** (`None`) | Gondwana Basin stratigraphy, colliery occurrences, VNIR surface albedo (subsurface seams require core logs) |
+| **Bauxite (`Al`)** | Aluminum Lateritic Ore | `UNAVAILABLE_NO_MODEL` | **Strictly Null** (`None`) | Tertiary lateritic plateau/pat geomorphology, SWIR Al-OH clay absorption (chemical assay required for ore grade) |
+
+### Scientific Guardrails
+- **Manganese**: The Random Forest model is validated strictly within Sentinel-2 tile `T44QMK` (Balaghat corridor). Outside `T44QMK`, the system reports `OUTSIDE_TRAINING_FOOTPRINT`, withholding predictions to prevent invalid regional transfer without retraining.
+- **Iron Ore**: Spatial cross-validation across 16,033 pixels from 5 confirmed deposits (Noamundi, Joda East, Kiriburu, Gua, Bolani) demonstrates that optical features achieve 83.5% random holdout accuracy due to spatial autocorrelation, but drop to 47.7% accuracy under true spatially blocked validation due to regolith/laterite confounding. Numerical AI scores remain strictly withheld pending authorized GSI aeromagnetic tensor grids and 1:50,000 lithological vectors.
+- **Coal & Bauxite**: Honest evidence-only workflows. No synthetic scores, fabricated probabilities, or placeholder defaults.
 
 ---
 
-## 3. Dashboard Workflow
+## 3. Copernicus GLO-30 Terrain Integration
 
-1. **Step 1: Search for a Location**:
-   - Prominent search box at top of map.
-   - Live OpenStreetMap Nominatim geocoding suggestions.
-   - Coordinate search support (e.g. `21.85, 80.25`).
-2. **Step 2: Interactive Map**:
-   - Leaflet map with OpenStreetMap tiles.
-   - Pan, zoom, click any random location to select coordinates.
-3. **Step 3: Live GPS Location**:
-   - "Use My Current Location" button requests browser GPS permission on click.
-   - Graceful permission denial and timeout error handling.
-4. **Step 4: Mineral Selection**:
-   - Exactly 4 cards: **Coal**, **Manganese**, **Iron Ore**, **Bauxite**.
-   - Clear icon, elemental symbol, status badge, and single-selection behavior.
-5. **Step 5: Search Radius**:
-   - 1 km ($3.14\text{ km}^2$), 5 km ($78.54\text{ km}^2$), 10 km ($314.16\text{ km}^2$), 25 km ($1963.50\text{ km}^2$).
-   - Dynamic translucent circle centered on target location.
-6. **Step 6: Analyze Button**:
-   - Validates coordinates, mineral, and radius before sending request to `/analyze`.
-   - Prevents duplicate requests with visual loading spinner.
-7. **Step 7: Results Dashboard**:
-   - Location name, Lat/Lon, Mineral, Radius, Status.
-   - AI prediction / relative spatial prospectivity index.
-   - Honest confidence notes: Manganese is explicitly marked `NOT CALIBRATED` with explanations.
-   - For Coal, Iron Ore, and Bauxite: returns `"INSUFFICIENT_DATA"` with the honest notice `"Insufficient data for a reliable geographical assessment"`.
-   - Authoritative data sources and limitations warnings.
-8. **Rock Specimen Classifier Modal**:
-   - Upload rock photo to classify between the 4 mineral classes via PyTorch CNN.
-   - Displays probabilities and explicit disclaimer that rock classification does not prove underground deposit presence.
+Authentic Copernicus Digital Elevation Model (GLO-30 Public) data has been downloaded and integrated for the Noamundi iron ore corridor:
+
+- **Source DEM Tiles**:
+  - `data/dem/Copernicus_DSM_COG_10_N22_00_E085_00_DEM.tif` (44.88 MB, SHA256: `147ec7153ac712cb8d171210fa84fce2ea161efe501ca93b08e27ee3dfed4b08`)
+  - `data/dem/Copernicus_DSM_COG_10_N21_00_E085_00_DEM.tif` (44.39 MB)
+- **Aligned 3-Band GeoTIFF**:
+  - `data/dem/noamundi_10km_copernicus_dem_utm45n.tif` (10.83 MB, SHA256: `b2db7085cf03e04ac872ad044cc77f196aa6c0c525694b693ff45d55b33b302f`)
+  - Band 1: Elevation (m ASL, EGM2008 geoid)
+  - Band 2: Slope (degrees, Horn finite differences on UTM metric grid)
+  - Band 3: Topographic Position Index (TPI, 500m moving window filter)
+- **Geomorphic Metrics**:
+  - Elevation Range: 364.9 m – 907.3 m (Mean: 483.1 m, Noamundi open pit centroid: 532.9 m)
+  - Slope: Mean 6.5°, Steep scarp slopes (> 15°): 8.32%
+  - TPI (500m): Prominent ridge crests (> 12 m): 6.41%, Incised valleys (< -12 m): 4.09%
+- **Spatial Resolution Notice**: Resampling the native 1 arc-second (~30.87 m) DEM to 20 m UTM grid aligns geometrically with Sentinel-2 L2A 20 m bands, but does **not** create new 20 m terrain information. Effective spatial resolving power remains ~30 m.
 
 ---
 
-## 4. Running the Application
+## 4. End-to-End User Workflow
 
-### Backend Setup & Launch
+1. **Location Search**: Search places across India via OpenStreetMap Nominatim geocoding or direct coordinate entry (e.g. `22.15, 85.50` or `21.90, 80.18`).
+2. **Select Location**: Map smoothly pans and centers on the selected coordinates.
+3. **Select Mineral**: Choose from Coal, Manganese, Iron Ore, or Bauxite.
+4. **Choose Radius**: Select 1 km, 5 km, 10 km, 25 km, or 50 km exploration footprint (geometric survey area computed dynamically in $\text{km}^2$).
+5. **Run Analysis**: Click **Analyze Selected Area** to trigger the geospatial and evidence pipeline.
+6. **Results Dossier**:
+   - **Verdict**: Overall status, spatial prospectivity index (when validated), or evidence-only notice.
+   - **Geology**: Host stratigraphy, regional terranes, and certified GSI/IBM mine occurrences.
+   - **Terrain**: Copernicus GLO-30 elevation, slope, TPI, geomorphic context, and resolution disclaimer.
+   - **Evidence Matrix**: Breakdown of remote-sensing, geological, and topographic evidence items.
+   - **Decisions**: Exploration readiness, target tier, and recommended field actions.
+   - **Sources**: Traceable attributions for satellite, elevation, and geological datasets.
+7. **2D & 3D Visualizations**: Toggle between 2D Map, 3D Terrain View, and 3D Prospectivity Mesh.
+
+---
+
+## 5. Local Setup & Startup Commands
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+ and npm
+
+### Backend Launch
 ```bash
-# In the project root directory
-py -3.11 -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
+# In workspace root (C:\Users\yadar\Downloads\ai_mineral_explo)
+.venv\Scripts\python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 ```
-Backend runs at `http://127.0.0.1:8000` (Docs available at `/docs`).
+Backend API will be accessible at `http://127.0.0.1:8000` (Interactive Swagger documentation at `/docs`).
 
-### Frontend Setup & Launch
+### Frontend Launch
 ```bash
+# In frontend directory
 cd frontend
 npm install
-npm run dev -- --host 127.0.0.1 --port 5173
+npm run dev
 ```
-Frontend runs at `http://127.0.0.1:5173`.
+Frontend dashboard will be accessible at `http://127.0.0.1:5173`.
+
+### Frontend Production Build
+```bash
+cd frontend
+npm run build
+```
 
 ---
 
-## 5. Verification & Testing
+## 6. Automated Testing & Verification Results
 
-Run the automated backend test suite:
+### Python Test Suite (`pytest`)
+Execute all tests using the virtual environment:
 ```bash
-py -3.11 -m pytest tests/test_backend_api.py -v
+# 1. 4-Mineral Activation & Isolation tests (11 tests)
+.venv\Scripts\pytest tests/test_coal_iron_bauxite_activation.py
+
+# 2. Copernicus DEM integration tests (12 tests)
+.venv\Scripts\pytest tests/test_terrain_integration.py
+
+# 3. Geology and terrain evidence tests (20 tests)
+.venv\Scripts\pytest tests/test_geology_terrain.py
+
+# 4. Iron ore pipeline and scientific guardrail tests (11 tests)
+.venv\Scripts\pytest tests/test_iron_ore_pipeline.py
+
+# 5. Processed satellite evidence tests (10 tests)
+.venv\Scripts\pytest tests/test_evidence_processed.py
+
+# 6. Core intelligence & 3D score integrity tests (17 tests)
+.venv\Scripts\pytest tests/test_phase10_intelligence.py tests/test_mineral_eligibility_and_3d_scores.py
+
+# 7. Backend API endpoint tests (16 tests)
+.venv\Scripts\pytest tests/test_backend_api.py
+
+# 8. Nationwide satellite raster ingestion tests (20 tests)
+.venv\Scripts\pytest tests/test_raster_ingestion.py
 ```
-All 7 unit and integration tests pass:
-- `test_health_endpoint` (PASS)
-- `test_minerals_endpoint` (PASS)
-- `test_analyze_manganese_inside_tile` (PASS)
-- `test_analyze_manganese_outside_tile` (PASS)
-- `test_analyze_coal_awaiting_data` (PASS)
-- `test_analyze_invalid_mineral` (PASS)
-- `test_classify_image_endpoint` (PASS)
+**Python Test Summary**: **117 tests executed, 117 passed (100% pass rate)**.
+
+### JavaScript Test Suite (`node`)
+```bash
+node tests/run_all_js_tests.js
+```
+**JavaScript Test Summary**: **219 tests executed across 19 test files, 219 passed (100% pass rate, 0 failures)**.
+
+---
+
+## 7. Submission Checklist & Security Safeguards
+
+- [x] Zero credentials, passwords, or access tokens committed to the repository.
+- [x] Machine-learning prospectivity scores strictly withheld when models are unvalidated.
+- [x] Manganese Random Forest model preserved and restricted to its validated footprint (Tile `T44QMK`).
+- [x] Iron Ore AI score and confidence remain strictly `null`.
+- [x] Coal and Bauxite remain in graceful evidence-only states (`UNAVAILABLE_NO_MODEL`).
+- [x] Authentic Copernicus GLO-30 DEM integrated with real SHA256 checksums.
+- [x] 2D map, 3D terrain, and conditional 3D prospectivity visualization fully functional.
+- [x] Frontend production bundle built successfully without compilation errors.

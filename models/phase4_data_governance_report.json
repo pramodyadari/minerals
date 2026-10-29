@@ -1,0 +1,388 @@
+{
+  "metadata": {
+    "title": "Phase 4: Specimen Data Governance and Evaluation Infrastructure Report",
+    "timestamp": "2026-10-29T15:13:01.044868+00:00",
+    "auditor": "Senior Computer-Vision Engineer & Mineral-Data Quality Auditor",
+    "workspace": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo",
+    "governance_standard": "ISO-Geological-AI-Data-Governance-v1.0"
+  },
+  "executive_summary": {
+    "evaluation_readiness_status": "GOVERNANCE_INFRASTRUCTURE_ESTABLISHED",
+    "field_evaluation_verdict": "NOT_READY_FOR_DEPLOYMENT",
+    "verified_field_specimens_count": 0,
+    "verified_field_accuracy": "UNAVAILABLE",
+    "primary_rationale": "Zero laboratory-assayed physical mineral specimens exist in evaluation splits. Accuracy against unassayed field photographs cannot be computed without violating scientific validity.",
+    "production_gatekeeper_status": "MineralConvNet (models/mineral_image_classifier.pth) preserved; OOD threshold tau=5.0 active; candidate and ResNet-18 unpromoted."
+  },
+  "task1_split_integrity_resolution": {
+    "target_pair": [
+      "data/train/iron_ore/iron_ore_train_004.jpg",
+      "data/test/iron_ore/iron_ore_test_004.jpg"
+    ],
+    "forensic_evidence": {
+      "sha256_train": "d8ccb2b32a3faa7a3ddda7699ce7a0a2dea852bd5b712c36bbdb7dffdcb71845",
+      "sha256_test": "49637946df9f8fc2a8b9a7fcd1e04dc0ad9224fe6af8b800f7e6e6248a2ba20c",
+      "exact_hash_match": false,
+      "dhash_hamming_distance": 4,
+      "ahash_hamming_distance": 16,
+      "pixel_mean_absolute_error_mae": 19.41,
+      "pixel_root_mean_squared_error_rmse": 28.13,
+      "pixel_max_absolute_difference": 136.0,
+      "percent_pixels_differing_over_10_intensity": 56.41,
+      "percent_pixels_differing_over_25_intensity": 24.16,
+      "pixel_correlation": 0.7755
+    },
+    "root_cause_analysis": "Low dHash distance (4 bits) is an algorithmic artifact of monotonic horizontal gradient orientation on dark red hematite synthetic textures. Both images exhibit smooth left-to-right intensity drop, resulting in predominantly zero difference hash bits. Average hash (aHash) distance is 16 bits (25% bit discrepancy), and max pixel difference is 136.0.",
+    "conclusion_and_action": "INDEPENDENT_SYNTHETIC_PATCHES. The pair does not represent duplicate leakage, data cropping, or shared physical specimen origin. Test set integrity is preserved; no silent modification of test samples is required or permitted."
+  },
+  "task2_upload_inventory_reconciliation": {
+    "total_upload_files": 274,
+    "unique_upload_hashes": 19,
+    "reconciliation_breakdown": {
+      "TEST_GENERATED_API_UPLOAD_REFERENCE": 148,
+      "CORRUPT_TEST_FIXTURE": 46,
+      "SOLID_BLOCK_TEST_FIXTURE": 32,
+      "ORIGINAL_USER_UPLOAD": 3,
+      "EXACT_DUPLICATE_USER_COPY": 28,
+      "TEST_GENERATED_API_UPLOAD_EPHEMERAL": 17
+    },
+    "original_user_uploads": [
+      {
+        "specimen_id": "SPECIMEN_FIELD_COAL_001",
+        "filename": "20261028_134742_70df91e2acfb_Bituminous_Coal.jpg",
+        "sha256": "70df91e2acfb562d95410d4e043bb1001807c1e9d8ae5898fd4e08ed11e1a1fb",
+        "resolution": [
+          4608,
+          3072
+        ],
+        "total_copies_in_uploads": 5,
+        "quarantine_status": "QUARANTINED"
+      },
+      {
+        "specimen_id": "SPECIMEN_FIELD_MANGANESE_001",
+        "filename": "20261026_161612_c31314697563_2a95d3e8-610f-4bff-9bc7-c9700e76d534.png",
+        "sha256": "c31314697563e17891e7f9289e569e00bb2196e012d171736a50f8da579041ef",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "total_copies_in_uploads": 23,
+        "quarantine_status": "QUARANTINED"
+      },
+      {
+        "specimen_id": "SPECIMEN_FIELD_ROCK_001",
+        "filename": "20261026_170458_8797163ce43e_b19a1621-3881-452e-8151-8d4008d899fd.png",
+        "sha256": "8797163ce43ed7b63d9caf65ffb1141ea48d79860fdd569b0bb113ab15a8777b",
+        "resolution": [
+          1536,
+          1024
+        ],
+        "total_copies_in_uploads": 3,
+        "quarantine_status": "QUARANTINED"
+      }
+    ],
+    "quarantine_policy": "REVERSIBLE_QUARANTINE_PRESERVATION. Zero files deleted. Automated test fixtures and corrupt test mocks are retained to guarantee regression test suite compatibility."
+  },
+  "task3_specimen_record_schema": {
+    "schema_module": "backend/app/specimen_governance.py",
+    "enforced_models": [
+      "SpecimenRecord",
+      "VerificationStatus",
+      "DatasetSplit",
+      "LaboratoryAssayReport",
+      "SamplingProvenance",
+      "AcquisitionConditions"
+    ],
+    "governance_rule": "Enforced by Pydantic model validator. Any SpecimenRecord attempting to assert is_verified_ground_truth=True without a certified LaboratoryAssayReport containing report_id and assay_method raises a ValidationError.",
+    "quarantined_user_specimens": [
+      {
+        "specimen_id": "SPECIMEN_FIELD_COAL_001",
+        "mineral_label": "coal",
+        "verification_status": "UNVERIFIED_PENDING_ASSAY",
+        "is_verified_ground_truth": false,
+        "laboratory_report": null,
+        "sampling_provenance": {
+          "geological_formation": null,
+          "mining_district": null,
+          "state_province": null,
+          "country": null,
+          "latitude": null,
+          "longitude": null,
+          "collector_or_operator": null,
+          "collection_date": null
+        },
+        "acquisition_conditions": {
+          "lighting_regime": "macroscopic_field_sample_on_white_paper_with_scale_natural_indoor_light",
+          "background": null,
+          "scale_bar_present": false,
+          "color_calibration_target": null,
+          "camera_make_model": null,
+          "original_dimensions": [
+            4608,
+            3072
+          ],
+          "raw_exif_preserved": false
+        },
+        "original_image_hashes": [
+          "70df91e2acfb562d95410d4e043bb1001807c1e9d8ae5898fd4e08ed11e1a1fb"
+        ],
+        "derived_images": [],
+        "dataset_split": "quarantined_upload",
+        "reviewer_role": "Senior Computer-Vision Engineer & Mineral-Data Quality Auditor",
+        "verification_timestamp": null,
+        "quarantine_notes": "Supplied as Bituminous Coal. Quarantined pending certified laboratory XRF/proximate analysis."
+      },
+      {
+        "specimen_id": "SPECIMEN_FIELD_MANGANESE_001",
+        "mineral_label": "manganese",
+        "verification_status": "UNVERIFIED_PENDING_ASSAY",
+        "is_verified_ground_truth": false,
+        "laboratory_report": null,
+        "sampling_provenance": {
+          "geological_formation": null,
+          "mining_district": null,
+          "state_province": null,
+          "country": null,
+          "latitude": null,
+          "longitude": null,
+          "collector_or_operator": null,
+          "collection_date": null
+        },
+        "acquisition_conditions": {
+          "lighting_regime": "macroscopic_specimen_high_contrast_studio_backdrop",
+          "background": null,
+          "scale_bar_present": false,
+          "color_calibration_target": null,
+          "camera_make_model": null,
+          "original_dimensions": [
+            1536,
+            1024
+          ],
+          "raw_exif_preserved": false
+        },
+        "original_image_hashes": [
+          "c31314697563e17891e7f9289e569e00bb2196e012d171736a50f8da579041ef"
+        ],
+        "derived_images": [],
+        "dataset_split": "quarantined_upload",
+        "reviewer_role": "Senior Computer-Vision Engineer & Mineral-Data Quality Auditor",
+        "verification_timestamp": null,
+        "quarantine_notes": "Supplied as Manganese. Quarantined pending certified laboratory XRF/XRD assay."
+      },
+      {
+        "specimen_id": "SPECIMEN_FIELD_ROCK_001",
+        "mineral_label": "unknown",
+        "verification_status": "UNVERIFIED_PENDING_ASSAY",
+        "is_verified_ground_truth": false,
+        "laboratory_report": null,
+        "sampling_provenance": {
+          "geological_formation": null,
+          "mining_district": null,
+          "state_province": null,
+          "country": null,
+          "latitude": null,
+          "longitude": null,
+          "collector_or_operator": null,
+          "collection_date": null
+        },
+        "acquisition_conditions": {
+          "lighting_regime": "macroscopic_field_specimen_natural_diffuse_light",
+          "background": null,
+          "scale_bar_present": false,
+          "color_calibration_target": null,
+          "camera_make_model": null,
+          "original_dimensions": [
+            1536,
+            1024
+          ],
+          "raw_exif_preserved": false
+        },
+        "original_image_hashes": [
+          "8797163ce43ed7b63d9caf65ffb1141ea48d79860fdd569b0bb113ab15a8777b"
+        ],
+        "derived_images": [],
+        "dataset_split": "quarantined_upload",
+        "reviewer_role": "Senior Computer-Vision Engineer & Mineral-Data Quality Auditor",
+        "verification_timestamp": null,
+        "quarantine_notes": "Supplied as unverified rock. Quarantined pending mineralogical identification."
+      }
+    ]
+  },
+  "task4_evaluation_governance_report": {
+    "section_a_synthetic_known_class_benchmark": {
+      "benchmark_name": "Curated Held-out Test Set",
+      "sample_count": 40,
+      "classes": [
+        "coal",
+        "manganese",
+        "iron_ore",
+        "bauxite"
+      ],
+      "accuracy_pct": 100.0,
+      "balanced_accuracy_pct": 100.0,
+      "macro_f1": 1.0,
+      "false_rejection_rate_frr_pct": 0.0,
+      "confusion_matrix": [
+        [
+          10,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          10,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10
+        ]
+      ],
+      "per_class_metrics": {
+        "coal": {
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "manganese": {
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "iron_ore": {
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "bauxite": {
+          "support": 10,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "scope_limitation": "Valid ONLY for $224 \\times 224$ synthetic micro-texture patches. Does NOT demonstrate real field rock generalization."
+    },
+    "section_b_synthetic_ood_benchmark": {
+      "benchmark_name": "Procedural Lithology Rejection Benchmark",
+      "sample_count": 60,
+      "lithologies": [
+        "quartz",
+        "granite",
+        "limestone",
+        "sandstone",
+        "basalt"
+      ],
+      "ood_threshold": 5.0,
+      "rejection_rate_pct": 100.0,
+      "false_acceptance_rate_far_pct": 0.0,
+      "lithology_breakdown": {
+        "quartz": {
+          "support": 12,
+          "rejection_rate_pct": 100.0
+        },
+        "granite": {
+          "support": 12,
+          "rejection_rate_pct": 100.0
+        },
+        "limestone": {
+          "support": 12,
+          "rejection_rate_pct": 100.0
+        },
+        "sandstone": {
+          "support": 12,
+          "rejection_rate_pct": 100.0
+        },
+        "basalt": {
+          "support": 12,
+          "rejection_rate_pct": 100.0
+        }
+      },
+      "safety_verdict": "SAFE. Zero country rock specimens falsely accepted into mineral classes."
+    },
+    "section_c_unverified_field_photo_diagnostics": {
+      "disputed_bituminous_coal": {
+        "specimen_id": "SPECIMEN_FIELD_COAL_001",
+        "supplied_label": "Coal (Unverified)",
+        "original_image": {
+          "prediction": "bauxite",
+          "confidence_pct": 99.65,
+          "distance": 11.46,
+          "status": "OUT_OF_DISTRIBUTION"
+        },
+        "candidate_crop": {
+          "prediction": "bauxite",
+          "confidence_pct": 86.59,
+          "distance": 9.93,
+          "status": "OUT_OF_DISTRIBUTION"
+        },
+        "candidate_finetuned_crop": {
+          "prediction": "manganese",
+          "confidence_pct": 62.42,
+          "distance": 16.48,
+          "status": "OUT_OF_DISTRIBUTION"
+        },
+        "diagnostic_finding": "Cropping and luster augmentation reduce pale bauxite bias toward dark sub-metallic manganese, but manifold distance correctly withholds acceptance."
+      },
+      "disputed_manganese": {
+        "specimen_id": "SPECIMEN_FIELD_MANGANESE_001",
+        "supplied_label": "Manganese (Unverified)",
+        "original_image": {
+          "prediction": "manganese",
+          "confidence_pct": 89.43,
+          "distance": 10.18,
+          "status": "OUT_OF_DISTRIBUTION"
+        },
+        "candidate_crop": {
+          "prediction": "manganese",
+          "confidence_pct": 95.41,
+          "distance": 8.58,
+          "status": "OUT_OF_DISTRIBUTION"
+        }
+      },
+      "unverified_rock": {
+        "specimen_id": "SPECIMEN_FIELD_ROCK_001",
+        "supplied_label": "Unverified Rock",
+        "original_image": {
+          "prediction": "bauxite",
+          "confidence_pct": 100.0,
+          "distance": 19.29,
+          "status": "OUT_OF_DISTRIBUTION"
+        },
+        "candidate_crop": {
+          "prediction": "bauxite",
+          "confidence_pct": 100.0,
+          "distance": 16.83,
+          "status": "OUT_OF_DISTRIBUTION"
+        }
+      },
+      "governance_note": "Metrics (accuracy, F1, precision, recall) are NOT calculated for unverified field photos. Ground truth is uncertified."
+    },
+    "section_d_verified_field_specimen_evaluation": {
+      "verified_specimens_available": 0,
+      "verified_field_accuracy": "UNAVAILABLE",
+      "verified_field_macro_f1": "UNAVAILABLE",
+      "status_notice": "Field accuracy is explicitly UNAVAILABLE (neither 0% nor 100%). No laboratory-assayed physical rock specimens currently reside in the evaluation split."
+    }
+  },
+  "non_negotiable_safeguards_verification": {
+    "production_checkpoint_path": "models/mineral_image_classifier.pth",
+    "production_checkpoint_untouched": true,
+    "production_ood_config_path": "models/mineral_classifier_ood_config.json",
+    "production_ood_threshold": 5.0,
+    "candidate_models_status": "QUARANTINED_UNPROMOTED"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "audit_metadata": {
+    "title": "Phase 3 \u2014 Copernicus GLO-30 Real Terrain Data Integration & Quality Audit",
+    "commodity": "Iron Ore",
+    "study_region": "Noamundi Mining Sector (Singhbhum-North Odisha Craton)",
+    "target_center_coordinates": {
+      "latitude": 22.15,
+      "longitude": 85.5,
+      "utm_easting": 345319.36,
+      "utm_northing": 2450193.53,
+      "utm_zone": 45,
+      "hemisphere": "N"
+    },
+    "radius_km": 10.0,
+    "analysis_area_sq_km": 314.16,
+    "audit_timestamp": "2026-10-15T12:28:00Z",
+    "status": "VERIFIED_REAL_DEM_INTEGRATED",
+    "scientific_recommendation": "RETAIN_UNAVAILABLE_PREDICTION_STATUS_INTEGRATE_TERRAIN_EVIDENCE"
+  },
+  "dataset_provenance": {
+    "product_name": "Copernicus Digital Elevation Model (GLO-30 Public)",
+    "authoritative_agency": "European Space Agency (ESA) / Airbus Defence and Space",
+    "distribution_source": "AWS Open Data Registry (Requester Pays Disabled, Public Access)",
+    "source_url": "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N22_00_E085_00_DEM/Copernicus_DSM_COG_10_N22_00_E085_00_DEM.tif",
+    "raw_tile_filename": "Copernicus_DSM_COG_10_N22_00_E085_00_DEM.tif",
+    "raw_sha256_checksum": "147ec7153ac712cb8d171210fa84fce2ea161efe501ca93b08e27ee3dfed4b08",
+    "raw_filesize_bytes": 44882091,
+    "raw_geographic_bounds": {
+      "min_lon": 84.99986,
+      "max_lon": 85.99986,
+      "min_lat": 22.00014,
+      "max_lat": 23.00014
+    },
+    "raw_native_crs": "EPSG:4326 (WGS 84 2D Geographic)",
+    "raw_native_resolution": "1 arc-second (~30.87 m at 22\u00b0N)",
+    "raw_vertical_datum": "EGM2008 (Earth Gravitational Model 2008 geoid)",
+    "raw_vertical_units": "Metres above sea level",
+    "licensing": "Copernicus Open Access Policy / Free Public WorldDEM Derivative"
+  },
+  "spatial_alignment_and_reprojection": {
+    "target_crs": "EPSG:32645 (WGS 84 / UTM Zone 45N)",
+    "output_grid_resolution_m": 20.0,
+    "resampling_algorithm": "Bilinear Interpolation",
+    "aligned_product_file": "data/dem/noamundi_10km_copernicus_dem_utm45n.tif",
+    "aligned_sha256_checksum": "b2db7085cf03e04ac872ad044cc77f196aa6c0c525694b693ff45d55b33b302f",
+    "aligned_filesize_bytes": 10828593,
+    "grid_dimensions": [
+      1000,
+      1000
+    ],
+    "total_cells_in_radius": 785347,
+    "scientific_disclaimer": "Resampling Copernicus GLO-30 from native 30m to 20m via bilinear interpolation provides geometric co-registration with Sentinel-2 L2A 20m multi-spectral bands (B11, B12, SCL), but does NOT create new 20m terrain information. The effective spatial resolving power remains ~30m."
+  },
+  "terrain_geomorphic_metrics": {
+    "elevation_m": {
+      "min": 364.9,
+      "max": 907.3,
+      "mean": 483.1,
+      "median": 467.0,
+      "std": 78.3,
+      "pit_centroid_elevation": 532.5,
+      "vertical_relief_m": 542.4
+    },
+    "slope_degrees": {
+      "algorithm": "Horn Finite Differences on UTM Metric Grid",
+      "mean": 6.5,
+      "median": 4.8,
+      "max": 50.1,
+      "gentle_slopes_0_to_5_deg_pct": 51.52,
+      "moderate_slopes_5_to_15_deg_pct": 40.16,
+      "steep_scarp_slopes_over_15_deg_pct": 8.32
+    },
+    "topographic_position_index": {
+      "algorithm": "Cell Elevation minus 500m Moving Window Mean (25x25 cell uniform filter)",
+      "neighbourhood_radius_m": 500.0,
+      "min_tpi_m": -61.2,
+      "max_tpi_m": 54.7,
+      "mean_tpi_m": 0.02,
+      "prominent_ridge_crests_tpi_over_12m_pct": 6.41,
+      "incised_valleys_tpi_under_minus_12m_pct": 4.09,
+      "midslope_and_uniform_terrain_pct": 89.5
+    }
+  },
+  "geological_relevance": {
+    "bif_ridge_capping": "In the Singhbhum Iron Ore Craton, Banded Hematite Jasper (BHJ) and enriched hematite ore bodies form resistant topographic ridge crests (TPI > 12m, elevation 550m-900m ASL). Soft tuffaceous shales and phyllites weather rapidly into low-relief valleys (TPI < -12m).",
+    "open_pit_bench_topography": "Active open-cast mining benches produce localized steep scarp slopes (>15\u00b0 up to 50\u00b0) and localized negative TPI within the pit floor excavation.",
+    "exploration_value": "Terrain metrics allow masking out unmineralized alluvium and valley-fill sediments, isolating prospective structural ridge crests before spectral ratio evaluation."
+  },
+  "scientific_guardrails": {
+    "ai_prospectivity_score": null,
+    "model_confidence": null,
+    "status": "UNAVAILABLE_INSUFFICIENT_SPATIAL_VALIDATION",
+    "rationale": "Terrain integration provides genuine geomorphic context, but terrain alone cannot distinguish barren quartzite ridges or dolerite dykes from economic iron ore bodies. The AI prediction score remains strictly withheld pending authorized GSI aeromagnetic tensor grids and 1:50k lithological vectors."
+  }
+}

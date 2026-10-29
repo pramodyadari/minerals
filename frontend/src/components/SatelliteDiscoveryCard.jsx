@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../apiConfig';
 import {
   Satellite,
   Layers,
@@ -30,24 +31,30 @@ export default function SatelliteDiscoveryCard({
   const [loading, setLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  // Load scenes from props or backend
+  // Load scenes strictly from props when analysisResult is present, or query discovery endpoint
   useEffect(() => {
-    if (satelliteScenes && satelliteScenes.length > 0) {
+    if (satelliteScenes !== undefined && satelliteScenes !== null) {
       setScenes(satelliteScenes);
-      setSelectedSceneId(satelliteScenes[0].scene_id);
+      setSelectedSceneId(satelliteScenes[0]?.scene_id || null);
     } else if (selectedLocation?.lat && selectedLocation?.lon) {
       setLoading(true);
       fetch(
-        `http://127.0.0.1:8000/satellite-scenes?latitude=${selectedLocation.lat}&longitude=${selectedLocation.lon}&mineral=${selectedMineral}`
+        getApiUrl(`/satellite-scenes?latitude=${selectedLocation.lat}&longitude=${selectedLocation.lon}&mineral=${selectedMineral}`)
       )
         .then((res) => res.json())
         .then((data) => {
           if (data?.scenes) {
             setScenes(data.scenes);
-            setSelectedSceneId(data.scenes[0]?.scene_id);
+            setSelectedSceneId(data.scenes[0]?.scene_id || null);
+          } else {
+            setScenes([]);
+            setSelectedSceneId(null);
           }
         })
-        .catch(() => {})
+        .catch(() => {
+          setScenes([]);
+          setSelectedSceneId(null);
+        })
         .finally(() => setLoading(false));
     }
   }, [selectedLocation, selectedMineral, satelliteScenes]);
@@ -275,10 +282,25 @@ export default function SatelliteDiscoveryCard({
                     <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '3px' }}>
                       ID: <span style={{ fontFamily: 'var(--font-mono)' }}>{scene.scene_id}</span>
                     </div>
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '4px', fontSize: '0.68rem', color: '#cbd5e1' }}>
-                      <span>Cloud: {scene.cloud_cover_pct}%</span>
-                      <span>Res: {scene.resolution_m}m</span>
-                      <span>Tile: {scene.tile_id || 'MSIL2A'}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '5px' }}>
+                      <div style={{ display: 'flex', gap: '8px', fontSize: '0.68rem', color: '#cbd5e1' }}>
+                        <span>Cloud: {scene.cloud_cover_pct}%</span>
+                        <span>Res: {scene.resolution_m}m</span>
+                        <span>Tile: {scene.tile_id || 'MSIL2A'}</span>
+                      </div>
+                      <span style={{
+                        fontSize: '0.62rem',
+                        fontWeight: 700,
+                        padding: '1px 6px',
+                        borderRadius: '4px',
+                        background: scene.status === 'DISCOVERED_LIVE_CDSE'
+                          ? 'rgba(16, 185, 129, 0.18)'
+                          : 'rgba(56, 189, 248, 0.18)',
+                        color: scene.status === 'DISCOVERED_LIVE_CDSE' ? '#10b981' : '#38bdf8',
+                        border: '1px solid ' + (scene.status === 'DISCOVERED_LIVE_CDSE' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(56, 189, 248, 0.3)')
+                      }}>
+                        {scene.status === 'DISCOVERED_LIVE_CDSE' ? 'LIVE CDSE ODATA' : scene.status === 'AVAILABLE_LOCAL_ARCHIVE' ? 'LOCAL TILE ARCHIVE' : 'LOCAL CACHE'}
+                      </span>
                     </div>
                   </button>
                 );

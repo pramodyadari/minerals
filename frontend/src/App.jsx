@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import LocationSearch from './components/LocationSearch';
@@ -10,6 +10,9 @@ import ResultsPanel from './components/ResultsPanel';
 import SpecimenClassifierModal from './components/SpecimenClassifierModal';
 import ProductionForecastModal from './components/ProductionForecastModal';
 import DemoTourModal from './components/DemoTourModal';
+import FieldObservationModal from './components/FieldObservationModal';
+import FieldObservationDrawer from './components/FieldObservationDrawer';
+import { getApiUrl } from './apiConfig';
 import {
   Compass,
   Loader2,
@@ -40,59 +43,176 @@ export default function App() {
   // Step 4: Mineral selection (Exactly 4 minerals: Coal, Manganese, Iron Ore, Bauxite)
   const [selectedMineral, setSelectedMineral] = useState('Manganese');
 
-  // Step 5: Search radius (1, 5, 10, 25 km)
-  const [selectedRadius, setSelectedRadius] = useState(5);
+  // Step 5: Search radius (1, 5, 10, 25, 50 km - default 10 km)
+  const [selectedRadius, setSelectedRadius] = useState(10);
 
   // Step 6 & 7: Analysis execution and results
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzingMode, setAnalyzingMode] = useState(null); // 'all' | 'single' | null
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [multiResult, setMultiResult] = useState(null);
   const [analysisError, setAnalysisError] = useState(null);
+
+  // Map visualization mode: '2d' | '3d-terrain' | '3d-prospectivity' (maintained across views and selections)
+  const [mapMode, setMapMode] = useState('2d');
+
+  // Abort controller ref for managing in-flight analysis requests
+  const abortControllerRef = useRef(null);
+
+  // Clean up in-flight requests on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  // Safe state transitions that abort in-flight queries and prevent stale results
+  const handleLocationChange = (loc) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsAnalyzing(false);
+    setAnalyzingMode(null);
+    setSelectedLocation(loc);
+    setAnalysisResult(null);
+    setMultiResult(null);
+    setAnalysisError(null);
+  };
+
+  const handleMineralChange = (m) => {
+    setSelectedMineral(m);
+    // If we have an active multi-mineral result, seamlessly synchronize the active 2D/3D single view to that mineral
+    if (multiResult && multiResult.minerals && multiResult.minerals[m]) {
+      setAnalysisResult(multiResult.minerals[m]);
+    }
+  };
+
+  const handleRadiusChange = (rad) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsAnalyzing(false);
+    setAnalyzingMode(null);
+    setSelectedRadius(rad);
+    setAnalysisResult(null);
+    setMultiResult(null);
+    setAnalysisError(null);
+  };
+
+  // Multi-mineral custom selection mode state (Part B)
+  const [analysisMode, setAnalysisMode] = useState('all_four'); // 'all_four' | 'choose_minerals'
+  const [customMinerals, setCustomMinerals] = useState(['Coal', 'Manganese']);
 
   // Modals state
   const [isSpecimenModalOpen, setIsSpecimenModalOpen] = useState(false);
   const [isProductionModalOpen, setIsProductionModalOpen] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [isObservationModalOpen, setIsObservationModalOpen] = useState(false);
+  const [isObservationDrawerOpen, setIsObservationDrawerOpen] = useState(false);
+  const [obsRefreshTrigger, setObsRefreshTrigger] = useState(0);
 
-  // Analyze Button Click Handler (Priority 1 -> Priority 8)
-  const handleRunAnalysis = async () => {
-    if (!selectedLocation || !selectedMineral || !selectedRadius || isAnalyzing) return;
+  // Analyze Button Click Handler with Bounded Timeout and Abort Controller
+  // mode: 'all' (primary default: executes all 4 minerals or custom 2/3 selection) or 'single' (optional single-commodity pipeline)
+  const handleRunAnalysis = async (mode = 'all') => {
+    if (!selectedLocation || !selectedRadius || isAnalyzing) return;
+    if (mode === 'single' && !selectedMineral) return;
+    if (mode === 'all' && analysisMode === 'choose_minerals' && (customMinerals.length < 2 || customMinerals.length > 3)) return;
+
+    // Abort previous in-flight request if any
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     setIsAnalyzing(true);
+    setAnalyzingMode(mode);
     setAnalysisError(null);
 
-    try {
-      const payload = {
-        location_name: selectedLocation.name,
-        latitude: parseFloat(selectedLocation.lat),
-        longitude: parseFloat(selectedLocation.lon),
-        mineral: selectedMineral,
-        radius_km: parseFloat(selectedRadius),
-      };
+    // Bounded client safety timeout: 22s for multi-mineral run, 12s for single
+    const timeoutDuration = mode === 'all' ? 22000 : 12000;
+    const timeoutId = setTimeout(() => {
+      controller.abort('TIMEOUT');
+    }, timeoutDuration);
 
-      const response = await fetch('http://127.0.0.1:8000/analyze', {
+    try {
+      const url = mode === 'all' ? getApiUrl('/analyze-all') : getApiUrl('/analyze');
+      const payload = mode === 'all'
+        ? {
+            location_name: selectedLocation.name,
+            latitude: parseFloat(selectedLocation.lat),
+            longitude: parseFloat(selectedLocation.lon),
+            radius_km: parseFloat(selectedRadius),
+            minerals: analysisMode === 'choose_minerals' ? customMinerals : null,
+          }
+        : {
+            location_name: selectedLocation.name,
+            latitude: parseFloat(selectedLocation.lat),
+            longitude: parseFloat(selectedLocation.lon),
+            mineral: selectedMineral,
+            radius_km: parseFloat(selectedRadius),
+          };
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Server returned status ${response.status}`);
+        throw new Error(errorData.detail || `Server returned HTTP status ${response.status}`);
       }
 
       const data = await response.json();
-      setAnalysisResult(data);
+
+      if (mode === 'all') {
+        setMultiResult(data);
+        // Default the single focused dossier/3D view to the user's currently selectedMineral if available
+        if (data.minerals && data.minerals[selectedMineral]) {
+          setAnalysisResult(data.minerals[selectedMineral]);
+        } else if (data.minerals) {
+          const firstKey = Object.keys(data.minerals)[0];
+          setAnalysisResult(data.minerals[firstKey]);
+        }
+      } else {
+        setAnalysisResult(data);
+        setMultiResult(null);
+      }
     } catch (err) {
-      setAnalysisError(err.message || 'Geographical analysis request failed.');
-      setAnalysisResult(null);
+      clearTimeout(timeoutId);
+      if (err.name === 'AbortError' || controller.signal.aborted) {
+        if (controller.signal.reason === 'TIMEOUT') {
+          setAnalysisError(`The analysis request timed out after ${timeoutDuration / 1000} seconds. Remote service did not respond in time.`);
+        }
+      } else {
+        setAnalysisError(err.message || 'Geographical analysis request failed.');
+      }
+      if (mode === 'single') {
+        setAnalysisResult(null);
+      }
     } finally {
+      clearTimeout(timeoutId);
+      if (abortControllerRef.current === controller) {
+        abortControllerRef.current = null;
+      }
       setIsAnalyzing(false);
+      setAnalyzingMode(null);
     }
   };
 
-  const isAnalyzeDisabled = !selectedLocation || !selectedMineral || !selectedRadius || isAnalyzing;
+  const isCustomModeInvalid = analysisMode === 'choose_minerals' && (customMinerals.length < 2 || customMinerals.length > 3);
+  const isAnalyzeDisabled = !selectedLocation || !selectedRadius || isAnalyzing || isCustomModeInvalid;
 
   // Jump directly to dashboard view
   const handleExploreDashboard = () => {
@@ -110,14 +230,23 @@ export default function App() {
     }
   };
 
+  // Navigation tab change handler: when user opens map explorer tab, load and maintain 3D terrain view
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'map') {
+      setMapMode((current) => (current === '2d' ? '3d-terrain' : current));
+    }
+  };
+
   return (
     <div className="app-container">
       {/* Top Header matching reference image */}
       <Header
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab)}
+        onTabChange={handleTabChange}
         onOpenSpecimenClassifier={() => setIsSpecimenModalOpen(true)}
         onOpenProductionForecast={() => setIsProductionModalOpen(true)}
+        onOpenFieldVerification={() => setIsObservationDrawerOpen(true)}
       />
 
       {/* Main View Switching */}
@@ -152,11 +281,7 @@ export default function App() {
               <section className="map-section" style={{ position: 'relative' }}>
                 <LocationSearch
                   selectedLocation={selectedLocation}
-                  onLocationSelect={(loc) => {
-                    setSelectedLocation(loc);
-                    setAnalysisResult(null);
-                    setAnalysisError(null);
-                  }}
+                  onLocationSelect={handleLocationChange}
                 />
 
                 <InteractiveMap
@@ -164,11 +289,11 @@ export default function App() {
                   radiusKm={selectedRadius}
                   targetMineral={selectedMineral}
                   analysisResult={analysisResult}
-                  onLocationChange={(loc) => {
-                    setSelectedLocation(loc);
-                    setAnalysisResult(null);
-                    setAnalysisError(null);
-                  }}
+                  onLocationChange={handleLocationChange}
+                  mapMode={mapMode}
+                  onMapModeChange={setMapMode}
+                  onOpenCreateObservation={() => setIsObservationModalOpen(true)}
+                  refreshObservationsTrigger={obsRefreshTrigger}
                 />
 
                 {/* Priority 2 & 3: Satellite Discovery and Spectral Ratios Card */}
@@ -186,46 +311,99 @@ export default function App() {
                 <div className="sidebar-content">
                   <MineralSelector
                     selectedMineral={selectedMineral}
-                    onSelectMineral={(m) => {
-                      setSelectedMineral(m);
-                      setAnalysisResult(null);
-                      setAnalysisError(null);
-                    }}
+                    onSelectMineral={handleMineralChange}
+                    analysisMode={analysisMode}
+                    onAnalysisModeChange={setAnalysisMode}
+                    customMinerals={customMinerals}
+                    onCustomMineralsChange={setCustomMinerals}
                   />
 
                   <RadiusSelector
                     selectedRadius={selectedRadius}
-                    onRadiusChange={(r) => {
-                      setSelectedRadius(r);
-                      setAnalysisResult(null);
-                      setAnalysisError(null);
-                    }}
+                    onRadiusChange={handleRadiusChange}
                   />
 
                   <button
                     type="button"
                     className="analyze-btn"
-                    onClick={handleRunAnalysis}
+                    onClick={() => handleRunAnalysis('all')}
                     disabled={isAnalyzeDisabled}
-                    id="btn-analyze-geographical"
+                    id="btn-analyze-all-minerals"
+                    style={{
+                      background: isCustomModeInvalid ? 'rgba(255, 255, 255, 0.08)' : 'linear-gradient(135deg, #00f0ff, #3b82f6)',
+                      boxShadow: isCustomModeInvalid ? 'none' : '0 4px 15px rgba(0, 240, 255, 0.25)',
+                      fontWeight: 700
+                    }}
                   >
-                    {isAnalyzing ? (
+                    {isAnalyzing && analyzingMode === 'all' ? (
                       <>
                         <Loader2 size={20} className="animate-spin" />
-                        <span>Analyzing Location...</span>
+                        <span>{analysisMode === 'choose_minerals' ? `Analyzing Selected ${customMinerals.length} Minerals...` : 'Analyzing All 4 Minerals...'}</span>
                       </>
                     ) : (
                       <>
-                        <Compass size={20} />
-                        <span>Analyze Selected Area</span>
+                        <Sparkles size={20} />
+                        <span>
+                          {analysisMode === 'choose_minerals'
+                            ? (customMinerals.length === 2
+                                ? 'Analyze Selected 2 Minerals'
+                                : customMinerals.length === 3
+                                ? 'Analyze Selected 3 Minerals'
+                                : 'Select 2 or 3 Minerals to Analyze')
+                            : 'Analyze All Four Minerals'}
+                        </span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="analyze-btn-secondary"
+                    onClick={() => handleRunAnalysis('single')}
+                    disabled={isAnalyzeDisabled}
+                    id="btn-analyze-geographical"
+                    style={{
+                      marginTop: '8px',
+                      width: '100%',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      color: '#cbd5e1',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      cursor: isAnalyzeDisabled ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6,
+                      opacity: isAnalyzeDisabled ? 0.6 : 1,
+                      transition: 'all 0.2s ease'
+                    }}
+                    title={`Analyze only ${selectedMineral} at selected coordinates`}
+                  >
+                    {isAnalyzing && analyzingMode === 'single' ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" />
+                        <span>Analyzing {selectedMineral}...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Compass size={15} />
+                        <span>Analyze {selectedMineral} Only (Single Mode)</span>
                       </>
                     )}
                   </button>
 
                   <ResultsPanel
                     result={analysisResult}
+                    multiResult={multiResult}
                     isAnalyzing={isAnalyzing}
                     error={analysisError}
+                    selectedMineral={selectedMineral}
+                    onSelectMineral={handleMineralChange}
+                    radiusKm={selectedRadius}
+                    selectedLocation={selectedLocation}
                   />
                 </div>
               </aside>
@@ -240,11 +418,7 @@ export default function App() {
           <section className="map-section" style={{ position: 'relative' }}>
             <LocationSearch
               selectedLocation={selectedLocation}
-              onLocationSelect={(loc) => {
-                setSelectedLocation(loc);
-                setAnalysisResult(null);
-                setAnalysisError(null);
-              }}
+              onLocationSelect={handleLocationChange}
             />
 
             <InteractiveMap
@@ -252,11 +426,11 @@ export default function App() {
               radiusKm={selectedRadius}
               targetMineral={selectedMineral}
               analysisResult={analysisResult}
-              onLocationChange={(loc) => {
-                setSelectedLocation(loc);
-                setAnalysisResult(null);
-                setAnalysisError(null);
-              }}
+              onLocationChange={handleLocationChange}
+              mapMode={mapMode}
+              onMapModeChange={setMapMode}
+              onOpenCreateObservation={() => setIsObservationModalOpen(true)}
+              refreshObservationsTrigger={obsRefreshTrigger}
             />
 
             {/* Satellite Discovery & Spectral Processing */}
@@ -274,46 +448,99 @@ export default function App() {
             <div className="sidebar-content">
               <MineralSelector
                 selectedMineral={selectedMineral}
-                onSelectMineral={(m) => {
-                  setSelectedMineral(m);
-                  setAnalysisResult(null);
-                  setAnalysisError(null);
-                }}
+                onSelectMineral={handleMineralChange}
+                analysisMode={analysisMode}
+                onAnalysisModeChange={setAnalysisMode}
+                customMinerals={customMinerals}
+                onCustomMineralsChange={setCustomMinerals}
               />
 
               <RadiusSelector
                 selectedRadius={selectedRadius}
-                onRadiusChange={(r) => {
-                  setSelectedRadius(r);
-                  setAnalysisResult(null);
-                  setAnalysisError(null);
-                }}
+                onRadiusChange={handleRadiusChange}
               />
 
               <button
                 type="button"
                 className="analyze-btn"
-                onClick={handleRunAnalysis}
+                onClick={() => handleRunAnalysis('all')}
                 disabled={isAnalyzeDisabled}
-                id="btn-analyze-geographical-dashboard"
+                id="btn-analyze-all-minerals-dashboard"
+                style={{
+                  background: isCustomModeInvalid ? 'rgba(255, 255, 255, 0.08)' : 'linear-gradient(135deg, #00f0ff, #3b82f6)',
+                  boxShadow: isCustomModeInvalid ? 'none' : '0 4px 15px rgba(0, 240, 255, 0.25)',
+                  fontWeight: 700
+                }}
               >
-                {isAnalyzing ? (
+                {isAnalyzing && analyzingMode === 'all' ? (
                   <>
                     <Loader2 size={20} className="animate-spin" />
-                    <span>Analyzing Location...</span>
+                    <span>{analysisMode === 'choose_minerals' ? `Analyzing Selected ${customMinerals.length} Minerals...` : 'Analyzing All 4 Minerals...'}</span>
                   </>
                 ) : (
                   <>
-                    <Compass size={20} />
-                    <span>Analyze Selected Area</span>
+                    <Sparkles size={20} />
+                    <span>
+                      {analysisMode === 'choose_minerals'
+                        ? (customMinerals.length === 2
+                            ? 'Analyze Selected 2 Minerals'
+                            : customMinerals.length === 3
+                            ? 'Analyze Selected 3 Minerals'
+                            : 'Select 2 or 3 Minerals to Analyze')
+                        : 'Analyze All Four Minerals'}
+                    </span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                className="analyze-btn-secondary"
+                onClick={() => handleRunAnalysis('single')}
+                disabled={isAnalyzeDisabled}
+                id="btn-analyze-geographical-dashboard"
+                style={{
+                  marginTop: '8px',
+                  width: '100%',
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#cbd5e1',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: isAnalyzeDisabled ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                  opacity: isAnalyzeDisabled ? 0.6 : 1,
+                  transition: 'all 0.2s ease'
+                }}
+                title={`Analyze only ${selectedMineral} at selected coordinates`}
+              >
+                {isAnalyzing && analyzingMode === 'single' ? (
+                  <>
+                    <Loader2 size={15} className="animate-spin" />
+                    <span>Analyzing {selectedMineral}...</span>
+                  </>
+                ) : (
+                  <>
+                    <Compass size={15} />
+                    <span>Analyze {selectedMineral} Only (Single Mode)</span>
                   </>
                 )}
               </button>
 
               <ResultsPanel
                 result={analysisResult}
+                multiResult={multiResult}
                 isAnalyzing={isAnalyzing}
                 error={analysisError}
+                selectedMineral={selectedMineral}
+                onSelectMineral={handleMineralChange}
+                radiusKm={selectedRadius}
+                selectedLocation={selectedLocation}
               />
             </div>
           </aside>
@@ -348,11 +575,9 @@ export default function App() {
               radiusKm={selectedRadius}
               targetMineral={selectedMineral}
               analysisResult={analysisResult}
-              onLocationChange={(loc) => {
-                setSelectedLocation(loc);
-                setAnalysisResult(null);
-                setAnalysisError(null);
-              }}
+              onLocationChange={handleLocationChange}
+              mapMode={mapMode}
+              onMapModeChange={setMapMode}
             />
           </div>
         </div>
@@ -487,6 +712,36 @@ export default function App() {
         isOpen={isDemoModalOpen}
         onClose={() => setIsDemoModalOpen(false)}
         onExploreDashboard={handleExploreDashboard}
+      />
+
+      {/* Field Verification System Modals */}
+      <FieldObservationModal
+        isOpen={isObservationModalOpen}
+        onClose={() => setIsObservationModalOpen(false)}
+        initialLocation={selectedLocation}
+        initialMineral={selectedMineral}
+        analysisId={analysisResult ? `ANL-${selectedLocation.lat?.toFixed(2)}-${selectedLocation.lon?.toFixed(2)}` : null}
+        onObservationCreated={() => {
+          setObsRefreshTrigger(prev => prev + 1);
+        }}
+      />
+
+      <FieldObservationDrawer
+        isOpen={isObservationDrawerOpen}
+        onClose={() => setIsObservationDrawerOpen(false)}
+        onOpenCreateModal={() => {
+          setIsObservationDrawerOpen(false);
+          setIsObservationModalOpen(true);
+        }}
+        onSelectObservationOnMap={(obs) => {
+          setIsObservationDrawerOpen(false);
+          handleLocationChange({
+            name: `Field Obs #${obs.id} (${obs.mineral})`,
+            lat: obs.latitude,
+            lon: obs.longitude
+          });
+        }}
+        selectedLocation={selectedLocation}
       />
     </div>
   );

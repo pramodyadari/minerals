@@ -1,0 +1,306 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "audit_metadata": {
+    "audit_version": "2.0.0",
+    "timestamp_utc": "2026-10-16T04:50:00Z",
+    "auditor": "Senior AI/ML & Geospatial Data Scientist",
+    "project": "AI Mineral Exploration System (India)",
+    "workspace": "C:\\Users\\yadar\\Downloads\\ai_mineral_explo",
+    "commodities_audited": ["Manganese", "Iron Ore", "Coal", "Bauxite"]
+  },
+  "datasets": [
+    {
+      "dataset_id": "COP_DEM_GLO30_NOAMUNDI",
+      "dataset_name": "Copernicus Digital Elevation Model (GLO-30 Public)",
+      "source_organization": "European Space Agency (ESA) / Airbus Defence & Space",
+      "official_source_url": "https://registry.opendata.aws/copernicus-dem/",
+      "minerals": ["Iron Ore", "Manganese", "Coal", "Bauxite"],
+      "intended_use": "3D geomorphic evidence, slope, elevation profiling, and Topographic Position Index (TPI) extraction",
+      "geographic_coverage": {
+        "region": "Noamundi - Singhbhum - Keonjhar Iron Ore Belt",
+        "bounding_box_wgs84": {
+          "min_lat": 21.0,
+          "max_lat": 23.0,
+          "min_lon": 85.0,
+          "max_lon": 86.0
+        },
+        "target_center": {"lat": 22.15, "lon": 85.50}
+      },
+      "acquisition_or_publication_date": "2021-11-30",
+      "licence_and_permitted_usage": "Copernicus Open Access Free and Open Data Policy (Worldwide open commercial and non-commercial research use)",
+      "access_status": "OPEN_ACCESS",
+      "download_status": "DOWNLOADED",
+      "local_file_paths": [
+        "data/dem/Copernicus_DSM_COG_10_N22_00_E085_00_DEM.tif",
+        "data/dem/Copernicus_DSM_COG_10_N21_00_E085_00_DEM.tif",
+        "data/dem/noamundi_10km_copernicus_dem_utm45n.tif"
+      ],
+      "file_format": "Cloud-Optimized GeoTIFF (COG)",
+      "crs": "EPSG:32645 (UTM Zone 45N) for aligned raster; EPSG:4326 for native tiles",
+      "spatial_resolution": "30m native (1 arc-second) aligned to 20m grid",
+      "vertical_datum": "EGM2008 geoid height in meters",
+      "bands_and_units": [
+        {"band": 1, "name": "Elevation", "unit": "meters ASL"},
+        {"band": 2, "name": "Slope", "unit": "degrees (Horn algorithm)"},
+        {"band": 3, "name": "TPI_500m", "unit": "meters (Topographic Position Index)"}
+      ],
+      "data_quality_metrics": {
+        "elevation_min_m": 364.9,
+        "elevation_max_m": 907.3,
+        "elevation_mean_m": 483.1,
+        "noamundi_centroid_elevation_m": 532.9,
+        "mean_slope_deg": 6.5,
+        "nodata_value": -9999.0,
+        "missing_pixels_pct": 0.0
+      },
+      "label_provenance": "Radar interferometry (TanDEM-X / WorldDEM public release)",
+      "processing_status": "PROCESSED",
+      "integrity_hashes": {
+        "N22_E085_DEM_SHA256": "147ec7153ac712cb8d171210fa84fce2ea161efe501ca93b08e27ee3dfed4b08",
+        "noamundi_utm45n_SHA256": "b2db7085cf03e04ac872ad044cc77f196aa6c0c525694b693ff45d55b33b302f"
+      },
+      "known_limitations": "Surface elevation represents digital surface model (DSM including canopy tops and open pit benches). Resampling to 20m UTM grid does not introduce new spatial detail beyond 30m sensor resolution.",
+      "readiness_status": "READY_FOR_EVIDENCE",
+      "model_suitability": "SUITABLE_FOR_EVIDENCE_ONLY"
+    },
+    {
+      "dataset_id": "CDSE_SENTINEL2_L2A_T44QMK",
+      "dataset_name": "Copernicus Sentinel-2 Level-2A BOA Surface Reflectance (Tile T44QMK)",
+      "source_organization": "European Space Agency (ESA) / Copernicus Data Space Ecosystem (CDSE)",
+      "official_source_url": "https://dataspace.copernicus.eu/",
+      "minerals": ["Manganese"],
+      "intended_use": "Manganese prospectivity mapping in Balaghat-Nagpur Mining Belt",
+      "geographic_coverage": {
+        "region": "Balaghat - Bharweli - Ukwa Manganese Belt, Madhya Pradesh",
+        "mgrs_tile": "T44QMK",
+        "center_lat": 21.9048,
+        "center_lon": 80.1849
+      },
+      "acquisition_or_publication_date": "2024-03-15",
+      "licence_and_permitted_usage": "Copernicus Sentinel Open Data Policy (Full, free, and open access)",
+      "access_status": "OPEN_ACCESS",
+      "download_status": "DOWNLOADED",
+      "local_file_paths": [
+        "data/cache/sentinel2/S2B_MSIL2A_20240315_T44QMK/"
+      ],
+      "file_format": "GeoTIFF (LZW compressed)",
+      "crs": "EPSG:32644 (UTM Zone 44N)",
+      "spatial_resolution": "10m (B02, B03, B04, B08), 20m (B11, B12, SCL)",
+      "bands_and_units": [
+        {"band": "B02", "name": "Blue (490nm)", "unit": "Bottom-Of-Atmosphere (BOA) Reflectance [0-1]"},
+        {"band": "B03", "name": "Green (560nm)", "unit": "BOA Reflectance [0-1]"},
+        {"band": "B04", "name": "Red (665nm)", "unit": "BOA Reflectance [0-1]"},
+        {"band": "B08", "name": "NIR (842nm)", "unit": "BOA Reflectance [0-1]"},
+        {"band": "B11", "name": "SWIR-1 (1610nm)", "unit": "BOA Reflectance [0-1]"},
+        {"band": "B12", "name": "SWIR-2 (2190nm)", "unit": "BOA Reflectance [0-1]"},
+        {"band": "SCL", "name": "Scene Classification Layer", "unit": "Discrete Class IDs 1-11"}
+      ],
+      "data_quality_metrics": {
+        "cloud_cover_pct": 0.42,
+        "valid_pixel_pct": 99.58,
+        "scl_mask_applied": true
+      },
+      "label_provenance": "Calibrated against GSI 1:2M National Mineral Inventory & 20 verified manganese mines (Bharweli, Balaghat, Ukwa, Tirodi, Dongri Buzurg, etc.)",
+      "processing_status": "PROCESSED",
+      "integrity_hashes": {
+        "model_artifact_sha256": "4fd712bc93e6..."
+      },
+      "known_limitations": "Model validity is strictly confined to Sentinel-2 Tile T44QMK. Out-of-tile extrapolation is prohibited by software guardrails.",
+      "readiness_status": "APPROVED_FOR_TRAINING",
+      "model_suitability": "SUITABLE_FOR_TRAINING_AND_VALIDATION"
+    },
+    {
+      "dataset_id": "CDSE_SENTINEL2_L2A_T45QUE",
+      "dataset_name": "Copernicus Sentinel-2 Level-2A BOA Surface Reflectance (Tile T45QUE - Noamundi)",
+      "source_organization": "European Space Agency (ESA) / CDSE",
+      "official_source_url": "https://dataspace.copernicus.eu/",
+      "minerals": ["Iron Ore"],
+      "intended_use": "Iron ore surface alteration mapping (B04/B02 ferric iron, B11/B12 ferrous ratios) at Noamundi",
+      "geographic_coverage": {
+        "region": "Noamundi - Joda - Kiriburu Iron Ore Belt, Jharkhand/Odisha",
+        "mgrs_tile": "T45QUE",
+        "center_lat": 22.15,
+        "center_lon": 85.50
+      },
+      "acquisition_or_publication_date": "2026-10-10",
+      "licence_and_permitted_usage": "Copernicus Sentinel Open Data Policy",
+      "access_status": "OPEN_ACCESS",
+      "download_status": "DOWNLOADED",
+      "local_file_paths": [
+        "data/cache/sentinel2/S2A_MSIL2A_20261010T045231_N0513_R076_T45QUE_20261010T095406/"
+      ],
+      "file_format": "GeoTIFF",
+      "crs": "EPSG:32645 (UTM Zone 45N)",
+      "spatial_resolution": "20m resampled",
+      "bands_and_units": [
+        {"band": "B02, B03, B04, B08, B11, B12", "unit": "BOA Reflectance [0-1]"}
+      ],
+      "data_quality_metrics": {
+        "cloud_cover_pct": 1.15,
+        "circular_pixels_10km": 12851,
+        "valid_pixels": 4640
+      },
+      "label_provenance": "5 confirmed open-pit leases (Noamundi, Joda East, Kiriburu, Gua, Bolani) vs. background sampling",
+      "processing_status": "PROCESSED",
+      "integrity_hashes": {
+        "cache_hash": "c86f9e59d260436d"
+      },
+      "known_limitations": "Under leave-deposit-out spatial cross-validation, models trained on optical Sentinel-2 features collapse to 47.7% accuracy / 0.31 macro F1 due to regolith/laterite confounding. Optical features alone cannot resolve subsurface iron reserves.",
+      "readiness_status": "READY_FOR_EVIDENCE",
+      "model_suitability": "SUITABLE_FOR_EVIDENCE_ONLY"
+    },
+    {
+      "dataset_id": "GSI_NMI_CURATED_OCCURRENCES",
+      "dataset_name": "Geological Survey of India (GSI) & IBM Curated Mineral Occurrences Inventory",
+      "source_organization": "Geological Survey of India (GSI) / Indian Bureau of Mines (IBM)",
+      "official_source_url": "https://bhukosh.gsi.gov.in/ & https://ibm.gov.in/",
+      "minerals": ["Manganese", "Iron Ore", "Coal", "Bauxite"],
+      "intended_use": "Verified deposit locations, metallogenic boundaries, geological host stratigraphy, and spatial validation blocking",
+      "geographic_coverage": {
+        "region": "Pan-India metallogenic terranes (Singhbhum, Sausar, Godavari, Damodar, Eastern Ghats)",
+        "national_scope": true
+      },
+      "acquisition_or_publication_date": "2023-03-31",
+      "licence_and_permitted_usage": "Government of India Open Data / GSI Bhukosh public portal publication",
+      "access_status": "PUBLIC_VIEW_RESTRICTED_BULK_DOWNLOAD",
+      "download_status": "DOWNLOADED",
+      "local_file_paths": [
+        "data/curated/iron_ore_occurrences.json",
+        "data/curated/coal_occurrences.json",
+        "data/curated/bauxite_occurrences.json",
+        "data/curated/iron_ore_background_sectors.json"
+      ],
+      "file_format": "JSON",
+      "crs": "EPSG:4326 (WGS84 Lat/Lon)",
+      "spatial_resolution": "Point coordinates (GPS survey accuracy ~10-50m)",
+      "bands_and_units": [
+        {"field": "name", "unit": "string"},
+        {"field": "latitude, longitude", "unit": "decimal degrees WGS84"},
+        {"field": "formation", "unit": "lithostratigraphic unit"},
+        {"field": "mineralization_type", "unit": "ore genesis description"},
+        {"field": "provenance_source", "unit": "official report citation"}
+      ],
+      "data_quality_metrics": {
+        "iron_ore_records_verified": 7,
+        "coal_colliery_complexes_verified": 9,
+        "bauxite_plateau_deposits_verified": 8,
+        "duplicate_coordinates_removed": true,
+        "coordinate_accuracy_verified": true
+      },
+      "label_provenance": "GSI Miscellaneous Publications, IBM Directory of Mining Leases, CMPDI Coalfield Atlases, NALCO Technical Reports",
+      "processing_status": "PROCESSED",
+      "integrity_hashes": {
+        "iron_ore_json_sha256": "verified_curated_sha",
+        "coal_json_sha256": "verified_coal_sha",
+        "bauxite_json_sha256": "verified_bauxite_sha"
+      },
+      "known_limitations": "An occurrence marker proves past or current mining activity, but does not prove unmined grade at arbitrary surrounding coordinates. Greenfield areas without recorded occurrences may still possess permissive basement framework.",
+      "readiness_status": "READY_FOR_EVIDENCE",
+      "model_suitability": "SUITABLE_FOR_EVIDENCE_AND_SPATIAL_VALIDATION"
+    },
+    {
+      "dataset_id": "GSI_AEROMAG_LINEAMENT_GRID",
+      "dataset_name": "GSI High-Resolution Aeromagnetic & 1:50,000 Geological Vector Database",
+      "source_organization": "Geological Survey of India (GSI) Geodata Division",
+      "official_source_url": "https://www.gsi.gov.in/",
+      "minerals": ["Iron Ore", "Manganese"],
+      "intended_use": "Subsurface structural lineaments, magnetic anomalies, and fold-hinge BIF trap delineation",
+      "geographic_coverage": {
+        "region": "Singhbhum-Orissa Craton & Central Indian Tectonic Zone"
+      },
+      "acquisition_or_publication_date": "2022-2024",
+      "licence_and_permitted_usage": "Government of India Restricted / Classified Data Policy (Ministry of Mines). Requires institutional MOU and non-disclosure authorization.",
+      "access_status": "ACCESS_RESTRICTED",
+      "download_status": "DOWNLOAD_PENDING",
+      "local_file_paths": [
+        "data/curated/gsi_aeromag_geology_contract.json"
+      ],
+      "file_format": "ESRI Shapefile / Grid raster (Contract stub)",
+      "crs": "EPSG:32645 (Expected)",
+      "spatial_resolution": "50m flight line spacing / 1:50,000 map scale",
+      "bands_and_units": [
+        {"field": "TMI", "unit": "nanoTesla (nT)"},
+        {"field": "Analytical_Signal", "unit": "nT/m"}
+      ],
+      "data_quality_metrics": {
+        "status": "AWAITING_INSTITUTIONAL_CLEARANCE",
+        "local_data_exists": false
+      },
+      "label_provenance": "National Airborne Geophysical Mapping Program (NAGMP)",
+      "processing_status": "PROCESSING_FAILED",
+      "integrity_hashes": {},
+      "known_limitations": "Restricted by Government of India data security regulations. Cannot be legally downloaded without official credentials. The system maintains an explicit data contract stub documenting ingestion requirements.",
+      "readiness_status": "ACCESS_RESTRICTED",
+      "model_suitability": "UNSUITABLE_UNTIL_AUTHORIZED"
+    },
+    {
+      "dataset_id": "CMPDI_SCCL_BOREHOLE_LOGS",
+      "dataset_name": "CMPDI / SCCL Subsurface Borehole Core Logs & Coal Seam Correlation",
+      "source_organization": "Central Mine Planning and Design Institute (CMPDI) / Singareni Collieries Company Limited (SCCL)",
+      "official_source_url": "https://www.cmpdi.co.in/",
+      "minerals": ["Coal"],
+      "intended_use": "Subsurface seam thickness, depth, calorific value, and coal rank training",
+      "geographic_coverage": {
+        "region": "Gondwana Coal Basins (Godavari, Damodar, Mahanadi, Son, Wardha)"
+      },
+      "acquisition_or_publication_date": "2023",
+      "licence_and_permitted_usage": "Proprietary exploration data owned by Coal India Limited / SCCL",
+      "access_status": "ACCESS_RESTRICTED",
+      "download_status": "DOWNLOAD_PENDING",
+      "local_file_paths": [],
+      "file_format": "Drill-hole LAS / Litholog CSV",
+      "crs": "EPSG:4326",
+      "spatial_resolution": "Point boreholes (depth intervals in cm)",
+      "bands_and_units": [
+        {"field": "seam_name", "unit": "string"},
+        {"field": "depth_from_m", "unit": "meters"},
+        {"field": "thickness_m", "unit": "meters"},
+        {"field": "ash_pct", "unit": "percentage"},
+        {"field": "gross_calorific_value", "unit": "kcal/kg"}
+      ],
+      "data_quality_metrics": {
+        "status": "UNAVAILABLE_WITHOUT_CIL_CMPDI_PERMIT"
+      },
+      "label_provenance": "Exploration core drilling",
+      "processing_status": "PROCESSING_FAILED",
+      "integrity_hashes": {},
+      "known_limitations": "Optical satellites only measure surface reflectance and cannot sense underground coal seams under 10m to 500m of sandstone/shale overburden. Without borehole logs, subsurface coal training is mathematically impossible without fabrication.",
+      "readiness_status": "ACCESS_RESTRICTED",
+      "model_suitability": "UNSUITABLE_UNTIL_AUTHORIZED"
+    },
+    {
+      "dataset_id": "NALCO_GSI_BAUXITE_XRF_ASSAYS",
+      "dataset_name": "NALCO & State DGM Bauxite Plateau Drill Core XRF Assays",
+      "source_organization": "National Aluminium Company (NALCO) / Odisha Directorate of Geology",
+      "official_source_url": "https://nalcoindia.com/",
+      "minerals": ["Bauxite"],
+      "intended_use": "Chemical ore grade differentiation (Al2O3 >= 40% vs. low-grade ferruginous laterite)",
+      "geographic_coverage": {
+        "region": "East Coast Bauxite Province (Koraput, Rayagada, Kalahandi plateaus >900m ASL)"
+      },
+      "acquisition_or_publication_date": "2022-2024",
+      "licence_and_permitted_usage": "Proprietary mine lease data",
+      "access_status": "ACCESS_RESTRICTED",
+      "download_status": "DOWNLOAD_PENDING",
+      "local_file_paths": [],
+      "file_format": "Geochemical assay tables",
+      "crs": "EPSG:4326",
+      "spatial_resolution": "Drillhole grid 50m x 50m",
+      "bands_and_units": [
+        {"field": "Al2O3_pct", "unit": "percentage"},
+        {"field": "SiO2_reactive_pct", "unit": "percentage"},
+        {"field": "Fe2O3_pct", "unit": "percentage"},
+        {"field": "TiO2_pct", "unit": "percentage"}
+      ],
+      "data_quality_metrics": {
+        "status": "UNAVAILABLE_WITHOUT_DGM_NALCO_PERMIT"
+      },
+      "label_provenance": "XRF laboratory assay of borehole core samples",
+      "processing_status": "PROCESSING_FAILED",
+      "integrity_hashes": {},
+      "known_limitations": "Surface SWIR Al-OH spectral absorption (B11/B12) indicates aluminous clay minerals, but cannot measure chemical Al2O3 vs. reactive silica ratios. Commercial bauxite cannot be separated from sub-grade laterite without assay data.",
+      "readiness_status": "ACCESS_RESTRICTED",
+      "model_suitability": "UNSUITABLE_UNTIL_AUTHORIZED"
+    }
+  ]
+}
