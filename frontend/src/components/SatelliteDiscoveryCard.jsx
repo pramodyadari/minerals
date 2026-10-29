@@ -30,8 +30,9 @@ export default function SatelliteDiscoveryCard({
   const [scenes, setScenes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
+  const [discoveredSpectralData, setDiscoveredSpectralData] = useState(null);
 
-  // Load scenes strictly from props when analysisResult is present, or query discovery endpoint
+  // Load scenes and spectral reflectance data from props or query discovery endpoint
   useEffect(() => {
     if (satelliteScenes !== undefined && satelliteScenes !== null) {
       setScenes(satelliteScenes);
@@ -50,6 +51,9 @@ export default function SatelliteDiscoveryCard({
             setScenes([]);
             setSelectedSceneId(null);
           }
+          if (data?.spectral_processing) {
+            setDiscoveredSpectralData(data.spectral_processing);
+          }
         })
         .catch(() => {
           setScenes([]);
@@ -59,13 +63,14 @@ export default function SatelliteDiscoveryCard({
     }
   }, [selectedLocation, selectedMineral, satelliteScenes]);
 
+  const activeSpectralData = spectralData || discoveredSpectralData;
   const activeScene = scenes.find((s) => s.scene_id === selectedSceneId) || scenes[0];
 
   // Authentic raster processing indicators
-  const pixelsProcessed = Boolean(spectralData?.raster_pixels_processed);
-  const pixelCoverage = spectralData?.pixel_coverage;
-  const tileInfo = spectralData?.tile_info;
-  const scientificGuardrail = spectralData?.scientific_guardrail || (
+  const pixelsProcessed = Boolean(activeSpectralData?.raster_pixels_processed);
+  const pixelCoverage = activeSpectralData?.pixel_coverage;
+  const tileInfo = activeSpectralData?.tile_info;
+  const scientificGuardrail = activeSpectralData?.scientific_guardrail || (
     selectedMineral === 'Coal'
       ? 'CRITICAL SCIENTIFIC PRINCIPLE: Optical sensors measure surface opencast faces only. Never infer underground coal seams from optical satellite imagery alone.'
       : selectedMineral === 'Iron Ore'
@@ -75,8 +80,8 @@ export default function SatelliteDiscoveryCard({
       : 'SCIENTIFIC INTEGRITY GUARDRAIL: Surface spectral ratios indicate alteration halos and gossans. Subsurface drilling is required to verify economic grade.'
   );
 
-  const bandReflectances = spectralData?.band_reflectances || null;
-  const spectralIndices = spectralData?.mineral_spectral_indices || [];
+  const bandReflectances = activeSpectralData?.band_reflectances || null;
+  const spectralIndices = activeSpectralData?.mineral_spectral_indices || [];
 
   const bandsList = [
     { name: 'B02 (Blue)', wavelength: '490 nm', val: bandReflectances?.B02_blue, color: '#38bdf8' },
@@ -375,7 +380,7 @@ export default function SatelliteDiscoveryCard({
                   fontSize: '0.72rem',
                   color: '#94a3b8'
                 }}>
-                  {spectralData?.raster_processing_details || 'Band GeoTIFF package awaiting download/decompression to calculate pixel ratios.'}
+                  {activeSpectralData?.raster_processing_details || 'Band GeoTIFF package awaiting download/decompression to calculate pixel ratios.'}
                 </div>
               ) : (
                 spectralIndices.map((idx, i) => (

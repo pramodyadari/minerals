@@ -46,6 +46,7 @@ from app.mineral_service import (
     get_candidate_zones_list,
     get_satellite_scenes_for_location,
     get_production_forecast_data,
+    process_satellite_spectral_bands,
 )
 from app.vision_service import classify_specimen_image
 try:
@@ -272,6 +273,17 @@ def get_satellite_scenes(latitude: float, longitude: float, mineral: str = "Mang
     """Discovers available Copernicus Sentinel-2 satellite scenes for the target coordinates."""
     discovery = get_satellite_scenes_for_location(latitude, longitude, mineral, mock_error_type=mock_error)
     scenes = discovery.get("scenes", [])
+    
+    # Process authentic multispectral band reflectances and diagnostic ratios
+    spectral_proc = process_satellite_spectral_bands(
+        lat=latitude,
+        lon=longitude,
+        mineral_name=mineral,
+        radius_km=1.0,
+        sat_discovery=discovery,
+        mock_error_type=mock_error
+    )
+    
     return {
         "latitude": latitude,
         "longitude": longitude,
@@ -280,7 +292,8 @@ def get_satellite_scenes(latitude: float, longitude: float, mineral: str = "Mang
         "total_scenes": len(scenes),
         "availability_status": discovery.get("status"),
         "source": discovery.get("source"),
-        "error_details": discovery.get("error_details")
+        "error_details": discovery.get("error_details"),
+        "spectral_processing": spectral_proc
     }
 
 
