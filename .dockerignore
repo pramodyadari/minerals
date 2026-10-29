@@ -1,0 +1,17 @@
+.git/
+.gitignore
+.env*
+.venv/
+venv/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.log
+*.tmp
+data/cache/sentinel2/S2*
+data/cache/processed/proc_*

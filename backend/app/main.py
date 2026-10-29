@@ -1389,6 +1389,16 @@ def export_observations_geojson(
         raise HTTPException(status_code=500, detail=f"GeoJSON export failed: {str(exc)}")
 
 
+# -------------------------------------------------------------
+# Static Frontend Serving (Single-Container Cloud Deployment Mode)
+# -------------------------------------------------------------
+from fastapi.staticfiles import StaticFiles
+
+frontend_dist = os.path.join(project_root, "frontend", "dist")
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend-static")
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend.app.main:app", host="127.0.0.1", port=8000, reload=True)
