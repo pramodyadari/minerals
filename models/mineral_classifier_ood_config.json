@@ -1166,5 +1166,11 @@
         "mean_observed_distance": 7.51
       }
     }
+  },
+  "class_thresholds": {
+    "coal": 6.5,
+    "manganese": 14.0,
+    "iron_ore": 10.0,
+    "bauxite": 5.0
   }
 }

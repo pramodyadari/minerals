@@ -41,3 +41,4 @@ Thumbs.db
 data/cache/sentinel2/S2A_MSIL2A_20261010*
 data/cache/sentinel2/S2B_MSIL2A_20261015*
 data/cache/processed/proc_*
+data/uploads/

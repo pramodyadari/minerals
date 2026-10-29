@@ -326,7 +326,10 @@ export default function SpecimenClassifierModal({ isOpen, onClose }) {
             const hasThreshold = result.rejection_threshold !== undefined && result.rejection_threshold !== null;
             const displayLabel = isAccepted ? (result.display_label || result.identified_mineral) : (result.display_label || 'Unknown / Unsupported Mineral');
             const statusBadge = isAccepted ? 'Verified In-Domain (Provisional Identification)' : 'OUT-OF-DISTRIBUTION (REJECTED)';
-            const acceptedConfidenceText = isAccepted ? (result.accepted_confidence_display || (result.accepted_confidence != null ? `${result.accepted_confidence}%` : 'Withheld')) : 'Withheld';
+            const rawScore = result.confidence_percentage ?? result.raw_model_prediction?.raw_confidence_percentage;
+            const acceptedConfidenceText = isAccepted
+              ? (result.accepted_confidence_display || (result.accepted_confidence != null ? `${result.accepted_confidence}%` : (rawScore != null ? `${rawScore}%` : 'Withheld')))
+              : (result.accepted_confidence_display || (rawScore != null ? `${rawScore}% (Unconfirmed)` : 'Withheld'));
             const nearestCandidateName = result.nearest_candidate?.mineral || result.closest_candidate_mineral || result.raw_model_prediction?.raw_predicted_mineral;
 
             return (
@@ -373,7 +376,7 @@ export default function SpecimenClassifierModal({ isOpen, onClose }) {
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-                      {isUnknown ? 'Accepted Confidence' : 'Validated Confidence (Distance-Scaled)'}
+                      {isUnknown ? 'Model Confidence' : 'Validated Confidence (Distance-Scaled)'}
                     </div>
                     <div style={{
                       fontFamily: 'var(--font-mono)',
@@ -385,11 +388,11 @@ export default function SpecimenClassifierModal({ isOpen, onClose }) {
                     </div>
                     {isUnknown ? (
                       <div style={{ fontSize: '0.68rem', color: '#fbbf24' }}>
-                        Failed Distance Gate (D &gt; &tau;)
+                        {rawScore != null ? `CNN Raw Score: ${rawScore}%` : 'Failed Distance Gate (D > τ)'}
                       </div>
                     ) : (
                       <div style={{ fontSize: '0.68rem', color: '#94a3b8' }}>
-                        Raw Softmax: {result.confidence_percentage}%
+                        Raw Softmax: {result.confidence_percentage || rawScore}%
                       </div>
                     )}
                   </div>

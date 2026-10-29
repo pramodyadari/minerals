@@ -230,7 +230,14 @@ def classify_specimen_image(image_bytes: bytes) -> dict:
 
     if ood_cfg and "centroids" in ood_cfg:
         centroids = ood_cfg["centroids"]
-        rejection_threshold = float(ood_cfg.get("rejection_threshold_tau", 5.0))
+        default_tau = float(ood_cfg.get("rejection_threshold_tau", 5.0))
+        class_thresholds = ood_cfg.get("class_thresholds", {
+            "coal": 6.5,
+            "manganese": 14.0,
+            "iron_ore": 10.0,
+            "bauxite": 5.0
+        })
+        rejection_threshold = default_tau
         scale_bounds = ood_cfg.get("scale_bounds", {})
         penalty_weight = float(ood_cfg.get("scale_penalty_weight", 25.0))
         dists = {}
@@ -253,6 +260,7 @@ def classify_specimen_image(image_bytes: bytes) -> dict:
         if dists:
             closest_candidate = min(dists, key=dists.get)
             min_dist = dists[closest_candidate]
+            rejection_threshold = float(class_thresholds.get(closest_candidate, default_tau))
             if min_dist > rejection_threshold:
                 is_supported = False
                 closest_display = CLASS_DISPLAY.get(closest_candidate, closest_candidate.title())
@@ -396,8 +404,8 @@ def build_specimen_classification_decision(
             "identified_mineral": None,
             "identification_status": "OUT_OF_DISTRIBUTION",
             "display_label": "Unknown / Unsupported Mineral",
-            "accepted_confidence": None,
-            "accepted_confidence_display": "Withheld",
+            "accepted_confidence": round(confidence * 100, 2),
+            "accepted_confidence_display": f"{round(confidence * 100, 2)}% (Unconfirmed)",
             "nearest_candidate": nearest_candidate_obj,
             "raw_softmax_scores": raw_softmax_scores,
             "is_supported_mineral": False,
@@ -433,7 +441,7 @@ def build_specimen_classification_decision(
 
     # Calibrated confidence for accepted in-distribution samples
     distance_factor = max(0.0, 1.0 - (min_dist / (rejection_threshold + 1e-5)) ** 2)
-    calibrated_conf = float(confidence * (0.6 + 0.4 * distance_factor))
+    calibrated_conf = float(confidence * (0.85 + 0.15 * distance_factor))
 
     best_mineral_display = raw_favored_display
     nearest_candidate_obj = {
